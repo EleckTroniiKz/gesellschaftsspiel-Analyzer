@@ -1,11 +1,13 @@
-var fs = require('fs');
+const fs = require('fs');
+const LocalStorage = require('node-localstorage').LocalStorage;
+const localStorage = new LocalStorage('./DataStorage/storage');
+
 /**
  * this. ... works in fs.readfile only when the callback is an arrow function.
  */
 
 //Mabye change json with localStorage
 class fileImport {
-
   constructor(fileName){
     this.fileName = fileName;
     this.checkFilename()
@@ -63,7 +65,7 @@ class fileImport {
     //idea --> IDK if all csv files are seperated by the same symbol but maybe define a function which first skims through the csv file and finds out what the seperator is
     let seperator = ";"
     let importFilePath = 'DataImport/' + this.fileName;
-    fs.readFile(importFilePath, 'utf8', function(err,data) {
+    fs.readFile(importFilePath, 'utf8', (err,data) => {
       if(err) {
         console.log("File not found!");
       }
@@ -138,9 +140,6 @@ class fileImport {
         console.log("Unknown Dataformat")
       }
     }
-    else if(fileType === "xlsx"){
-      this.importEXCEL()
-    }
     else{
       console.log("Wrong stripped")
     }
@@ -148,4 +147,3 @@ class fileImport {
 }
 
 var a = new fileImport('users1.csv')
-a.getFileData('DataStorage/storage.json')
