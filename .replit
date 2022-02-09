@@ -1,6 +1,4 @@
 entrypoint = "index.js"
-language="javascript"
-run = "node index.js"
 
 [interpreter]
 command = [
