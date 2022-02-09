@@ -1,5 +1,5 @@
 entrypoint = "index.js"
-language = "node.js"
+language = "nodejs"
 run = "node index.js"
 
 [interpreter]
