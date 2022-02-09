@@ -10,10 +10,56 @@ const localStorage = new LocalStorage('./DataStorage/storage');
 class fileImport {
   constructor(fileName){
     this.fileName = fileName;
-    this.checkFilename()
     this.fileData = ""
     this.userIDs = []
   }
+
+	deleteUser(userID){
+		let userList = this.getUserList();
+		let filteredUsers = userList.filter((value) => {
+					if(value.uID !== userID){
+						return value;
+					}
+				})
+		localStorage.setItem('users', JSON.stringify(filteredUsers))
+	}
+
+	deleteGame(userID, game){
+		const userList = this.getUserList();
+		for(let i = 0; i < userList.length; i++){
+			if(userList[i].uID === userID){
+				if(userList[i].games.includes(game)){
+					let filteredGames = userList[i].games.filter((value) => {if(value !== game) return value})
+					userList[i].games = filteredGames;
+					console.log(filteredGames)
+					localStorage.setItem('users', JSON.stringify(userList))
+				}
+			}
+		}
+	}
+
+	addGame(userID, game){
+		const userList = this.getUserList();
+		for(let i = 0; i < userList.length; i++){
+			if(userList[i].uID === userID){
+				if(userList[i].games.includes(game) === false){
+					userList[i].games.push(game)
+					localStorage.setItem('users', JSON.stringify(userList))
+				}
+			}
+		}
+	}
+
+	getUserList(){
+		return JSON.parse(localStorage.getItem('users'));
+	}
+
+	addUser(userName, gameArr){
+		let userList = this.getUserList();
+		let userObject = {uID: this.generateUserID(), name: userName, games: gameArr}
+		userList.push(userObject);
+		localStorage.setItem('users', JSON.stringify(userList))
+	}
 
   /**  
    * @param data: extracted data from json file
