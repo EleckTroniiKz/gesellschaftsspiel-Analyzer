@@ -56,68 +56,56 @@ class fileImport {
     this.userIDs.push(id)
     return id;
   }
-  
+
+	saveUserData(users) {
+		let userList = [];
+		let gameArr = [];
+		let row = 1;
+		for(let i = 0; i < users[0].length; i++){
+			let name = users[0][i];
+			while(row < users.length){
+				let game = users[row][i];
+				if(game !== ''){
+					gameArr.push(game)
+				}
+				row++;
+			}
+			let userObject = {uID: this.generateUserID(), name: name, games: gameArr}
+			userList.push(userObject);
+			gameArr = [];
+			row = 1
+		}
+		localStorage.setItem('users', JSON.stringify(userList));
+	}
+	
   /**  
    *  extracts data from .csv file and saves it in storage.json
   */
   importCSV() {
-    console.log("importing CSV")
-    //idea --> IDK if all csv files are seperated by the same symbol but maybe define a function which first skims through the csv file and finds out what the seperator is
-    let seperator = ";"
-    let importFilePath = 'DataImport/' + this.fileName;
-    fs.readFile(importFilePath, 'utf8', (err,data) => {
-      if(err) {
-        console.log("File not found!");
-      }
-      else{
-        data = data.replace(/(\r\n|\n|\r)/gm, seperator+seperator).split(";");
-        let dataArray = []
-        let currentLine = []
-        
-        // loop through file and put elements into nested array
-        for(let i = 0; i < data.length; i++){
-          if(data[i] !== ''){
-            currentLine.push(data[i])
-          }
-          else if(data[i] === '' && data[i+1] === ''){
-            dataArray.push(currentLine);
-            break;
-          }
-          else{
-            if(currentLine !== []){
-              dataArray.push(currentLine)
-              currentLine = []
-            }
-          }
-        } 
+    let filePath = `DataImport//${this.fileName}`;
+		fs.readFile(filePath, 'utf-8', (err,data) => {
+			if(err) console.log('File not found!')
+			let dataArray = data.replace(/(\r\n|\n|\r)/gm, ';;').split(";");
+			let currentRow = []
+			let importedData = []
 
-        let objectList = [];
-        // read through element list form loop before and create a JSON object, which is then pushed into an object list
-        for(let i = 0; i < dataArray[0].length; i++){
-          let jsonObject = { uID: 0, name: '', games: []};
-          let gameArray = [];
-          let arrayLine = 0;
-          while(arrayLine < dataArray.length){
-            if(arrayLine === 0){
-              jsonObject.name = dataArray[arrayLine][i];
-              jsonObject.uID = this.generateUserID()
-            }
-            else{
-              gameArray.push(dataArray[arrayLine][i]);
-            }
-            jsonObject.games = gameArray;
-            arrayLine += 1;
-          }
-          objectList.push(jsonObject);
-        }
-        let nD = JSON.stringify(objectList)
-        
-        fs.writeFile('DataStorage/storage.json', nD, (err) => {
-          if(err) console.log("Saving failed")
-        });
-      }
-    });
-    this.getFileData('DataStorage/storage.json')
+			for(let i = 0; i < dataArray.length; i++){
+				if(dataArray[i] !== ''){
+					currentRow.push(dataArray[i]);
+				}
+				else if(dataArray[i] === '' && dataArray[i+1] === ''){
+					importedData.push(currentRow);
+					break;
+				}
+				else{
+					if(currentRow !== []){
+						importedData.push(currentRow);
+						currentRow = []
+					}
+				}
+			}
+			this.saveUserData(importedData);
+		})
   }
 
   /**  TODO
@@ -146,4 +134,4 @@ class fileImport {
   }
 }
 
-var a = new fileImport('users1.csv')
+exports.fileImport = fileImport;
