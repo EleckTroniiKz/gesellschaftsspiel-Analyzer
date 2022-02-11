@@ -5,8 +5,27 @@ const localStorage = new LocalStorage('./DataStorage/storage');
 class fileImport {
 	constructor(fileName){
 		this.fileName = fileName;
-		this.fileData = ""
-		this.userIDs = []
+		this.userIDs = [];
+		localStorage.setItem('userIds', JSON.stringify(this.userIDs))
+		localStorage.setItem('gameList', JSON.stringify([]))
+	}
+
+	updateGlobalGameList(){
+		let userList = JSON.parse(localStorage.getItem('users'));
+		let globalGameList = JSON.parse(localStorage.getItem('gameList'));
+		let games = globalGameList.filter((value) => {return value.name})
+		let gameObject = {};
+		//game { name: , rating: , veto: false};
+		for(let i = 0; i < userList.length; i++){
+			let currentUser = userList[i]
+			for(let j = 0; j < currentUser.games.length; j++){
+				if(!games.includes(currentUser.games[j])){
+					gameObject = {name: currentUser.games[j], rating: null, veto: false}
+					globalGameList.push(gameObject);
+				}
+			}
+		}
+		localStorage.setItem('gameList', JSON.stringify(globalGameList))
 	}
 
 	/**
@@ -21,14 +40,17 @@ class fileImport {
 				}
 			})
 		localStorage.setItem('users', JSON.stringify(filteredUsers))
+		this.updateGlobalGameList
 	}
 
+	deleteGameGlobally(game){}
+	
 	/**
 	 * @description Deletes a game out of the games list of a specific user
 	 * @param {userID} number  is the ID of the user in which the game will be removed out of the users list.
 	 * @param {game} string is the name of the game which will be deleted.  
 	 */
-	deleteGame(userID, game){
+	deleteGameFromUser(userID, game){
 		const userList = this.getUserList();
 		for(let i = 0; i < userList.length; i++){
 			if(userList[i].uID === userID && userList[i].games.includes(game)){
@@ -37,6 +59,7 @@ class fileImport {
 				localStorage.setItem('users', JSON.stringify(userList))
 			}
 		}
+		this.updateGlobalGameList()
 	}
 
 	/**
@@ -49,9 +72,11 @@ class fileImport {
 		for(let i = 0; i < userList.length; i++){
 			if(userList[i].uID === userID && !(userList[i].games.includes(game))){				
 				userList[i].games.push(game)
+				userList[i].games = this.searchDuplicates(userList[i].games)
 				localStorage.setItem('users', JSON.stringify(userList))
 			}
 		}
+		this.updateGlobalGameList()
 	}
 
 	/**
@@ -68,9 +93,11 @@ class fileImport {
 	 */
 	addUser(userName, gameArr){
 		let userList = this.getUserList();
+		gameArr = this.searchDuplicates(gameArr);
 		let userObject = {uID: this.generateUserID(), name: userName, games: gameArr}
 		userList.push(userObject);
 		localStorage.setItem('users', JSON.stringify(userList))
+		this.updateGlobalGameList()
 	}
 
 	/**
@@ -78,12 +105,24 @@ class fileImport {
 	 * @returns a new random userID (0-99)
 	 */
 	generateUserID() {
-	let id = Math.trunc(Math.floor(Math.random() * 99));
-	while(this.userIDs.includes(id)){
-		id = Math.random() * 9999;
-	} 
-	this.userIDs.push(id)
-	return id;
+		let userIDS = JSON.parse(localStorage.getItem('userIds'))
+		let id = Math.trunc(Math.floor(Math.random() * 99));
+		while(userIDS.includes(id)){
+			id = Math.random() * 9999;
+		} 
+		userIDS.push(id)
+		localStorage.setItem("userIds", JSON.stringify(userIDS))
+		return id;
+	}
+
+	searchDuplicates(arr){
+		let filteredArr = [];
+		for(let i = 0; i < arr.length; i++){
+			if(!filteredArr.includes(arr[i]) && arr[i] !== "|"){
+				filteredArr.push(arr[i])
+			}
+		}
+		return filteredArr;
 	}
 
 	/**
@@ -103,12 +142,55 @@ class fileImport {
 				}
 				row++;
 			}
-			let userObject = {uID: this.generateUserID(), name: name, games: gameArr}
+			gameArr = this.searchDuplicates(gameArr);
+			let id = this.generateUserID()
+			let userObject = {uID: id, name: name, games: gameArr}
 			userList.push(userObject);
 			gameArr = [];
 			row = 1
 		}
 		localStorage.setItem('users', JSON.stringify(userList));
+		this.updateGlobalGameList()
+	}
+
+	parseLine(array){
+		let currentRow = [];
+		let currentWord = "";
+
+		array = array.slice(0, -1)
+		console.log(array)
+		for(let j = 0; j <= array.length; j++){
+			if(array[j] === ";"){
+				if(currentWord === ""){
+					currentRow.push("|");
+				}
+				else{
+					currentRow.push(currentWord);
+					currentWord = ""
+				}
+			}
+			else if((array[j]+array[j+1]) === "\r" || array[j] === ""){
+				if(currentWord === ""){
+					currentRow.push("|");
+				}
+				else{
+					currentRow.push(currentWord);
+					currentWord = ""
+				}
+			}
+				else if(j === array.length){
+					if(currentWord !== ""){
+						currentRow.push(currentWord)
+					}
+					else{
+						currentRow.push("|")
+					}
+				}
+			else{
+				currentWord = currentWord + array[j]
+			}
+		}
+		return currentRow
 	}
 	
 	/**  
@@ -117,26 +199,20 @@ class fileImport {
 	importCSV() {
 	let filePath = `DataImport//${this.fileName}`;
 		fs.readFile(filePath, 'utf-8', (err,data) => {
-			if(err) console.log('File not found!')
-			let dataArray = data.replace(/(\r\n|\n|\r)/gm, ';;').split(";");
+			if(err) {console.log('File not found!'); return;}
+			let dataArray = data.split("\n");
+			console.log(dataArray);
+			
 			let currentRow = []
 			let importedData = []
+			let currentWord = ""
 
 			for(let i = 0; i < dataArray.length; i++){
-				if(dataArray[i] !== ''){
-					currentRow.push(dataArray[i]);
-				}
-				else if(dataArray[i] === '' && dataArray[i+1] === ''){
-					importedData.push(currentRow);
-					break;
-				}
-				else{
-					if(currentRow !== []){
-						importedData.push(currentRow);
-						currentRow = []
-					}
+				if(dataArray[i] !== '' && dataArray[i].includes(';') && dataArray[i] !== undefined){
+					importedData.push(this.parseLine(dataArray[i], i));
 				}
 			}
+			console.log(importedData)
 			this.saveUserData(importedData);
 		})
 	}
