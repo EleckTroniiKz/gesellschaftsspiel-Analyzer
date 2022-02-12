@@ -30,8 +30,8 @@ class fileImport {
 
 	/**
 	 * @description Deletes user out of global user list
-	 * @param {userID} number  is the ID of the user which is going to be deleted 
-	 */
+	 * @param number  is the ID of the user which is going to be deleted 	 
+*/
 	deleteUser(userID){
 		let userList = this.getUserList();
 		let filteredUsers = userList.filter((value) => {
@@ -115,6 +115,11 @@ class fileImport {
 		return id;
 	}
 
+	/**
+	* @description searches thorugh given array and filters out duplicates
+	* @param arr is a random array
+	* @returns array without duplicates
+	*/
 	searchDuplicates(arr){
 		let filteredArr = [];
 		for(let i = 0; i < arr.length; i++){
@@ -133,6 +138,7 @@ class fileImport {
 		let userList = [];
 		let gameArr = [];
 		let row = 1;
+
 		for(let i = 0; i < users[0].length; i++){
 			let name = users[0][i];
 			while(row < users.length){
@@ -153,11 +159,14 @@ class fileImport {
 		this.updateGlobalGameList()
 	}
 
+	/**
+	* @desription receives the data from a csv file as a string and parses it into an array
+	* @param 
+	* @returns the row from the nested array
+	*/
 	parseLine(array){
 		let currentRow = [];
 		let currentWord = "";
-
-		array = array.slice(0, -1)
 		console.log(array)
 		for(let j = 0; j <= array.length; j++){
 			if(array[j] === ";"){
@@ -180,6 +189,10 @@ class fileImport {
 			}
 				else if(j === array.length){
 					if(currentWord !== ""){
+						currentWord = currentWord.trim()
+						if(currentWord === ""){
+							currentWord = "|"
+						}
 						currentRow.push(currentWord)
 					}
 					else{
