@@ -15,16 +15,21 @@ class fileImport {
 		let globalGameList = JSON.parse(localStorage.getItem('gameList'));
 		let games = globalGameList.filter((value) => {return value.name})
 		let gameObject = {};
+		let gameNames = []
 		//game { name: , rating: , veto: false};
 		for(let i = 0; i < userList.length; i++){
 			let currentUser = userList[i]
 			for(let j = 0; j < currentUser.games.length; j++){
 				if(!games.includes(currentUser.games[j])){
 					gameObject = {name: currentUser.games[j], rating: null, veto: false}
-					globalGameList.push(gameObject);
+					if(!gameNames.includes(gameObject.name)){
+						globalGameList.push(gameObject);
+						gameNames.push(gameObject.name)
+					}
 				}
 			}
 		}
+		globalGameList = this.searchDuplicates(globalGameList)
 		localStorage.setItem('gameList', JSON.stringify(globalGameList))
 	}
 
