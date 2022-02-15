@@ -1,0 +1,44 @@
+Ziel: 100 Punkte
+
+- Must Haves fehlerfrei umsetzen
+- Nice-To-Haves müssen dazu
+	-> Filter möglichkeiten?
+	-> besondere datenspeicherung?
+	-> Benutzerauthentifizierung?
+- Code Leserlichkeit
+	-> gesamt eindruck
+	-> code steht nicht im vordergrund
+	-> es soll einheitlich, aufgeräumt sein, ordnetlich
+	-> gleiche einrückung, gut formatiert, geschweifte Klammern
+	-> konsistent in einer Sprache
+
+Absolute Deadline: 4.April 10 Uhr morgens (eigtl. Sonntag davor)
+
+____________________________________
+Coding-Guidelines:
+
+Kommentar- Guidelines:
+/**
+* @param [parameter Name und beschreibung]
+* @description [Beschreibung vom der Methode/Klasse]
+* @return [return type und beschreibung]
+*/
+
+Schleifen: 
+Über schleifen kurz angeben, durch was die Schleife iteriert 
+Bsp.: 
+
+//Iteriert durch die Zeilen des Arrays x ...
+for(int i = 0;i < x; i++){} 
+
+
+Sprache: 
+- Die Kommentare, Methodennamen, Klassennamen und Variablen werden auf englisch gespeichert. 
+
+Casing:
+- Klassen: PascalCase (bsp.: DataImport)
+- Methoden: camelCase (bsp.: getUser)
+- Variablen: camelCase (bsp.: )
+______________________________________________
+Mögliche Nice To haves:
+- aktueller Stand -> Englische Ausgabe --> ein nice to have wäre Deutsche Übersetzung
