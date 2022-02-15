@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/EleckTroniiKz/gesellschaftsspiel-Analzyer#readme",
   "dependencies": {
-    "node-localstorage": "^2.2.1"
+    "node-localstorage": "^2.2.1",
+    "terminal-kit": "^2.4.0"
   }
 }

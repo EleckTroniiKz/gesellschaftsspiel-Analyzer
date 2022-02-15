@@ -1,5 +1,7 @@
 const {Boardgame, Player} = require("./applicationMode");
 const {DataHandler} = require('./dataHandler');
+const {Control} = require("./control");
+let control = new Control();
 
 let session = new DataHandler('dos.csv')
 //session.checkFilename()
