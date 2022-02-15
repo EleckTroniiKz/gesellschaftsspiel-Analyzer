@@ -18,15 +18,33 @@ class Boardgame {
     }
   }
 }
-class Player {
-  constructor(name) {
-    this.name = name;
-  }
-  constructor(name, boardgames) {
 
+class Player {
+  constructor(name, boardgames) {
+    this.name = name;
+    if(!Array.isArray(boardgames)) {
+      this.boardgames = [];
+    } else {
+      this.boardgames = [];
+      for(let i = 0; i < boardgames.length; i++) {
+        let boardgameobject = new Boardgame(boardgames[i]);
+        this.boardgames.push(boardgameobject.getName());
+      }
+    }
   }
   getName() {
     return this.name;
+  }
+  getBoardgames() {
+    return this.boardgames;
+  }
+  addBoardgame(boardgamestring) {
+    if(typeof(boardgamestring) === "string") {
+      let boardgameobject = new Boardgame(boardgamestring);
+      this.boardgames.push(boardgameobject.getName());
+    } else {
+      console.log("The boardgame value was invalid! No boardgame was added!");
+    }
   }
   test() {
     let game = new Boardgame("Wizard");
@@ -34,3 +52,4 @@ class Player {
   }
 }
 exports.Boardgame = Boardgame;
+exports.Player = Player;

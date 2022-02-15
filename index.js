@@ -1,4 +1,4 @@
-const {Boardgame} = require("./applicationMode");
+const {Boardgame, Player} = require("./applicationMode");
 const {DataHandler} = require('./dataHandler');
 
 let session = new DataHandler('dos.csv')
@@ -14,3 +14,8 @@ let session = new DataHandler('dos.csv')
 console.log(game.getName());
 game.setRating();
 console.log(game.getRating());*/
+let player = new Player("Niclas", ["test"]);
+console.log(player.getName());
+console.log(player.getBoardgames());
+player.addBoardgame("3");
+console.log(player.getBoardgames());
