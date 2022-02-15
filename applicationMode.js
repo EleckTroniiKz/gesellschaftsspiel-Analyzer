@@ -18,4 +18,19 @@ class Boardgame {
     }
   }
 }
+class Player {
+  constructor(name) {
+    this.name = name;
+  }
+  constructor(name, boardgames) {
+
+  }
+  getName() {
+    return this.name;
+  }
+  test() {
+    let game = new Boardgame("Wizard");
+    console.log();
+  }
+}
 exports.Boardgame = Boardgame;
