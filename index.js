@@ -1,7 +1,7 @@
 const {Boardgame} = require("./applicationMode");
-const {fileImport} = require('./fileImport');
+const {DataHandler} = require('./dataHandler');
 
-let session = new fileImport('dos.csv')
+let session = new DataHandler('dos.csv')
 //session.checkFilename()
 //session.deleteGame(2141, 'Magic')
 //session.deleteUser(757)

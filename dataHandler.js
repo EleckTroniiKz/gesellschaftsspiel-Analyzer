@@ -2,7 +2,7 @@ const fs = require('fs');
 const LocalStorage = require('node-localstorage').LocalStorage;
 const localStorage = new LocalStorage('./DataStorage/storage');
 
-class fileImport {
+class DataHandler {
 	constructor(fileName){
 		this.fileName = fileName;
 		this.userIDs = [];
@@ -261,4 +261,4 @@ class fileImport {
 	}
 }
 
-exports.fileImport = fileImport;
+exports.DataHandler = DataHandler;
