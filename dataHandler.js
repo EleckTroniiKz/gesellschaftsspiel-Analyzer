@@ -6,6 +6,10 @@ class DataHandler {
 	constructor(fileName){
 		this.fileName = fileName;
 		this.userIDs = [];
+		
+	}
+
+	setUpLocalStorages(){
 		localStorage.setItem('userIds', JSON.stringify(this.userIDs))
 		localStorage.setItem('gameList', JSON.stringify([]))
 	}
