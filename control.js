@@ -1,7 +1,6 @@
 var term = require( 'terminal-kit' ).terminal ;
 
 
-
 const mainMenu = ["Exit","Import Mode","Application Mode", "Management Mode", "Export Mode"]
 const managementModeMenu = ["Back to Main Menu", "Player settings", "Game settings"]
 
