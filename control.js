@@ -1,5 +1,5 @@
 var term = require( 'terminal-kit' ).terminal ;
-
+//TEST
 
 
 const mainMenu = ["Exit","Import Mode","Application Mode", "Management Mode", "Export Mode"]
@@ -51,9 +51,6 @@ term.singleColumnMenu( items , function( error , response ) {
 	) ;
 	process.exit() ;
 } ) ;
-
-
-
 }
   
 }
