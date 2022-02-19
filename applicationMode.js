@@ -20,8 +20,9 @@ class Boardgame {
 }
 
 class Player {
-  constructor(name, boardgames) {
+  constructor(name, boardgames, id) {
     this.name = name;
+    this.id = id;
     if(!Array.isArray(boardgames)) {
       this.boardgames = [];
     } else {
@@ -32,6 +33,11 @@ class Player {
       }
     }
   }
+
+  getID() {
+    return this.id;
+  }
+
   getName() {
     return this.name;
   }
