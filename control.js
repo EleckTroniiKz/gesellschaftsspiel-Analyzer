@@ -40,7 +40,6 @@ async postMainMenu() {
 	return selectedIndex;
 }
   
-
 postManagementMode() {
 
 term(`>MainMenu<\n`) ;

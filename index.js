@@ -6,9 +6,33 @@ let control = new Control();
 //let session = new DataHandler('dos.csv')
 control.postWelcome();
 
+function showPage(x){
+	//
+}
+
 async function loop() {
   let x = await control.postMainMenu();
   console.log("INDEX: " + x)
+	switch(x) {
+		case 0:
+			console.log("EXIT");
+			break;
+		case 1:
+			console.log("Import Mode");
+			break;
+		case 2:
+			console.log("Application Mode");
+			break;
+		case 3:
+			console.log("Export Mode");
+			break;
+		default:
+			console.log("Something wrong");
+			break;
+	}
+	/**
+	* wenn x == 0 consle.log(exit), x==1 console.log(import mode), ...
+*/
 
   // TODO: Rest des Programms
 }
