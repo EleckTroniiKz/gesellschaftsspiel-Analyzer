@@ -3,7 +3,18 @@ const {DataHandler} = require('./dataHandler');
 const {Control} = require("./control");
 let control = new Control();
 
-let session = new DataHandler('dos.csv')
+//let session = new DataHandler('dos.csv')
+control.postWelcome();
+
+async function loop() {
+  let x = await control.postMainMenu();
+  console.log("INDEX: " + x)
+
+  // TODO: Rest des Programms
+}
+
+loop();
+
 //session.checkFilename()
 //session.deleteGame(2141, 'Magic')
 //session.deleteUser(757)
@@ -15,9 +26,9 @@ let session = new DataHandler('dos.csv')
 /*let game = new Boardgame("Wizard");
 console.log(game.getName());
 game.setRating();
-console.log(game.getRating());*/
+console.log(game.getRating());
 let player = new Player("Niclas", ["test"]);
 console.log(player.getName());
 console.log(player.getBoardgames());
 player.addBoardgame("3");
-console.log(player.getBoardgames());
+console.log(player.getBoardgames());*/

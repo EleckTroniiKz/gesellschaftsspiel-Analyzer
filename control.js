@@ -1,7 +1,12 @@
 var term = require( 'terminal-kit' ).terminal ;
 //TEST
 
-const mainMenu = ["Exit","Import Mode","Application Mode", "Management Mode", "Export Mode"]
+const mainMenu = [
+                    "Exit",
+                    "Import Mode",
+                    "Application Mode",
+                    "Management Mode",
+                    "Export Mode"]
 const managementModeMenu = ["Back to Main Menu", "Player settings", "Game settings"]
 
 class Control {
@@ -12,46 +17,43 @@ postWelcome() {
 █───█─█───█───█───█──█─█▀▄▀█─█──
 █───█─█▀▀─█───█───█──█─█─▀─█─█▀▀
 █▄█▄█─█───█───█───█──█─█───█─█──
-─▀─▀───▀▀──▀▀──▀▀──▀▀──▀───▀──▀▀`)
+─▀─▀───▀▀──▀▀──▀▀──▀▀──▀───▀──▀▀\n`)
 }
 
-postMainMenu() {
+async postMainMenu() {
+  let selectedIndex = 1;
+	term(`>MainMenu<\n`) ;
+	term(`Please select a mode.\n`)
 
-/*console.log(`This is the Main Menue`);
-console.log(`You can chose one of these Modes:\n`);
+	// term.singleColumnMenu( mainMenu ,( error , response )=> {
+	// 	term( '\n' ).green("Selected: %s \n",response.selectedText); 
+  //  	selectedIndex = response.selectedIndex;
+	// 	console.log("THIS INDEX SHOULD GO OUT: " + response.selectedIndex)
+	// });
 
-for(let i = 0; i<mainMenu.length;i++ ) {
-console.log(`${mainMenu[i]} [${i}]`);
-}
-console.log();
-
-let invalidInput = true;
-while(invalidInput) {
-let choice = prompt("Please enter the mode number");
-if(choice )
-}
-*/
-term.cyan( 'The hall is spacious. Someone lighted few chandeliers.\n' ) ;
-term.cyan( 'There are doorways south and west.\n' ) ;
-
-var items = [
-	'a. Go south' ,
-	'b. Go west' ,
-	'c. Go back to the street'
-] ;
-
-term.singleColumnMenu( items , function( error , response ) {
-	term( '\n' ).eraseLineAfter.green(
-		"#%s selected: %s (%s,%s)\n" ,
-		response.selectedIndex ,
-		response.selectedText ,
-		response.x ,
-		response.y
-	) ;
-	process.exit() ;
-} ) ;
+  const response = await term.singleColumnMenu( mainMenu ).promise;
+  const text = await response.selectedText;
+  selectedIndex = await response.selectedIndex;
+  term( '\n' ).green("Selected: %s \n", text); 
+	console.log("THIS INDEX SHOULD GO OUT: " + selectedIndex)
+  
+	return selectedIndex;
 }
   
+
+postManagementMode() {
+
+term(`>MainMenu<\n`) ;
+term(`Please select a mode.\n`)
+
+term.singleColumnMenu( mainMenu , function( error , response ) {
+	term( '\n' ).eraseLineAfter.green(
+		"Selected: %s \n" ,
+		response.selectedText
+	) 
+} ) ;
+}
+
 }
 
 exports.Control = Control
