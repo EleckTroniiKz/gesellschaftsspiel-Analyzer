@@ -7,7 +7,15 @@ const mainMenu = [
                     "Application Mode",
                     "Management Mode",
                     "Export Mode"]
-const managementModeMenu = ["Back to Main Menu", "Player settings", "Game settings"]
+const managementModeMenu = [
+                       "Back to Main Menu",
+                       "Player settings",
+                       "Game settings"]
+
+const applicationModeMenu = [
+                    "Back to Main Menu",
+                    "Start Game"
+]
 
 class Control {
 
@@ -21,38 +29,63 @@ postWelcome() {
 }
 
 async postMainMenu() {
-  let selectedIndex = 1;
+
+  let selectedIndex;
+
 	term(`>MainMenu<\n`) ;
 	term(`Please select a mode.\n`)
 
-	// term.singleColumnMenu( mainMenu ,( error , response )=> {
-	// 	term( '\n' ).green("Selected: %s \n",response.selectedText); 
-  //  	selectedIndex = response.selectedIndex;
-	// 	console.log("THIS INDEX SHOULD GO OUT: " + response.selectedIndex)
-	// });
-
   const response = await term.singleColumnMenu( mainMenu ).promise;
-  const text = await response.selectedText;
+  const selectedText = await response.selectedText;
   selectedIndex = await response.selectedIndex;
-  term( '\n' ).green("Selected: %s \n", text); 
-	console.log("THIS INDEX SHOULD GO OUT: " + selectedIndex)
+  term( '\n' ).green("Selected:", selectedText); 
+  console.log();
+	console.log("THIS INDEX SHOULD GO OUT: " + selectedIndex);
   
 	return selectedIndex;
 }
   
-postManagementMode() {
+async postManagementMode() {
 
-term(`>MainMenu<\n`) ;
-term(`Please select a mode.\n`)
+  let selectedIndex;
 
-term.singleColumnMenu( mainMenu , function( error , response ) {
-	term( '\n' ).eraseLineAfter.green(
-		"Selected: %s \n" ,
-		response.selectedText
-	) 
-} ) ;
+  await console.clear()
+
+	term(`>Management Mode<\n`) ;
+	term(`Please select a mode.\n`);
+  
+  const response = await term.singleColumnMenu( managementModeMenu ).promise;
+  const selectedText = await response.selectedText;
+  selectedIndex = await response.selectedIndex;
+  term( '\n' ).green("Selected:", selectedText);
+  console.log();
+	console.log("THIS INDEX SHOULD GO OUT: " + selectedIndex);
+  
+	return selectedIndex;
+
+}
+
+async postApplicationMode() {
+
+  let selectedIndex;
+
+  await console.clear()
+
+	term(`>Application Mode<\n`) ;
+	term(`Please select a mode.\n`)
+
+  const response = await term.singleColumnMenu( applicationModeMenu ).promise;
+  const selectedText = await response.selectedText;
+  selectedIndex = await response.selectedIndex;
+  term( '\n' ).green("Selected:", selectedText);
+  console.log();
+	console.log("THIS INDEX SHOULD GO OUT: " + selectedIndex)
+  
+	return selectedIndex;
+
 }
 
 }
+
 
 exports.Control = Control

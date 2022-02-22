@@ -9,23 +9,30 @@ control.postWelcome();
 function showPage(x){
 	//
 }
-
 async function loop() {
   let x = await control.postMainMenu();
-  console.log("INDEX: " + x)
+  console.log("INDEX: " + x);
 	switch(x) {
+
 		case 0:
 			console.log("EXIT");
+      process.Exit();
 			break;
-		case 1:
-			console.log("Import Mode");
+
+		case 1: //Import Mode
 			break;
-		case 2:
-			console.log("Application Mode");
-			break;
-		case 3:
-			console.log("Export Mode");
-			break;
+
+		case 2: // Application Mode
+       let z =  await control.postApplicationMode();
+			    break;
+
+		case 3: //Management Mode
+        let y = await control.postManagementMode();
+		      break;
+
+  	case 4: //Export Mode
+		    	break;
+
 		default:
 			console.log("Something wrong");
 			break;
