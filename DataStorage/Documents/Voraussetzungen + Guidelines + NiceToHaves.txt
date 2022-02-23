@@ -43,3 +43,4 @@ ______________________________________________
 Mögliche Nice To haves:
 - aktueller Stand -> Englische Ausgabe --> ein nice to have wäre Deutsche Übersetzung
 - Bestenliste bzgl. Beste Bewerte Spiele, Spieler die die meisten Spiele gespielt haben, und die SPiele die am meisten gespielt wurden 
+- Wenn man in ein Menü feld reingeht und zurück, dann ist das letzte Menüfeld markiert (also ausgewählt) (schon teilweise umgesetzt)
