@@ -1,7 +1,7 @@
 const {Boardgame, Player} = require("./applicationMode");
 const {DataHandler} = require('./dataHandler');
 const {Control} = require("./control");
-const {MODES, MANAGEMENT_MODES, MANAGEMENT_PLAYERS_MODES, EDIT_PLAYERS, MANAGEMENT_GAMES_MODES, DELETE_GAME} = require("./enums/enum.js")
+const {MODES, MANAGEMENT_MODES, MANAGEMENT_PLAYERS_MODES, EDIT_PLAYERS, MANAGEMENT_GAMES_MODES, DELETE_GAME, MENUES} = require("./enums/enum.js")
 
 let control = new Control();
 
