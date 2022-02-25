@@ -6,7 +6,6 @@ class DataHandler {
 	constructor(fileName){
 		this.fileName = fileName;
 		this.userIDs = [];
-		
 	}
 
 	setUpLocalStorages(){

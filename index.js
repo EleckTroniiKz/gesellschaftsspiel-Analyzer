@@ -4,8 +4,6 @@ const {Control} = require("./control");
 const {MODES, MANAGEMENT_MODES, MANAGEMENT_PLAYERS_MODES, EDIT_PLAYERS, MANAGEMENT_GAMES_MODES, DELETE_GAME, MENUES} = require("./enums/enum.js")
 
 let control = new Control();
-
-//let session = new DataHandler('dos.csv')
 control.postWelcome();
 mainLoop();
 
@@ -18,6 +16,17 @@ async function gamesManagementLoop(mode_index){
 		case MANAGEMENT_GAMES_MODES.ADD:
 			//add GAME
 			//Input a Name for the game. Then choose if it should be added to a existing player or create a new player
+			let user = ["Can", "Patrick", "Niclas", "RETURN"]
+			let chosenPlayer = await control.choosePlayer(user)
+			if(chosenPlayer !== "RETURN"){
+				let newGame = await control.addGameInput();
+				console.log(newGame)
+				// WOllen siespiel x zu user y hinzufügen --> ja und nein
+				//session.addGame(userID, newGame)
+				//Dann ausgeben, dass SPiel x zu User y hinzugefügt wurde.
+				//vllt die spiele liste vom user ausgeben. --> 
+			}
+			mainLoop(MODES.MANAGEMENT);
 			break;
 		case MANAGEMENT_GAMES_MODES.EDIT:
 			//edit game
@@ -25,7 +34,14 @@ async function gamesManagementLoop(mode_index){
 			//After selection, choose a player with that game and change the name either for one person or globally
 			break;
 		case MANAGEMENT_GAMES_MODES.DELETE:
-			//delete Game
+			//let gameList = session.getGlobalGameList()
+			let gameList= ["A", "B", "C", "RETURN"]
+			let gameToDelete = await control.chooseGame(gameList)
+			await control.decision(['GLOBAL', 'PLAYER', 'RETURN'], 'Delete Game', 'Do you want to delete the chosen game from a user or globally?')
+			if(gameToDelete !== "RETURN"){
+				//rest stuff
+			}
+			mainLoop(MODES.MANAGEMENT);
 			//Either for a player or globally
 			break;
 		default:
@@ -41,6 +57,8 @@ async function playerManagementLoop(mode_index){
 				mainLoop(MODES.MANAGEMENT)
 				break;
 			case MANAGEMENT_PLAYERS_MODES.ADD:
+				control.addPlayerInput()
+			//muss noch liste der spiele und des spielernames returnen
 				//add Player
 				//Input for Player Name, and the Games from the Player
 				break;
@@ -50,6 +68,19 @@ async function playerManagementLoop(mode_index){
 				//After selection, choose what will be edited: Name, Games
 				break;
 			case MANAGEMENT_PLAYERS_MODES.DELETE:
+			//userList = session.getUserList
+			let userList = ["Harry", "Hermine", "Ron", "RETURN"]
+			const player = await control.choosePlayer(userList)
+			if(player !== "RETURN"){
+				const decision = await control.confirm("Do you really want to delete the Player " + player + " ?\n")
+				if(decision){
+					//lösch det zeug
+				}
+				else{
+					//sag dass es nicht gelöscht wurde
+				}
+			}
+			mainLoop(MODES.MANAGEMENT)
 				//delete Player
 				//Show list of player and give out the IDs + Names to select.
 				//After selection, ask if the user is sure they want to delete that user
