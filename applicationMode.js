@@ -61,16 +61,14 @@ class Player {
     return this.ratingHashmap;
   }
   setRating(boardgame) {
-
-    this.ratingHashmap.set();
-    
-    let temp2 = this.getBoardgames();
-    let temp = prompt("Rate " + temp2[0] + " from 1 to 5: ");
-    if(temp == 1 || temp == 2 || temp == 3 || temp == 4 || temp == 5) {
-      this.rating = temp;
-    } else {
-      console.log("You rated " + temp2[0] + " with an invalid value. Try again please.");
-      this.setRating();
+    if(this.ratingHashmap.has(boardgame)) {
+      let temp = prompt("Rate " + boardgame + " from 1 to 5: ");
+      if(temp == 1 || temp == 2 || temp == 3 || temp == 4 || temp == 5) {
+        this.ratingHashmap.set(boardgame, temp);
+      } else {
+        console.log("You rated " + boardgame + " with an invalid value. Try again please.");
+        this.setRating(boardgame);
+      }
     }
   }
   
@@ -98,7 +96,6 @@ class Gamesnight {
           if(!this.boardgames.includes(this.players[i].getBoardgames()[j])) {
             this.boardgames.push(this.players[i].getBoardgames()[j]);
           }
-          //this.boardgames.push();
         }
       }
     }

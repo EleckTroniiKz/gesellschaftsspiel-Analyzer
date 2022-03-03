@@ -126,8 +126,11 @@ async function applicationLoop(mode_index){
   console.log(gamesnight.getPlayers());
   console.log(gamesnight.getBoardgames());
   //player.setRating();
+  player.setRating("Wizard");
   console.log(player.getRating());
   console.log(player2.getRating());
+  player.setRating("UNO");
+  console.log(player.getRating());
   
 }
 
