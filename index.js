@@ -121,16 +121,33 @@ async function applicationLoop(mode_index){
   let player2 = new Player("Patrick", ["Siedler von Catan", "Risiko", "Wizard"], 2);
   console.log(player.getName());
   console.log(player.getBoardgames());
-  console.log(player.getID());
+  console.log(player.getRating());
+  console.log(player2.getRating());
+  //console.log(player.getID());
   let gamesnight = new Gamesnight([player, player2]);
   console.log(gamesnight.getPlayers());
   console.log(gamesnight.getBoardgames());
-  //player.setRating();
-  player.setRating("Wizard");
+  console.log(player.getBoardgames());
   console.log(player.getRating());
   console.log(player2.getRating());
-  player.setRating("UNO");
+  console.log(gamesnight.getRating());
+  //player.setRating();
+  player.setRating(gamesnight, "Wizard");
   console.log(player.getRating());
+  console.log(player2.getRating());
+  console.log(gamesnight.getRating());
+  player.setRating(gamesnight, "UNO");
+  console.log(player.getRating());
+  console.log(player2.getRating());
+  console.log(gamesnight.getRating());
+  player.setRating(gamesnight, "Risiko");
+  console.log(player.getRating());
+  console.log(player2.getRating());
+  console.log(gamesnight.getRating());
+  player2.setRating(gamesnight, "Wizard");
+  console.log(player.getRating());
+  console.log(player2.getRating());
+  console.log(gamesnight.getRating());
   
 }
 

@@ -36,6 +36,8 @@ class Player {
     for(let i = 0; i < this.boardgames.length; i++) {
       this.ratingHashmap.set(this.boardgames[i], "No rating asigned yet!");
     }
+    //placeholder for an upcoming gamesnight
+    this.gamesnight;
   }
 
   getID() {
@@ -60,30 +62,40 @@ class Player {
   getRating() {
     return this.ratingHashmap;
   }
-  setRating(boardgame) {
+  setRating(gamesnight, boardgame) {
+    this.gamesnight = gamesnight;
     if(this.ratingHashmap.has(boardgame)) {
       let temp = prompt("Rate " + boardgame + " from 1 to 5: ");
       if(temp == 1 || temp == 2 || temp == 3 || temp == 4 || temp == 5) {
-        this.ratingHashmap.set(boardgame, temp);
+        this.ratingHashmap.set(boardgame, parseInt(temp));
+        this.gamesnight.setRating(boardgame, parseInt(temp));
       } else {
         console.log("You rated " + boardgame + " with an invalid value. Try again please.");
-        this.setRating(boardgame);
+        this.setRating(gamesnight, boardgame);
+      }
+    }
+  }
+
+  setBoardgameList(boardgames, ratingHashmap) {
+    this.boardgames = boardgames;
+    this.ratingHashmap = ratingHashmap;
+  }
+
+  addBoardgameToList(boardgames) {
+    for(let i = 0; i < boardgames.length; i++) {
+      if(!this.boardgames.includes(boardgames[i])) {
+        this.boardgames.push(boardgames[i]);
+        this.ratingHashmap.set(boardgames[i], "No rating asigned yet!");
       }
     }
   }
   
-  createGamesnight() {
-    let gamesnight = new Gamesnight(this);
-  }
-  test() {
-    let game = new Boardgame("Wizard");
-    console.log();
-  }
 }
 
 class Gamesnight {
   constructor(players) {
     this.players = players;
+    this.ratingHashmap = new Map();
     if(!Array.isArray(players)) {
       this.boardgames = [];
       console.log("Your player input was not an array!");
@@ -97,7 +109,16 @@ class Gamesnight {
             this.boardgames.push(this.players[i].getBoardgames()[j]);
           }
         }
+        for(let j = 0; j < this.boardgames.length; j++) {
+          this.ratingHashmap.set(this.boardgames[j], "No rating asigned yet!");
+        }
+        //this.players[i].setBoardgameList(this.boardgames, this.ratingHashmap);
+        
       }
+      for(let i = 0; i < this.players.length; i++) {
+        this.players[i].addBoardgameToList(this.boardgames);  
+      }
+      
     }
   }
 
@@ -111,8 +132,23 @@ class Gamesnight {
   getBoardgames() {
     return this.boardgames;
   }
-  test() {
-    console.log(this.players.getName());
+  getRating() {
+    return this.ratingHashmap;
+  }
+  setRating(boardgame, rating) {
+    if(this.ratingHashmap.has(boardgame)) {
+      if(rating == 1 || rating == 2 || rating == 3 || rating == 4 || rating == 5) {
+        if(this.ratingHashmap.get(boardgame) === "No rating asigned yet!") {
+          this.ratingHashmap.set(boardgame, rating);
+        } else {
+          let averageRating = (parseInt(this.ratingHashmap.get(boardgame)) + parseInt(rating)) / this.players.length;
+          this.ratingHashmap.set(boardgame, averageRating);  
+        }
+      } else {
+        console.log("You rated " + boardgame + " with an invalid value. Try again please.");
+        this.setRating(boardgame, rating);
+      }
+    }
   }
 }
 exports.Boardgame = Boardgame;
