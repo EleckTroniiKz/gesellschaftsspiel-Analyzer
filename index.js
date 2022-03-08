@@ -1,4 +1,4 @@
-const {Boardgame, Player} = require("./applicationMode");
+const {Boardgame, Player, Gamesnight} = require("./applicationMode");
 const {DataHandler} = require('./dataHandler');
 const {Control} = require("./control");
 const {MODES, MANAGEMENT_MODES, MANAGEMENT_PLAYERS_MODES, EDIT_PLAYERS, MANAGEMENT_GAMES_MODES, DELETE_GAME, MENUES} = require("./enums/enum.js")
@@ -161,6 +161,38 @@ async function managementLoop(mode_index){
 
 async function applicationLoop(mode_index){
 	//TO DO
+  let player = new Player("Niclas", ["Wizard", "UNO"], 1);
+  let player2 = new Player("Patrick", ["Siedler von Catan", "Risiko", "Wizard"], 2);
+  console.log(player.getName());
+  console.log(player.getBoardgames());
+  console.log(player.getRating());
+  console.log(player2.getRating());
+  //console.log(player.getID());
+  let gamesnight = new Gamesnight([player, player2]);
+  console.log(gamesnight.getPlayers());
+  console.log(gamesnight.getBoardgames());
+  console.log(player.getBoardgames());
+  console.log(player.getRating());
+  console.log(player2.getRating());
+  console.log(gamesnight.getRating());
+  //player.setRating();
+  player.setRating(gamesnight, "Wizard");
+  console.log(player.getRating());
+  console.log(player2.getRating());
+  console.log(gamesnight.getRating());
+  player.setRating(gamesnight, "UNO");
+  console.log(player.getRating());
+  console.log(player2.getRating());
+  console.log(gamesnight.getRating());
+  player.setRating(gamesnight, "Risiko");
+  console.log(player.getRating());
+  console.log(player2.getRating());
+  console.log(gamesnight.getRating());
+  player2.setRating(gamesnight, "Wizard");
+  console.log(player.getRating());
+  console.log(player2.getRating());
+  console.log(gamesnight.getRating());
+  
 }
 
 async function mainLoop(mainIndex = null) {
