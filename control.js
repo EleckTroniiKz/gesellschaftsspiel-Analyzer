@@ -20,11 +20,10 @@ const managementModeMenu = [
                   	"Return to Main Menu",
                     "Player management",
                     "Game management",
-										"Gamenight planning"]
-
+					"Gamenight planning"]
 const applicationModeMenu = [
-										"Return to Main Menu",
-										"Start Game"
+					"Return to Main Menu",
+					"Start Game"
 ]
 
 const managePlayersMenu = [
@@ -53,6 +52,17 @@ const deleteGamesMenu = [
                     "Delete Game Globally"
 ]
 
+function terminate() {
+	term.grabInput( false ) ;
+	console.clear();
+	console.log( "Program has been terminated" ) ;
+	setTimeout( function() { process.exit() } , 100 ) ;
+}
+
+term.on( 'key' , function( name , matches , data ) {
+	if ( name === 'CTRL_C' || name === 'ESCAPE' ) { terminate() ; }
+});
+
 class Control {
 
 	constructor(){
@@ -70,24 +80,23 @@ class Control {
 	
 	async postMainMenu() {
 	
-	  let selectedIndex;
+	  	let selectedIndex;
 		console.clear()
-	
+
 		let startIndex = mainMenu.indexOf(this.lastOption)
 		if(startIndex === -1){
-			console.log("IN")
 			startIndex = 0;
 		}
-	
+
 		term(`>MainMenu<\n`) ;
 		term(`Please select a mode.\n`)
 	
-	  const response = await term.singleColumnMenu( mainMenu ,{selectedIndex: startIndex} ).promise;
-	  const selectedText = await response.selectedText;
-	  selectedIndex = await response.selectedIndex;
-	  term( '\n' ).green("Selected: ", selectedText); 
-	
-	  this.lastOption = "Main Menu"
+		const response = await term.singleColumnMenu( mainMenu ,{selectedIndex: startIndex} ).promise;
+		const selectedText = await response.selectedText;
+		selectedIndex = await response.selectedIndex;
+		term( '\n' ).green("Selected: ", selectedText); 
+		
+		this.lastOption = "Main Menu"
 	
 		return selectedIndex;
 	}
@@ -214,22 +223,22 @@ class Control {
 		return selectedIndex;
 	}
 
-  async postFileSelector() {
+	async postFileSelector() {
 
-	  console.clear();
-	
-	  term(`>Import Mode<\n`)
-	  term.cyan( 'Choose a file:\n' ) ;
+		console.clear();
+		
+		term(`>Import Mode<\n`)
+		term.cyan( 'Choose a file:\n' ) ;
 
-    let items = await fs.readdirSync('./DataImport', {withFileTypes: true}).map(d => d.name ) ;
-		items.push('EXIT');
-    const response = await term.gridMenu( items ).promise;
-    const selectedText = await response.selectedText;
-    const selectedIndex = await response.selectedIndex;
-    term( '\n' ).green("Selected: ", selectedText);
+		let items = await fs.readdirSync('./DataImport', {withFileTypes: true}).map(d => d.name ) ;
+			items.push('EXIT');
+		const response = await term.gridMenu( items ).promise;
+		const selectedText = await response.selectedText;
+		const selectedIndex = await response.selectedIndex;
+		term( '\n' ).green("Selected: ", selectedText);
 
-    return selectedText;
-  }
+		return selectedText;
+	}
 
 	async choosePlayer(userList) {
 		let selectedIndex;
@@ -278,14 +287,14 @@ class Control {
 		return selectedText;
 	}
 
-  async confirm(confirmQuestion) {
+	async confirm(confirmQuestion) {
 
-		console.clear()
-    term(`${confirmQuestion} \n Insert`); term.red(` \"n\" to deny `); term(`or`);
-    term.green(` \"y\" to confirm \n`);
-  	const result = await term.yesOrNo( { yes: [ 'y' , 'ENTER' ] , no: [ 'n' ] }).promise;
-    return result;
-  }
+			console.clear()
+		term(`${confirmQuestion} \n Insert`); term.red(` \"n\" to deny `); term(`or`);
+		term.green(` \"y\" to confirm \n`);
+		const result = await term.yesOrNo( { yes: [ 'y' , 'ENTER' ] , no: [ 'n' ] }).promise;
+		return result;
+	}
 
 	async addGameInput() {
 		
@@ -293,8 +302,12 @@ class Control {
 		term('>Add Game<\n');
 		term.cyan('Enter the game you want to add: ')
 		const gameName = await term.inputField().promise;
-		
-		return ;
+		if(gameName !== ""){
+			return gameName;
+		}
+		else{
+			this.addGameInput()
+		}
 	}
 
 	async addPlayerInput() {

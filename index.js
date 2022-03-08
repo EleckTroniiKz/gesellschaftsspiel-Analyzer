@@ -3,8 +3,11 @@ const {DataHandler} = require('./dataHandler');
 const {Control} = require("./control");
 const {MODES, MANAGEMENT_MODES, MANAGEMENT_PLAYERS_MODES, EDIT_PLAYERS, MANAGEMENT_GAMES_MODES, DELETE_GAME, MENUES} = require("./enums/enum.js")
 
+let hasImportedData = false;
+let session;
 let control = new Control();
 control.postWelcome();
+//Check if there is already Data saved
 mainLoop();
 
 async function gamesManagementLoop(mode_index){
@@ -16,15 +19,32 @@ async function gamesManagementLoop(mode_index){
 		case MANAGEMENT_GAMES_MODES.ADD:
 			//add GAME
 			//Input a Name for the game. Then choose if it should be added to a existing player or create a new player
-			let user = ["Can", "Patrick", "Niclas", "RETURN"]
-			let chosenPlayer = await control.choosePlayer(user)
-			if(chosenPlayer !== "RETURN"){
-				let newGame = await control.addGameInput();
-				console.log(newGame)
-				// WOllen siespiel x zu user y hinzufügen --> ja und nein
-				//session.addGame(userID, newGame)
-				//Dann ausgeben, dass SPiel x zu User y hinzugefügt wurde.
-				//vllt die spiele liste vom user ausgeben. --> 
+			if(hasImportedData){
+				let userList = session.getUserList();
+				let filteredNameList = []
+				let filteredIDList = []
+				for(let i = 0; i < userList.length; i++){
+					filteredNameList.push(userList[i].name);
+					filteredIDList.push(userList[i].uID);
+				}
+				filteredNameList.push("RETURN")
+				let choosenPlayer = await control.choosePlayer(filteredNameList);
+				if(filteredNameList[choosenPlayer] !== "RETURN"){
+					let gameToAdd = await control.addGameInput();
+					if(await control.confirm(`Do you really want to add ${gameToAdd} to the User ${filteredNameList[choosenPlayer]}?`)){
+						session.addGame(filteredIDList[choosenPlayer], gameToAdd);
+					}
+					else{
+						await control.decision(["Ok"], "No Data found.", "Please import Data first!")
+					}
+					//Wollen sie spiel x zu user y hinzufügen --> ja und nein
+					//session.addGame(userID, newGame).
+					//Dann ausgeben, dass SPiel x zu User y hinzugefügt wurde.
+					//vllt die spiele liste vom user ausgeben. --> 
+				}
+			}
+			else{
+				let errorMsg = await control.decision(["Ok"], "No Data found.", "Please import Data first!")
 			}
 			mainLoop(MODES.MANAGEMENT);
 			break;
@@ -34,12 +54,36 @@ async function gamesManagementLoop(mode_index){
 			//After selection, choose a player with that game and change the name either for one person or globally
 			break;
 		case MANAGEMENT_GAMES_MODES.DELETE:
-			//let gameList = session.getGlobalGameList()
-			let gameList= ["A", "B", "C", "RETURN"]
+			let gameList = session.getGlobalGameList()
+			gameList.push("RETURN")
 			let gameToDelete = await control.chooseGame(gameList)
-			await control.decision(['GLOBAL', 'PLAYER', 'RETURN'], 'Delete Game', 'Do you want to delete the chosen game from a user or globally?')
+			let chosenAct = await control.decision(['GLOBAL', 'PLAYER', 'RETURN'], 'Delete Game', 'Do you want to delete the chosen game from a user or globally?')
 			if(gameToDelete !== "RETURN"){
-				//rest stuff
+				if(chosenAct === "GLOBAL"){
+					session.deleteGameGlobally(gameToDelete);
+				}
+				else if(chosenAct === "PLAYER"){
+					let userList = session.getUserList();
+					let filteredNameList = []
+					let filteredIDList = []
+					for(let i = 0; i < userList.length; i++){
+						filteredNameList.push(userList[i].name);
+						filteredIDList.push(userList[i].uID);
+					}
+					filteredNameList.push("RETURN")
+					let chosenIndex = await control.choosePlayer(filteredNameList)
+					if(filteredNameList[chosenIndex] === "RETURN"){
+						mainLoop(MODES.MANAGEMENT);
+					}
+					else {
+						if(await control.decision(["Yes", "No"], "Confirm Delete", `Are you sure you want to delete ${gameToDelete} from ${filteredNameList[chosenIndex]}`)){
+							session.deleteGameFromUser(filteredIDList[chosenIndex], gameToDelete);
+						}
+						else{
+							mainLoop(MODES.MANAGEMENT);
+						}
+					}
+				}
 			}
 			mainLoop(MODES.MANAGEMENT);
 			//Either for a player or globally
@@ -99,9 +143,9 @@ async function managementLoop(mode_index){
 			mainLoop();
 			break;
 		case MANAGEMENT_MODES.MANAGE_PLAYERS:
-      managementIndex = await control.postManagePlayersMenu();
+      		managementIndex = await control.postManagePlayersMenu();
 			playerManagementLoop(managementIndex);
-		  break;
+		  	break;
 		case MANAGEMENT_MODES.MANAGE_GAMES:
 			managementIndex = await control.postManageGamesMenu();
 			gamesManagementLoop(managementIndex);
@@ -126,22 +170,30 @@ async function mainLoop(mainIndex = null) {
   
 	switch(mainIndex) {
 		case MODES.EXIT:
-			console.log("EXIT");
-      process.Exit();
-			break;
+      		process.exit();
 		case MODES.IMPORT: //Import Mode
+			const fileText = await control.postFileSelector();
+			if(fileText !== "EXIT"){
+				session = new DataHandler(fileText)
+				session.setUpLocalStorages()
+				session.checkFilename()
+				console.log(session.getUserList())
+				console.log("Daten wurden gespeichert")
+				hasImportedData = true;
+			}
+			mainLoop()
 			break;
 		case MODES.APPLICATION: // Application Mode
-      let applicationIndex = await control.postApplicationMode();	
+      		let applicationIndex = await control.postApplicationMode();	
 			applicationLoop(applicationIndex)
-	    break;
+	    	break;
 		case MODES.MANAGEMENT: //Management Mode
-      let managementIndex = await control.postManagementMode();
+      		let managementIndex = await control.postManagementMode();
 			console.log(managementIndex)
 			managementLoop(managementIndex);
-      break;
-  	case MODES.EXPORT: //Export Mode
-	  	break;
+      		break;
+		case MODES.EXPORT: //Export Mode
+	  		break;
 		default:
 			console.log("Something wrong with the index!");
 			break;

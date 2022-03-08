@@ -2,6 +2,8 @@ const fs = require('fs');
 const LocalStorage = require('node-localstorage').LocalStorage;
 const localStorage = new LocalStorage('./DataStorage/storage');
 
+//TODO get GLOBAL GAME LIST UND UPDATE GAMELIST
+
 class DataHandler {
 	constructor(fileName){
 		this.fileName = fileName;
@@ -175,7 +177,6 @@ class DataHandler {
 	parseLine(array){
 		let currentRow = [];
 		let currentWord = "";
-		console.log(array)
 		for(let j = 0; j <= array.length; j++){
 			if(array[j] === ";"){
 				if(currentWord === ""){
@@ -222,7 +223,6 @@ class DataHandler {
 		fs.readFile(filePath, 'utf-8', (err,data) => {
 			if(err) {console.log('File not found!'); return;}
 			let dataArray = data.split("\n");
-			console.log(dataArray);
 			
 			let currentRow = []
 			let importedData = []
@@ -233,7 +233,6 @@ class DataHandler {
 					importedData.push(this.parseLine(dataArray[i], i));
 				}
 			}
-			console.log(importedData)
 			this.saveUserData(importedData);
 		})
 	}
