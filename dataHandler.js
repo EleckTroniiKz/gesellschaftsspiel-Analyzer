@@ -1,6 +1,7 @@
 const fs = require('fs');
 const LocalStorage = require('node-localstorage').LocalStorage;
 const localStorage = new LocalStorage('./DataStorage/storage');
+const {Boardgame, Player, Gamesnight} = require("./applicationMode");
 
 //TODO get GLOBAL GAME LIST UND UPDATE GAMELIST
 
@@ -18,19 +19,22 @@ class DataHandler {
 	updateGlobalGameList(){
 		let userList = JSON.parse(localStorage.getItem('users'));
 		let globalGameList = JSON.parse(localStorage.getItem('gameList'));
-		let games = globalGameList.filter((value) => {return value.name})
-		let gameObject = {};
+		
 		let gameNames = []
-		//game { name: , rating: , veto: false};
 		for(let i = 0; i < userList.length; i++){
-			let currentUser = userList[i]
-			for(let j = 0; j < currentUser.games.length; j++){
-				if(!games.includes(currentUser.games[j])){
-					gameObject = {name: currentUser.games[j], rating: null, veto: false}
-					if(!gameNames.includes(gameObject.name)){
-						globalGameList.push(gameObject);
-						gameNames.push(gameObject.name)
+			let currentUser = new Player(userList[i].name, userList[i].boardgames, userList[i].id)
+			let games = currentUser.getBoardgames().length;
+			for(let j = 0; j < games.length; j++){
+				let currentGame = games[j];
+				//gotta check if game name is in 
+				if(!gameNames.includes(currentGame.name)){
+					gameNames.push(currentGame.name);
+					let game = new Boardgame(currentGame.name);
+					if(currentGame.rating !== null){
+						//Implement setRating method in boardgame with value setter
+						//game.setRating(currentGame.rating);
 					}
+					globalGameList.push(game);
 				}
 			}
 		}
@@ -53,7 +57,13 @@ class DataHandler {
 		this.updateGlobalGameList
 	}
 
-	deleteGameGlobally(game){}
+	transformHashToString(hashMap){
+		return JSON.stringify(Array.from(hashMap.entries()));
+	}
+
+	transformStringToHash(stringArray){
+		return new Map(JSON.parse(stringArray))
+	}
 	
 	/**
 	 * @description Deletes a game out of the games list of a specific user
@@ -160,8 +170,8 @@ class DataHandler {
 			}
 			gameArr = this.searchDuplicates(gameArr);
 			let id = this.generateUserID()
-			let userObject = {uID: id, name: name, games: gameArr}
-			userList.push(userObject);
+			let player = new Player(name, gameArr, id);
+			userList.push(player);
 			gameArr = [];
 			row = 1
 		}
