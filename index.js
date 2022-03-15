@@ -3,8 +3,9 @@ const {DataHandler} = require('./dataHandler');
 const {Control} = require("./control");
 const {MODES, MANAGEMENT_MODES, MANAGEMENT_PLAYERS_MODES, EDIT_PLAYERS, MANAGEMENT_GAMES_MODES, DELETE_GAME, MENUES} = require("./enums/enum.js")
 
-let hasImportedData = false;
+
 let session;
+let hasImportedData = false;
 let control = new Control();
 control.postWelcome();
 //Check if there is already Data saved
@@ -160,38 +161,78 @@ async function managementLoop(mode_index){
 }
 
 async function applicationLoop(mode_index){
+	switch(mode_index){
+		case 1:
+			if(hasImportedData){
+				let userList = session.getUserObjectList();
+				let gamesnight = new Gamesnight(userList);
+				let gameList = []
+				for(let i = 0; i < userList.length; i++){
+					let currentUsersGames = userList[i].getBoardgames();
+					for(let j = 0; j < currentUsersGames.length; j++){
+						let gameName = currentUsersGames[j];
+						if(!gameList.includes(gameName)){
+							gameList.push(gameName);
+						}
+					}
+				}
+				let gameObjects = []
+				for(let i = 0; i < gameList.length; i++){
+					gameObjects.push(new Boardgame(gameList[i]))
+				}
+		
+				for(let i=0; i < userList.length; i++){
+					let player = userList[i];
+					let playerName = player.getName();
+					for(let g = 0; g < gameList.length; g++){
+						let gameName = gameList[g]
+						let rating = await control.setRating(playerName, gameName);
+						switch(rating){
+							case 0:
+								rating = 5;
+								break;
+							case 1:
+								rating = 4;
+								break;
+							case 2:
+								rating = 3;
+								break;
+							case 3:
+								rating = 2;
+								break;
+							case 4:
+								rating = 1;
+								break;
+							case 5:
+								rating = 0;
+								break;
+							default:
+								rating = 0;
+								break;
+						}
+						player.setRating(gamesnight, gameName, rating);
+						
+					}
+				} 
+				for(let i=0; i < userList.length; i++){
+					console.log(userList[i].getRating());
+				}
+				
+				//Ab hier wurden alle Games gerated nehme ich an.
+				// ich weiß leider nicht ganz was dann passieren soll xD
+			}
+			else{
+				let errorMsg = await control.decision(["Ok"], "No Data found.", "Please import Data first!");
+			}
+			break;
+		case 0:
+			break;
+		default:
+			break;
+	}
+	mainLoop();
 	//TO DO
-  let player = new Player("Niclas", ["Wizard", "UNO"], 1);
-  let player2 = new Player("Patrick", ["Siedler von Catan", "Risiko", "Wizard"], 2);
-  console.log(player.getName());
-  console.log(player.getBoardgames());
-  console.log(player.getRating());
-  console.log(player2.getRating());
-  //console.log(player.getID());
-  let gamesnight = new Gamesnight([player, player2]);
-  console.log(gamesnight.getPlayers());
-  console.log(gamesnight.getBoardgames());
-  console.log(player.getBoardgames());
-  console.log(player.getRating());
-  console.log(player2.getRating());
-  console.log(gamesnight.getRating());
-  //player.setRating();
-  player.setRating(gamesnight, "Wizard");
-  console.log(player.getRating());
-  console.log(player2.getRating());
-  console.log(gamesnight.getRating());
-  player.setRating(gamesnight, "UNO");
-  console.log(player.getRating());
-  console.log(player2.getRating());
-  console.log(gamesnight.getRating());
-  player.setRating(gamesnight, "Risiko");
-  console.log(player.getRating());
-  console.log(player2.getRating());
-  console.log(gamesnight.getRating());
-  player2.setRating(gamesnight, "Wizard");
-  console.log(player.getRating());
-  console.log(player2.getRating());
-  console.log(gamesnight.getRating());
+  
   
 }
 

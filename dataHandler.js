@@ -99,6 +99,20 @@ class DataHandler {
 		this.updateGlobalGameList()
 	}
 
+	getUserObjectList(){
+		let list = this.getUserList();
+		
+		let objectList = [];
+		for(let i = 0; i < list.length; i++){
+			let a = new Player(list[i].name, list[i].boardgames, list[i].id);
+			a.setBoardgameList(list[i].boardgames, this.transformStringToHash(list[i].ratingHashmap));
+			
+			objectList.push(a)
+		}
+		return objectList;
+		//returned Userliste, aber die elemente sind Instanzen von Player
+	}
+
 	/**
 	 * @returns a JSON Object of the user storage 
 	 */
@@ -171,6 +185,8 @@ class DataHandler {
 			gameArr = this.searchDuplicates(gameArr);
 			let id = this.generateUserID()
 			let player = new Player(name, gameArr, id);
+			let map = this.transformHashToString(player.getRating())
+			player.setBoardgameList(gameArr, map);
 			userList.push(player);
 			gameArr = [];
 			row = 1

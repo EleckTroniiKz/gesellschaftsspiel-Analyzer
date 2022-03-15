@@ -1,6 +1,7 @@
 class Boardgame {
   constructor(name) {
     this.name = name;
+    this.rating = null;
   }
   getName() {
     return this.name;
@@ -8,8 +9,10 @@ class Boardgame {
   getRating() {
     return this.rating;
   }
+  
   setRating() {
     let temp = prompt("Rate " + this.getName() + " from 1 to 5: ");
+
     if(temp == 1 || temp == 2 || temp == 3 || temp == 4 || temp == 5) {
       this.rating = temp;
     } else {
@@ -62,9 +65,14 @@ class Player {
   getRating() {
     return this.ratingHashmap;
   }
-  setRating(gamesnight, boardgame) {
+
+  setRating(gamesnight, boardgame, rating) {
     this.gamesnight = gamesnight;
     if(this.ratingHashmap.has(boardgame)) {
+      this.ratingHashmap.set(boardgame, rating);
+      this.gamesnight.setRating(boardgame, rating);
+      //Glaube wir brauchen das untern stehende nichtmehr, da die ratingabfrage vom Terminalkit gemacht wird
+      /*
       let temp = prompt("Rate " + boardgame + " from 1 to 5: ");
       if(temp == 1 || temp == 2 || temp == 3 || temp == 4 || temp == 5) {
         this.ratingHashmap.set(boardgame, parseInt(temp));
@@ -73,6 +81,7 @@ class Player {
         console.log("You rated " + boardgame + " with an invalid value. Try again please.");
         this.setRating(gamesnight, boardgame);
       }
+      */
     }
   }
 
@@ -137,6 +146,13 @@ class Gamesnight {
   }
   setRating(boardgame, rating) {
     if(this.ratingHashmap.has(boardgame)) {
+      if(this.ratingHashmap.get(boardgame) === "No rating asigned yet!") {
+        this.ratingHashmap.set(boardgame, rating);
+      } else {
+        let averageRating = (parseInt(this.ratingHashmap.get(boardgame)) + parseInt(rating)) / this.players.length;
+        this.ratingHashmap.set(boardgame, averageRating);  
+      }
+      /*
       if(rating == 1 || rating == 2 || rating == 3 || rating == 4 || rating == 5) {
         if(this.ratingHashmap.get(boardgame) === "No rating asigned yet!") {
           this.ratingHashmap.set(boardgame, rating);
@@ -147,7 +163,7 @@ class Gamesnight {
       } else {
         console.log("You rated " + boardgame + " with an invalid value. Try again please.");
         this.setRating(boardgame, rating);
-      }
+      }*/
     }
   }
 }

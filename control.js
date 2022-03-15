@@ -9,6 +9,8 @@ process.exit()*/
 
 //Arrays mit den Menüs
 
+const ratingOptions = ["very good", "good", "not bad", "not so good", "bad"];
+
 const mainMenu = [
                     "Exit",
                     "Import Mode",
@@ -167,6 +169,24 @@ class Control {
 		this.lastOption = "Player management"
 	  
 		return selectedIndex;
+	}
+
+	async setRating(playerName, gamename){
+		let selectedIndex;
+		console.clear();
+		term(`>Rate Games<\n`);
+		term(`> ${playerName} please rate the game ${gamename}!<\n`)
+
+		const response = await term.singleColumnMenu( ratingOptions ).promise;
+		selectedIndex = await response.selectedIndex;
+		term('\n').green(`You have rated ${gamename} with ${await response.selectedText}`);
+		let choice = await this.decision(["Next game", "Change rating"], `You voted ${gamename} with ${ratingOptions[selectedIndex]}`, `Do you want to rate the next game, or re-rate ${gamename}?`);
+		if(choice === "Next game"){
+			return selectedIndex;
+		}
+		else{
+			this.setRating(playerName, gamename);
+		}
 	}
 	
 	//NicetoHave
