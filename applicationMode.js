@@ -8,6 +8,12 @@ class Boardgame {
   getRating() {
     return this.rating;
   }
+  
+  //adds Rating By method call
+  setRating(rating) {
+   this.rating = rating; 
+  }
+  
   setRating() {
     let temp = prompt("Rate " + this.getName() + " from 1 to 5: ");
     if(temp == 1 || temp == 2 || temp == 3 || temp == 4 || temp == 5) {
