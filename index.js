@@ -1,16 +1,23 @@
 const {Boardgame, Player, Gamesnight} = require("./applicationMode");
 const {DataHandler} = require('./dataHandler');
 const {Control} = require("./control");
+const {Export} = require("./fileExport");
 const {MODES, MANAGEMENT_MODES, MANAGEMENT_PLAYERS_MODES, EDIT_PLAYERS, MANAGEMENT_GAMES_MODES, DELETE_GAME, MENUES} = require("./enums/enum.js")
 
 
 let session;
+/*
 let hasImportedData = false;
 let control = new Control();
 control.postWelcome();
+*/
 //Check if there is already Data saved
-mainLoop();
-
+let exp = new Export();
+let csvData = "";
+csvData += exp.setPlayerRatingCSV();
+csvData += exp.setGameAvgCSV();
+exp.createCSV(csvData,"Mein Export");
+/*
 async function gamesManagementLoop(mode_index){
 	
 	switch(mode_index){
