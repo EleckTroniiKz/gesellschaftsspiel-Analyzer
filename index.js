@@ -306,14 +306,3 @@ async function mainLoop(mainIndex = null) {
 	}
 }
 
-  
-
-/*let game = new Boardgame("Wizard");
-console.log(game.getName());
-game.setRating();
-console.log(game.getRating());
-let player = new Player("Niclas", ["test"]);
-console.log(player.getName());
-console.log(player.getBoardgames());
-player.addBoardgame("3");
-console.log(player.getBoardgames());*/

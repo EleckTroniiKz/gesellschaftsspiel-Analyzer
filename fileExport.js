@@ -11,80 +11,111 @@ class Export{
 		this.session = new DataHandler('dos.csv');
 		this.userList = this.session.getUserObjectList();
 	}
-	
+
+  /*
+  @description This method creates a string formatted in CSV, which contains data about
+               the rating of each game for each player
+  @return type = string
+      This method returns the rating of each game for each player
+      formatted in CSV, basically the data for the export file
+  */
 	
  setPlayerRatingCSV() {
- let data = "";
-  //Ich brauche alle Spieler und deren Games
-  //dann brauch ich alle Ratings dazu
+   //Initialize empty data string so you can append data with +=
+   let data = "";
+    /*
+    For every player in userList this loop gets the ratings from the hashmap and writes
+    it into the data string in CSV format
+    */
+   for(let index = 0;index < this.userList.length;index++){
+     //header for each player
+     data += `Rating von ${this.userList[index].getName()};\n\n`;
+     data += "Game;Rating\n";
+     
+     let map = this.userList[index].getRating();
+     let k = Array.from(map.keys());
 
-  //Für jeden Spieler
-  for(let index = 0;index < this.userList.length;index++){
-  
-    data += `Rating von ${this.userList[index].getName()};\n\n`;
-    data += "Game;Rating\n";
-    
-    //Hier alle Games und Ratings ausgeben
-		let map = this.userList[index].getRating()
-		let k = Array.from(map.keys());
-
-		for(let key = 0; key < k.length; key++){
-			
-			data += `${k[key]};${map.get(k[key])}\n`
-		}
-		
-    //Letzte Line vor neuem Spieler
-    data += "\n";
-  }
+     //content
+     for(let key = 0; key < k.length; key++){
+       data += `${k[key]};${map.get(k[key])}\n`;
+     }
+     //last line
+     data += "\n";
+   }
    return data;
 }
 
+  /*
+  @description This method creates a string formatted in CSV, which contains data about
+               the average of each game
+  @return type = string
+      This method returns the average rating for each game
+      formatted in CSV, basically the data for the export file
+  */
+
  setAvgRatingCSV(){
+   //Initialize empty data string so you can append data with +=
    let data = "";
-    data += "Average Rating for each Game;\n\n";
-    data += "Game;Rating\n";
+   data += "Average Rating for each Game;\n\n";
+   data += "Game;Rating\n";
    
     //Hier alle Games und Ratings ausgeben
    
-    return data;
+   return data;
   }
 
+  /*
+  @description This method combines the methods setPlayerRatingCSV and setAvgRatingCSV
+  @return type = string | This method returns the full rating Export data formatted in
+                          CSV
+  */
+
   setExportData(){
-  let data = "";
+    //Initialize empty data string so you can append data with +=
+    let data = "";
     data += this.setPlayerRatingCSV();
     data += this.setAvgRatingCSV();
     return data;
   }
 
+  /*
+  @param
+  data: This parameter is required, it needs the data string that has to be formatted
+        in CSV
+  name: This parameter is for the name of the export file, default is set to export
+  addDateToFile: Boolean value if the Date should be added to the Filename
 
- createExport(data,name = "export",addDate = true){
+  @description This method creates the export file inside DataExport
+  */
+ createExport(data,name = "export",addDateToFile = true){
    
-   console.log("Creating CSV file");
+   if(addDateToFile){
 
-   //Abfrage ob der Dateiname das Datum beinhalten soll
-   if(addDate){
+     let date = new Date();
+     date = date.toLocaleDateString("en-US");
+     let strDate = date.toString();
+     strDate = strDate.replaceAll("/","_");
+     
+     //with date in filename     
+     console.log("Creating CSV file");
+     fs.writeFile(`.//DataExport//${name}_${strDate}.csv`,data, (err) => {
+       if (err) throw err;
+       console.log("Export Completed!");
+     }
+                 );
 
-        let date = new Date();
-   date = date.toLocaleDateString("en-US");
-   let strDate = date.toString();
-   strDate = strDate.replaceAll("/","_");
-   
-   fs.writeFile(`.//DataExport//${name}_${strDate}.csv`,data, (err) => {
-     if (err) throw err;
-     console.log("Export Completed!");
-    }
-    );
 
-     //Erstelle Datei ohne Datum im Dateinamen
    } else{
-        fs.writeFile(`.//DataExport//${name}.csv`,data, (err) => {
-     if (err) throw err;
-     console.log("Export Completed!");
-    }
-    );
+     //without date in filename
+     console.log("Creating CSV file");
+     fs.writeFile(`.//DataExport//${name}.csv`,data, (err) => {
+       if (err) throw err;
+       console.log("Export Completed!");
+     }
+                 );
    }
-   
-  }
+ }
 }
 
+//Export
 exports.Export = Export;
