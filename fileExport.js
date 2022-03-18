@@ -6,6 +6,10 @@ const LocalStorage = require('node-localstorage').LocalStorage;
 const localStorage = new LocalStorage('./DataStorage/storage');
 const fs = require('fs');
 
+/*
+@description This class contains all Methods required to export a file in CSV format
+*/
+
 class Export{
 	constructor() {
 		this.session = new DataHandler('dos.csv');
