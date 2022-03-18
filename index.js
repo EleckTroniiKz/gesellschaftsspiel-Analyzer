@@ -4,20 +4,37 @@ const {Control} = require("./control");
 const {Export} = require("./fileExport");
 const {MODES, MANAGEMENT_MODES, MANAGEMENT_PLAYERS_MODES, EDIT_PLAYERS, MANAGEMENT_GAMES_MODES, DELETE_GAME, MENUES} = require("./enums/enum.js")
 
+let hasDataForExport = false;
 
 let session;
-/*
+
 let hasImportedData = false;
 let control = new Control();
-control.postWelcome();
-*/
-//Check if there is already Data saved
 let exp = new Export();
-let csvData = "";
-csvData += exp.setPlayerRatingCSV();
-csvData += exp.setGameAvgCSV();
-exp.createCSV(csvData,"Mein Export");
-/*
+control.postWelcome();
+//Check if there is already Data saved
+mainLoop()
+
+async function exportLoop(mode_index) {
+  switch(mode_index){
+    case 0:
+      mainLoop();
+      break;
+    case 1:
+    	let exportFileName = "Export";
+    	exportFileName = await control.addExportFileName();
+    	let exportDate = await control.confirm("Do you want to add the date to the filename?");
+    	let csvData = exp.setExportData();
+    	exp.createExport(csvData,exportFileName,exportDate);
+    	mainLoop();
+      break;
+      
+    default:
+			console.log("Something wrong with the index!");
+			break;
+ }
+}
+
 async function gamesManagementLoop(mode_index){
 	
 	switch(mode_index){
@@ -224,7 +241,7 @@ async function applicationLoop(mode_index){
 				for(let i=0; i < userList.length; i++){
 					console.log(userList[i].getRating());
 				}
-				
+				hasDataForExport = true;
 				//Ab hier wurden alle Games gerated nehme ich an.
 				// ich weiß leider nicht ganz was dann passieren soll xD
 			}
@@ -269,16 +286,27 @@ async function mainLoop(mainIndex = null) {
 	    	break;
 		case MODES.MANAGEMENT: //Management Mode
       		let managementIndex = await control.postManagementMode();
-			console.log(managementIndex)
+			console.log(managementIndex);
 			managementLoop(managementIndex);
       		break;
 		case MODES.EXPORT: //Export Mode
+			if(hasDataForExport){
+				//Abfrage, etc. pp
+        let exportIndex = await control.postExportMode();
+        exportLoop(exportIndex);
+			}
+			else{
+				let errorMsg = await control.decision(["Ok"], "No Data found.", "Please go through the application mode and rate the games first!");
+				mainLoop();
+			}
 	  		break;
 		default:
 			console.log("Something wrong with the index!");
 			break;
 	}
 }
+
+  
 
 /*let game = new Boardgame("Wizard");
 console.log(game.getName());

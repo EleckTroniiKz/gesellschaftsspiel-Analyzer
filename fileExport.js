@@ -39,7 +39,7 @@ class Export{
    return data;
 }
 
- setGameAvgCSV(){
+ setAvgRatingCSV(){
    let data = "";
     data += "Average Rating for each Game;\n\n";
     data += "Game;Rating\n";
@@ -49,22 +49,41 @@ class Export{
     return data;
   }
 
+  setExportData(){
+  let data = "";
+    data += this.setPlayerRatingCSV();
+    data += this.setAvgRatingCSV();
+    return data;
+  }
 
- createCSV(data,name = "export"){
+
+ createExport(data,name = "export",addDate = true){
    
    console.log("Creating CSV file");
-   let date = new Date();
-   date = date.toLocaleDateString("en-US")
-   let strDate = date.toString();
-   strDate = strDate.replaceAll("/","_")
 
-   
+   //Abfrage ob der Dateiname das Datum beinhalten soll
+   if(addDate){
+
+        let date = new Date();
+   date = date.toLocaleDateString("en-US");
+   let strDate = date.toString();
+   strDate = strDate.replaceAll("/","_");
    
    fs.writeFile(`.//DataExport//${name}_${strDate}.csv`,data, (err) => {
      if (err) throw err;
      console.log("Export Completed!");
     }
     );
+
+     //Erstelle Datei ohne Datum im Dateinamen
+   } else{
+        fs.writeFile(`.//DataExport//${name}.csv`,data, (err) => {
+     if (err) throw err;
+     console.log("Export Completed!");
+    }
+    );
+   }
+   
   }
 }
 

@@ -54,6 +54,11 @@ const deleteGamesMenu = [
                     "Delete Game Globally"
 ]
 
+const exportMenu = [
+                    "Return",
+                    "Create Export"
+]
+
 function terminate() {
 	term.grabInput( false ) ;
 	console.clear();
@@ -203,7 +208,9 @@ class Control {
 	  const selectedText = await response.selectedText;
 	  selectedIndex = await response.selectedIndex;
 	  term( '\n' ).green("Selected: ", selectedText);
-	  
+
+		this.lastOption = "Player management"
+		
 		return selectedIndex;
 	}
 	
@@ -337,9 +344,35 @@ class Control {
 		const playerName = await term.inputField().promise;
 		term.magenta(`\nEnter the games the player has. \n(Divide each game with a comma and if you're done, with a colon)\nExample: A,B,D,C; \n`)
 		const gameList = await term.inputField().promise;
-		let listString = gameList.slice(0, -1).split(',')
+		let listString = gameList.slice(0, -1).split(',');
 		
 	}
+
+  //Export
+  async postExportMode() {
+    let selectedIndex;
+	
+	  console.clear()
+	
+		term(`>Export Mode<\n`) ;
+		term(`Please select an Option.\n`);
+	  
+	  const response = await term.singleColumnMenu( exportMenu ).promise;
+	  const selectedText = await response.selectedText;
+	  selectedIndex = await response.selectedIndex;
+	  term( '\n' ).green("Selected: ", selectedText);
+		this.lastOption = "Export Mode";
+	  
+		return selectedIndex;
+	}
+
+  async addExportFileName() {
+		console.clear();
+		term('>Create Export<\n');
+		term.cyan('Enter the name of the file: ');
+		const fileName = await term.inputField().promise;
+    return fileName;
+}
 }
 
 exports.Control = Control
