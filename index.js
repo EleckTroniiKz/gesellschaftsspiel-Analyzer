@@ -260,6 +260,8 @@ async function applicationLoop(mode_index){
   
 }
 
+async function exportLoop(mode_index){}
+
 async function mainLoop(mainIndex = null) {
 	if(!mainIndex){
 		mainIndex = await control.postMainMenu()
@@ -274,7 +276,6 @@ async function mainLoop(mainIndex = null) {
 				session = new DataHandler(fileText)
 				session.setUpLocalStorages()
 				session.checkFilename()
-				console.log(session.getUserList())
 				console.log("Daten wurden gespeichert")
 				hasImportedData = true;
 			}
