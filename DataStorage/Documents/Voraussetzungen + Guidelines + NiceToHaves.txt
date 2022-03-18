@@ -46,3 +46,4 @@ Mögliche Nice To haves:
 - Wenn man in ein Menü feld reingeht und zurück, dann ist das letzte Menüfeld markiert (also ausgewählt) (schon teilweise umgesetzt)
 - False input control
 -Menüführung mit Pfeiltasten (und evtl. WASD) möglich?
+- nutzen von hashmaps für einfachere Speicherung und verwaltung der Ratings
