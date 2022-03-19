@@ -1,3 +1,384 @@
+const GERMAN = {
+	ratingOptions:["Sehr gut", "Gut", "Nicht schlecht", "Nicht so gut", "Schlecht"],
+	mainMenu: [
+		"EXIT",
+		//"Sprache einstellen",
+		"Importmodus",
+		"Anwendungsmodus",
+		"Verwaltungsmodus",
+		"Export Modus"
+	],
+	managementModeMenu: [
+		"Zurück zum Hauptmenü",
+		"Spieler-Verwaltung",
+		"Spiel-Verwaltung",
+		"Spielabend planung"
+	],
+	applicationModeMenu: [
+		"Zurück zum Hauptmenü",
+		"Starte Anwendung"
+	],
+	managePlayersMenu: [
+		"Zurück",
+		"Spieler hinzufügen",
+		"Spieler bearbeiten",
+		"Spieler löschen"
+	],
+	editPlayersMenu: [
+		"Zurück", 
+		"Name bearbeiten",
+		"Spiele bearbeiten"
+	],
+	manageGamesMenu: [
+		"Zurück",
+		"Spiel hinzufügen",
+		"Spiel bearbeiten",
+		"Spiel löschen"
+	],
+	deleteGamesMenu: [
+		"Zurück",
+		"Spiel von Spieler löschen",
+		"Spiel Global löschen"
+	],
+	exportMenu: [
+		"Zurück zum Hauptmenü",
+		"Export-Datei erstellen"
+	],
+	mainMenuHeader: ">Hauptmenü<\n",
+	managementModeHeader: ">Verwaltungsmodus<\n",
+	applicationModeHeader: ">Anwendungsmodus<\n",
+	managePlayersHeader: ">Verwalte Spieler<\n",
+	rateGamesHeader: ">Bewerte Spiele<\n",
+	editPlayerHeader: ">Spieler bearbeiten<\n",
+	manageGamesHeader: ">Spiele bearbeiten<\n",
+	deleteGamesHeader: ">Spiele löschen<\n",
+	importModeHeader: ">Importiere Daten<\n",
+	chooseFileQuestion: "Wähle eine Datei: \n",
+	choosePlayerHeader: ">Spielerauswahl<\n",
+	choosePlayerQuestion: "Wähle einen Spieler aus\n",
+	chooseGameHeader: ">Spielauswahl<\n",
+	chooseGameQuestion: "Wähle ein Spiel aus\n",
+	confirmQuestionCreator: (confirmQuestion, i) => {
+		switch(i){
+			case 0:
+				return `${confirmQuestion}\n Drücke`;
+			case 1:
+				return `\"n\" um abzulehnen`;
+			case 2:
+				return `oder`;
+			case 3:
+				return `\"y\" um zuzustimmen.\n`;
+		}
+	},
+	addGameHeader: `>Füge Spiel hinzu<\n`,
+	addGameQuestion: `Welches Spiel möchtest du hinzufügen?\n`,
+	addPlayerHeader: `>Füge Spieler hinzu<\n`,
+	addPlayerNameQuestion: `Gib den Namen des Spielers ein, den du hinzufügen möchtest: `,
+	addPlayerGameQuestion: `\nGib die Namen der Spiele ein, die der Spieler besitzt. \n (Trenne jedes Spiel mit einem Komma[,]. Wenn du fertig bist, schreib am Ende ein Semikolon[;]. -> Bsp: A,B,C;)\n`,
+	exportModeHeader: `>Exportmodus<\n`,
+	createExportHeader: `>Erstelle Export<\n`,
+	createExportFileQuestion: `Gib den Namen der Exportdatei an: `,
+	rateGameQuestion: (gameName, playerName) => {return `Spieler ${playerName}, bitte bewerte das Spiel ${gameName}`},
+	ratingNoticeOutput: (gameName, ratingValue) => {return `Du hast das Spiel ${gameName} mit ${ratingValue} bewertet.`},
+	ratingValidationQuestion: (gameName) => {return `Möchtest du das nächste Spiel bewerten oder deine Bewertung für ${gameName} ändern?`},
+	mainMenuSelectTitle: "Bitte wähle einen Modus aus. \n",
+	exportLoopOutput: "Möchtest du das heutige Datum an den Dateinamen beifügen?",
+	addGameToPlayerQuestion: (gameName, playerName) => {return `Möchtest du wirklich das Spiel ${gameName} dem Spieler ${playerName} hinzufügen?`},
+	noData: "Keine Daten gefunden!",
+	importOrder: "Bitte importieren Sie zuerst Daten!",
+	optionTextGlobalOrIndividual: "Möchtest du dieses Spiel von einem Nutzer löschen oder global?",
+	deleteGameTitle: "Lösche Spiel",
+	deleteConfirmText: "Löschen bestätigen",
+	deletePlayerQuestion: (playerName) => {return `Möchtest du wirklich den Spieler ${playerName} löschen?`},
+	exportDataMissingText: "Bitte starte zuerst den Anwensungsmodus und bewerte die Spiele!",
+}
+
+const ENGLISH = {
+	ratingOptions:["very good", "good", "not bad", "not so good", "bad"],
+	mainMenu: [
+		"EXIT",
+		//"Change the language",
+		"Import Mode",
+		"Application Mode",
+		"Management Mode",
+		"Export Mode"
+	],
+	managementModeMenu: [
+		"Return to Main Menu",
+		"Player management",
+		"Game management",
+		"Gamenight planning"
+	],
+	applicationModeMenu: [
+		"Return to Main Menu",
+		"Start Application"
+	],
+	managePlayersMenu: [
+		"Return",
+		"Add player",
+		"Edit player",
+		"Delete player"
+	],
+	editPlayersMenu: [
+		"Return", 
+		"Edit name",
+		"Edit games"
+	],
+	manageGamesMenu: [
+		"Return",
+		"Add game",
+		"Edit game",
+		"Delete game"
+	],
+	deleteGamesMenu: [
+		"Return",
+		"Delete game from player",
+		"Delete game globally"
+	],
+	exportMenu: [
+		"Return to Main Menu",
+		"Create Export file"
+	],
+	mainMenuHeader: ">Main menu<\n",
+	managementModeHeader: ">Management Mode<\n",
+	applicationModeHeader: ">Application Mode<\n",
+	managePlayersHeader: ">Manage Players<\n",
+	rateGamesHeader: ">Rate Games<\n",
+	editPlayerHeader: ">Edit player<\n",
+	manageGamesHeader: ">Edit games<\n",
+	deleteGamesHeader: ">Delete games<\n",
+	importModeHeader: ">Import data<\n",
+	chooseFileQuestion: "Choose a file: \n",
+	choosePlayerHeader: ">Player select<\n",
+	choosePlayerQuestion: "Choose a player\n",
+	chooseGameHeader: ">Game select<\n",
+	chooseGameQuestion: "Choose a game\n",
+	confirmQuestionCreator: (confirmQuestion, i) => {
+		switch(i){
+			case 0:
+				return `${confirmQuestion}\n Insert`;
+			case 1:
+				return `\"n\" to deny`;
+			case 2:
+				return `or`;
+			case 3:
+				return `\"y\" to confirm.\n`;
+		}
+	},
+	addGameHeader: `>Add game<\n`,
+	addGameQuestion: `Which game do you want to add?\n`,
+	addPlayerHeader: `>Add player<\n`,
+	addPlayerNameQuestion: `Insert the name, of the new player: `,
+	addPlayerGameQuestion: `\nInsert the names of the game, which are owned by the new player. \n (Seperate every game with a comma [,]. Wenn you're done type a semicolon [;] at the end. -> E.g. A,B,C;)\n`,
+	exportModeHeader: `>Export Mode<\n`,
+	createExportHeader: `>Create Export<\n`,
+	createExportFileQuestion: `Insert the export filename: `,
+	rateGameQuestion: (gameName, playerName) => {return `Player ${playerName}, please rat the game ${gameName}`},
+	ratingNoticeOutput: (gameName, ratingValue) => {return `You've rated ${gameName} with ${ratingValue}.`},
+	ratingValidationQuestion: (gameName) => {return `DO you want to rate the next game or change your rating for ${gameName}?`},
+	mainMenuSelectTitle: "Please choose a mode. \n",
+	exportLoopOutput: "Do you want to add the current date to the filename?",
+	addGameToPlayerQuestion: (gameName, playerName) => {return `Do you really want to add the game ${gameName} to the player ${playerName}?`},
+	noData: "No Data has been found!",
+	importOrder: "Please import data first!",
+	optionTextGlobalOrIndividual: "Do you want to delete game from a user or globally?",
+	deleteGameTitle: ">Delete Game<\n",
+	deleteConfirmText: "Confirm delete",
+	deletePlayerQuestion: (playerName) => {return `Do you really want to delete the player ${playerName}?`},
+	exportDataMissingText: "Please start the application mode first adn rate the games!",
+}
+
+const ITALIAN = {
+	ratingOptions:["Molto bene", "Bene", "Non male", "É non molto bene", "Male"],
+	mainMenu: [
+		"EXIT",
+		//"Cambiare la lingua",
+		"Modelità di importazione",
+		"Modelità di applicazione",
+		"Modelità di amministrazione",
+		"Modelità di espotare"
+	],
+	managementModeMenu: [
+		"Indietro al menù principale",
+		"Amministrazione dei giocatori",
+		"Amministrazione dei giochi",
+		"Amministrazione del serale di gioco"
+	],
+	applicationModeMenu: [
+		"Ritorno al menù principale",
+		"Cominciare l'applicazione"
+	],
+	managePlayersMenu: [
+		"Ritorno",
+		"Aggiungere dei giocatori",
+		"Modificare dei giocatori",
+		"Spegnere dei giocatori"
+	],
+	editPlayersMenu: [
+		"Ritorno", 
+		"Modificare il nome",
+		"Modificare i giochi"
+	],
+	manageGamesMenu: [
+		"Ritorno",
+		"Aggiungere dei giochi",
+		"Modificare dei giochi",
+		"Spegnere dei giochi"
+	],
+	deleteGamesMenu: [
+		"Ritorno",
+		"Spegnere un gioco da un giocatore",
+		"Spegnere un gioco globale"
+	],
+	exportMenu: [
+		"Ritorno al menù principale",
+		"Creare un file esporto"
+	],
+	mainMenuHeader: ">Menù principale<\n",
+	managementModeHeader: ">Modelità di amministrazione<\n",
+	applicationModeHeader: ">Modelità di applicazione<\n",
+	managePlayersHeader: ">Gestisci i giocatori<\n",
+	rateGamesHeader: ">Valuta i giochi<\n",
+	editPlayerHeader: ">Modifica giocatore<\n",
+	manageGamesHeader: ">Modifica i giochi<\n",
+	deleteGamesHeader: ">Rimuovere i giochi<\n",
+	importModeHeader: ">Importa dati<\n",
+	chooseFileQuestion: "Scegli un file: \n",
+	choosePlayerHeader: ">Selezione del giocatore<\n",
+	choosePlayerQuestion: "Scegli un giocatore\n",
+	chooseGameHeader: ">Selezione del giochi<\n",
+	chooseGameQuestion: "Scegli un gioco\n",
+	confirmQuestionCreator: (confirmQuestion, i) => {
+		switch(i){
+			case 0:
+				return `${confirmQuestion}\n Premi `;
+			case 1:
+				return `\"n\" per rifiutare`;
+			case 2:
+				return `o`;
+			case 3:
+				return `\"y\" per accettare.\n`;
+		}
+	},
+	addGameHeader: `>Aggiungi un gioco<\n`,
+	addGameQuestion: `Quale gioco vorresti aggiungere?\n`,
+	addPlayerHeader: `>Aggiungi giocatori<\n`,
+	addPlayerNameQuestion: `Inserisci il nome del giocatore che vuoi aggiungere: `,
+	addPlayerGameQuestion: `\nInserisci i nomi dei giochi che possiede il giocatore. \n (Separa ogni gioco con una virgola[,]. Quando hai finito, aggiungi un punto e virgola [;] alla fine. -> Bsp: A,B,C;)\n`,
+	exportModeHeader: `>modalità di esportazione<\n`,
+	createExportHeader: `>Creare l'esportazione<\n`,
+	createExportFileQuestion: `Immettere il nome del file di esportazione: `,
+	rateGameQuestion: (gameName, playerName) => {return `Giocatore ${playerName}, per favore valuta il gioco ${gameName}`},
+	ratingNoticeOutput: (gameName, ratingValue) => {return `Hai valutato il gioco ${gameName} con ${ratingValue}.`},
+	ratingValidationQuestion: (gameName) => {return `Vuoi dare un voto al prossimo gioco o cambiare il tuo punteggio per ${gameName}?`},
+	mainMenuSelectTitle: "Seleziona una modalità. \n",
+	exportLoopOutput: "uoi aggiungere la data odierna al nome del file?",
+	addGameToPlayerQuestion: (gameName, playerName) => {return `uoi davvero aggiungere il gioco ${gameName} al giocatore ${playerName}?`},
+	noData: "Nessun dato trovato!",
+	importOrder: "Si prega di importare prima i dati!",
+	optionTextGlobalOrIndividual: "Vuoi eliminare questo gioco da un utente o globalmente?",
+	deleteGameTitle: "Rimuovere il gioco",
+	deleteConfirmText: "Confermare il rimuoverazione",
+	deletePlayerQuestion: (playerName) => {return `Vuoi davvero rimuovere il giocatore ${playerName}?`},
+	exportDataMissingText: "Avvia prima la modalità applicazione e valuta i giochi!",
+}
+
+const TURKISH = {
+	ratingOptions:["Çok iyi", "Iyi", "Fena değil", "Çok iyi değil", "Kötü"],
+	mainMenu: [
+		"EXIT",
+		//"Dili değiştir",
+		"İçe aktarma modu",
+		"Uygulama modu",
+		"Yönetim modu",
+		"İhracat modları"
+	],
+	managementModeMenu: [
+		"Ana menüye dön",
+		"Oyuncu yönetimi",
+		"Oyun yönetimi",
+		"Oyun gecesi planlaması"
+	],
+	aapplicationModeMenu: [
+		"Ana menüye dön",
+		"Uygulamayı başlat"
+	],
+	managePlayersMenu: [
+		"Geri dön",
+		"Oyuncu ekle",
+		"Oyuncuyu düzenle",
+		"Oyuncuyu sil"
+	],
+	editPlayersMenu: [
+		"Geri dön", 
+		"Adı düzenle",
+		"Oyunları düzenle"
+	],
+	manageGamesMenu: [
+		"Geri dön",
+		"Oyun ekle",
+		"Oyunu düzenle",
+		"Oyunu sil"
+	],
+	deleteGamesMenu: [
+		"Geri dön",
+		"Oyuncudan oyunu sil",
+		"Oyunu global olarak sil"
+	],
+	exportMenu: [
+		"Ana menüye dön",
+		"Dışa aktarma dosyası oluştur"
+	],
+	mainMenuHeader: ">Ana menü<\n",
+	managementModeHeader: ">Yönetim modu<\n",
+	applicationModeHeader: ">Uygulama modu<\n",
+	managePlayersHeader: ">Oyuncuları yönet<\n",
+	rateGamesHeader: ">Oyunları değerlendirin<\n",
+	editPlayerHeader: ">Oyuncuyu düzenle<\n",
+	manageGamesHeader: ">Oyunları düzenle<\n",
+	deleteGamesHeader: ">Oyunları kaldır<\n",
+	importModeHeader: ">Verileri içe aktar<\n",
+	chooseFileQuestion: "Bir dosya seçin: \n",
+	choosePlayerHeader: ">Oyuncu seçimi<\n",
+	choosePlayerQuestion: "Bir oyuncu seçin\n",
+	chooseGameHeader: ">Oyun seçimi<\n",
+	chooseGameQuestion: "Bir oyun seçin\n",
+	confirmQuestionCreator: (confirmQuestion, i) => {
+		switch(i){
+			case 0:
+				return `${confirmQuestion}\n Reddetmek için `;
+			case 1:
+				return `\"n\" bas`;
+			case 2:
+				return `yoksa`;
+			case 3:
+				return `\"y\" bas, kabul etmek istersen.\n`;
+		}
+	},
+	addGameHeader: `>Oyun ekle<\n`,
+	addGameQuestion: `Hangi oyunu eklemek istersin?\n`,
+	addPlayerHeader: `>Oyuncu ekle<\n`,
+	addPlayerNameQuestion: `Eklemek istediğiniz oyuncunun adını girin: `,
+	addPlayerGameQuestion: `\nOyuncunun sahip olduğu oyunların adlarını yasin. \n (Her oyunu virgülle [,] ayırın. şiniz bittiğinde, sonuna noktalı virgül [;] ekleyin. -> Ö.v. A,B,C;)\n`,
+	exportModeHeader: `>Dışa aktarma modu<\n`,
+	createExportHeader: `>Dışa aktarmayı oluştur<\n`,
+	createExportFileQuestion: `Dışa aktarma dosyasının adını girin: `,
+	rateGameQuestion: (gameName, playerName) => {return `Oyuncu ${playerName}, lütfen oyuna ${gameName} oy verin`},
+	ratingNoticeOutput: (gameName, ratingValue) => {return `${gameName} oyununu ${ratingValue} ile eşleştirdin.`},
+	ratingValidationQuestion: (gameName) => {return `Bir sonraki oyuna oy vermek istiyormusun yoksa tekrar ${gameName} oy vermek ister misiniz?`},
+	mainMenuSelectTitle: "Bir mod seçin. \n",
+	exportLoopOutput: "Dosya adına bugünün tarihini eklemek istiyorsunuz?",
+	addGameToPlayerQuestion: (gameName, playerName) => {return `${gameName} oyununu gerçekten ${playerName} oyuncusuna eklemek istiyor musunuz?`},
+	noData: "Veri bulunamadı!",
+	importOrder: "Lütfen önce verileri ayarlayın!",
+	optionTextGlobalOrIndividual: "Bu oyunu bir kullanıcı tarafından mı yoksa genel olarak mı silmek istiyorsunuz?",
+	deleteGameTitle: "Oyunu kaldır",
+	deleteConfirmText: "Kaldırma işlemini onaylayın",
+	deletePlayerQuestion: (playerName) => {return `${playerName} adlı oyuncuyu gerçekten kaldırmak istiyor musunuz?`},
+	exportDataMissingText: "Önce uygulama modunu başlatın ve oyunları derecelendirin!",
+}
+
+
 const MODES = {
 	EXIT: 0,
 	IMPORT: 1,
@@ -39,30 +420,9 @@ const DELETE_GAME = {
 	PLAYER: 2
 }
 
-const MENUES = {
-	MAIN: 0,
-	MANAGEMENT: 1,
-	PLAYER_MANAGEMENT: {
-		MENU: 2.0,
-		EDIT_PLAYER: 2.1,
-		DELETE_PLAYER: 2.2,
-		ADD_PLAYER: 2.3,
-	},
-	GAME_MANAGEMENT: {
-		MENU: 3.0,
-		EDIT_PLAYER: 3.1,
-		DELETE_PLAYER: 3.2,
-		ADD_PLAYER: 3.3,
-	},
-	APPLICATION: 2,
-	
-	
-}
-
 exports.MODES = MODES;
 exports.MANAGEMENT_MODES = MANAGEMENT_MODES
 exports.MANAGEMENT_PLAYERS_MODES = MANAGEMENT_PLAYERS_MODES
 exports.EDIT_PLAYERS = EDIT_PLAYERS
 exports.MANAGEMENT_GAMES_MODES = MANAGEMENT_GAMES_MODES
 exports.DELETE_GAME = DELETE_GAME
-exports.MENUES = MENUES
