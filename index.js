@@ -2,11 +2,12 @@ const {Boardgame, Player, Gamesnight} = require("./applicationMode");
 const {DataHandler} = require('./dataHandler');
 const {Control} = require("./control");
 const {Export} = require("./fileExport");
-const {MODES, MANAGEMENT_MODES, MANAGEMENT_PLAYERS_MODES, EDIT_PLAYERS, MANAGEMENT_GAMES_MODES, DELETE_GAME, MENUES} = require("./enums/enum.js")
+const {MODES, MANAGEMENT_MODES, MANAGEMENT_PLAYERS_MODES, EDIT_PLAYERS, MANAGEMENT_GAMES_MODES, DELETE_GAME,ENGLISH, TURKISH, ITALIAN, GERMAN} = require("./enums/enum.js")
 
 let hasDataForExport = false;
 
 let session;
+let language;
 
 let hasImportedData = false;
 let control = new Control();
@@ -56,11 +57,12 @@ async function gamesManagementLoop(mode_index){
 				let choosenPlayer = await control.choosePlayer(filteredNameList);
 				if(filteredNameList[choosenPlayer] !== "RETURN"){
 					let gameToAdd = await control.addGameInput();
-					if(await control.confirm(`Do you really want to add ${gameToAdd} to the User ${filteredNameList[choosenPlayer]}?`)){
+					
+					if(await control.confirm(control.getLanguage().addGameToPlayerQuestion(gameToAdd, filteredNameList[choosenPlayer]))){
 						session.addGame(filteredIDList[choosenPlayer], gameToAdd);
 					}
 					else{
-						await control.decision(["Ok"], "No Data found.", "Please import Data first!")
+						await control.decision(["Ok"], control.getLanguage().noData, control.getLanguage().importOrder)
 					}
 					//Wollen sie spiel x zu user y hinzufügen --> ja und nein
 					//session.addGame(userID, newGame).
@@ -69,7 +71,7 @@ async function gamesManagementLoop(mode_index){
 				}
 			}
 			else{
-				let errorMsg = await control.decision(["Ok"], "No Data found.", "Please import Data first!")
+				let errorMsg = await control.decision(["Ok"],control.getLanguage().noData, control.getLanguage().importOrder)
 			}
 			mainLoop(MODES.MANAGEMENT);
 			break;
@@ -82,7 +84,7 @@ async function gamesManagementLoop(mode_index){
 			let gameList = session.getGlobalGameList()
 			gameList.push("RETURN")
 			let gameToDelete = await control.chooseGame(gameList)
-			let chosenAct = await control.decision(['GLOBAL', 'PLAYER', 'RETURN'], 'Delete Game', 'Do you want to delete the chosen game from a user or globally?')
+			let chosenAct = await control.decision(['GLOBAL', 'PLAYER', 'RETURN'],control.getLanguage().deleteGameTitle, control.getLanguage().optionTextGlobalOrIndividual)
 			if(gameToDelete !== "RETURN"){
 				if(chosenAct === "GLOBAL"){
 					session.deleteGameGlobally(gameToDelete);
@@ -101,7 +103,7 @@ async function gamesManagementLoop(mode_index){
 						mainLoop(MODES.MANAGEMENT);
 					}
 					else {
-						if(await control.decision(["Yes", "No"], "Confirm Delete", `Are you sure you want to delete ${gameToDelete} from ${filteredNameList[chosenIndex]}`)){
+						if(await control.decision(["Yes", "No"], control.getLanguage().deleteConfirmText, `Are you sure you want to delete ${gameToDelete} from ${filteredNameList[chosenIndex]}`)){
 							session.deleteGameFromUser(filteredIDList[chosenIndex], gameToDelete);
 						}
 						else{
@@ -138,10 +140,9 @@ async function playerManagementLoop(mode_index){
 				break;
 			case MANAGEMENT_PLAYERS_MODES.DELETE:
 			//userList = session.getUserList
-			let userList = ["Harry", "Hermine", "Ron", "RETURN"]
 			const player = await control.choosePlayer(userList)
 			if(player !== "RETURN"){
-				const decision = await control.confirm("Do you really want to delete the Player " + player + " ?\n")
+				const decision = await control.confirm(control.getLanguage().deletePlayerQuestion(player))
 				if(decision){
 					//lösch det zeug
 				}
@@ -246,7 +247,7 @@ async function applicationLoop(mode_index){
 				// ich weiß leider nicht ganz was dann passieren soll xD
 			}
 			else{
-				let errorMsg = await control.decision(["Ok"], "No Data found.", "Please import Data first!");
+				let errorMsg = await control.decision(["Ok"], control.getLanguage().noData, control.getLanguage().importOrder);
 			}
 			break;
 		case 0:
@@ -266,17 +267,37 @@ async function mainLoop(mainIndex = null) {
 	if(!mainIndex){
 		mainIndex = await control.postMainMenu()
 	}
+	language = control.getLanguage();
   
 	switch(mainIndex) {
 		case MODES.EXIT:
       		process.exit();
+		case MODES.LANGUAGE:
+			const newLanguageIndex = await control.languageSelectionMenu();
+			switch(newLanguageIndex){
+				case 0:
+					control.setLanguage(GERMAN);
+					break;
+				case 1:
+					control.setLanguage(ITALIAN);
+					break;
+				case 2:
+					control.setLanguage(ENGLISH);
+					break;
+				case 3:
+					control.setLanguage(TURKISH);
+					break;
+				default:
+					break;
+			}
+			mainLoop();
+			break;
 		case MODES.IMPORT: //Import Mode
 			const fileText = await control.postFileSelector();
 			if(fileText !== "EXIT"){
 				session = new DataHandler(fileText)
 				session.setUpLocalStorages()
 				session.checkFilename()
-				console.log("Daten wurden gespeichert")
 				hasImportedData = true;
 			}
 			mainLoop()

@@ -1,11 +1,7 @@
 var term = require( 'terminal-kit' ).terminal ;
 const fs = require('fs');
+const {ITALIAN, GERMAN, ENGLISH, TURKISH} = require("./enums/enum.js")
 
-/*	Dieser Code-Snippet ist um die Dateien für den Import zu kriegen.
-var files = fs.readdirSync('./DataImport', {withFileTypes: true});
-console.log(files);
-process.exit()*/
-//TEST
 
 //Arrays mit den Menüs
 
@@ -74,6 +70,15 @@ class Control {
 
 	constructor(){
 		this.lastOption = "Main Menu"
+		this.language = GERMAN;
+	}
+
+	setLanguage(language){
+		this.language = language;
+	}
+
+	getLanguage(){
+		return this.language;
 	}
 
 	postWelcome() {
@@ -84,6 +89,28 @@ class Control {
 	█▄█▄█─█───█───█───█──█─█───█─█──
 	─▀─▀───▀▀──▀▀──▀▀──▀▀──▀───▀──▀▀\n`)
 	}
+
+	async languageSelectionMenu(){
+		let selectedIndex;
+		console.clear()
+
+		let startIndex = mainMenu.indexOf(this.lastOption)
+		
+		if(startIndex === -1){
+			startIndex = 0;
+		}
+
+		term(this.language.languageChangeHeader) ;
+		term(this.language.languageChangeQuestion)
+		const response = await term.singleColumnMenu( this.language.languages ,{selectedIndex: startIndex} ).promise;
+		const selectedText = await response.selectedText;
+		selectedIndex = await response.selectedIndex;
+		term( '\n' ).green("Selected: ", selectedText); 
+		
+		this.lastOption = "Change Language"
+	
+		return selectedIndex;
+	}
 	
 	async postMainMenu() {
 	
@@ -91,14 +118,15 @@ class Control {
 		console.clear()
 
 		let startIndex = mainMenu.indexOf(this.lastOption)
+		
 		if(startIndex === -1){
 			startIndex = 0;
 		}
 
-		term(`>MainMenu<\n`) ;
-		term(`Please select a mode.\n`)
+		term(this.language.mainMenuHeader) ;
+		term(this.language.mainMenuSelectTitle)
 	
-		const response = await term.singleColumnMenu( mainMenu ,{selectedIndex: startIndex} ).promise;
+		const response = await term.singleColumnMenu( this.language.mainMenu ,{selectedIndex: startIndex} ).promise;
 		const selectedText = await response.selectedText;
 		selectedIndex = await response.selectedIndex;
 		term( '\n' ).green("Selected: ", selectedText); 
@@ -114,8 +142,8 @@ class Control {
 	
 	  console.clear()
 	
-		term(`>Management Mode<\n`) ;
-		term(`Please select a mode.\n`);
+		term(this.language.managementModeHeader) ;
+		term(this.language.mainMenuSelectTitle);
 	
 		let startIndex = 0;
 		
@@ -124,7 +152,7 @@ class Control {
 			startIndex = 0;
 		}
 	  
-	  const response = await term.singleColumnMenu( managementModeMenu, {selectedIndex: startIndex}  ).promise;
+	  const response = await term.singleColumnMenu( this.language.managementModeMenu, {selectedIndex: startIndex}  ).promise;
 	  const selectedText = await response.selectedText;
 	  selectedIndex = await response.selectedIndex;
 	  term( '\n' ).green("Selected: ", selectedText);
@@ -145,10 +173,10 @@ class Control {
 			startIndex = 0;
 		}
 		
-		term(`>Application Mode<\n`) ;
-		term(`Please select a mode.\n`)
+		term(this.language.applicationModeHeader) ;
+		term(this.language.mainMenuSelectTitle)
 	
-	  const response = await term.singleColumnMenu( applicationModeMenu, {selectedIndex: startIndex} ).promise;
+	  const response = await term.singleColumnMenu( this.language.applicationModeMenu, {selectedIndex: startIndex} ).promise;
 	  const selectedText = await response.selectedText;
 	  selectedIndex = await response.selectedIndex;
 	  term( '\n' ).green("Selected: ", selectedText);
@@ -164,10 +192,10 @@ class Control {
 		
 	  console.clear()
 	
-		term(`>Manage Players<\n`) ;
-		term(`Please select an Option.\n`);
+		term(this.language.managePlayersHeader) ;
+		term(this.language.mainMenuSelectTitle);
 	  
-	  const response = await term.singleColumnMenu( managePlayersMenu).promise;
+	  const response = await term.singleColumnMenu( this.language.managePlayersMenu).promise;
 	  const selectedText = await response.selectedText;
 	  selectedIndex = await response.selectedIndex;
 	  term( '\n' ).green("Selected: ", selectedText);
@@ -176,21 +204,23 @@ class Control {
 		return selectedIndex;
 	}
 
-	async setRating(playerName, gamename){
+	async setRating(playerName, gameName){
 		let selectedIndex;
 		console.clear();
-		term(`>Rate Games<\n`);
-		term(`> ${playerName} please rate the game ${gamename}!<\n`)
+		term(this.language.rateGamesHeader);
+		
+		term(`${this.language.rateGameQuestion(gameName, playerName)}\n`)
 
-		const response = await term.singleColumnMenu( ratingOptions ).promise;
+		const response = await term.singleColumnMenu( this.language.ratingOptions ).promise;
 		selectedIndex = await response.selectedIndex;
-		term('\n').green(`You have rated ${gamename} with ${await response.selectedText}`);
-		let choice = await this.decision(["Next game", "Change rating"], `You voted ${gamename} with ${ratingOptions[selectedIndex]}`, `Do you want to rate the next game, or re-rate ${gamename}?`);
+		term('\n').green(this.language.ratingNoticeOutput(gameName, await response.selectedText));
+
+		let choice = await this.decision(["Next game", "Change rating"], this.language.ratingNoticeOutput(gameName,this.language.ratingOptions[selectedIndex]), this.language.ratingValidationQuestion(gameName));
 		if(choice === "Next game"){
 			return selectedIndex;
 		}
 		else{
-			this.setRating(playerName, gamename);
+			this.setRating(playerName, gameName);
 		}
 	}
 	
@@ -201,10 +231,10 @@ class Control {
 	
 	  console.clear()
 	
-		term(`>Edit Player<\n`) ;
-		term(`Please select an Option.\n`);
+		term(this.language.editPlayerHeader) ;
+		term(this.language.mainMenuSelectTitle);
 	  
-	  const response = await term.singleColumnMenu( editPlayersMenu ).promise;
+	  const response = await term.singleColumnMenu( this.language.editPlayersMenu ).promise;
 	  const selectedText = await response.selectedText;
 	  selectedIndex = await response.selectedIndex;
 	  term( '\n' ).green("Selected: ", selectedText);
@@ -220,10 +250,10 @@ class Control {
 	
 	  console.clear()
 	
-		term(`>Manage Games<\n`) ;
-		term(`Please select an Option.\n`);
+		term(this.language.manageGamesHeader) ;
+		term(this.language.mainMenuSelectTitle);
 	  
-	  const response = await term.singleColumnMenu( manageGamesMenu ).promise;
+	  const response = await term.singleColumnMenu( this.language.manageGamesMenu ).promise;
 	  const selectedText = await response.selectedText;
 	  selectedIndex = await response.selectedIndex;
 	  term( '\n' ).green("Selected: ", selectedText);
@@ -239,10 +269,10 @@ class Control {
 	
 	  console.clear()
 	
-		term(`>Delete Games<\n`) ;
-		term(`Please select an Option.\n`);
+		term(this.language.deleteGamesHeader) ;
+		term(this.language.mainMenuSelectTitle);
 	  
-	  const response = await term.singleColumnMenu( deleteGamesMenu ).promise;
+	  const response = await term.singleColumnMenu( this.language.deleteGamesMenu ).promise;
 	  const selectedText = await response.selectedText;
 	  selectedIndex = await response.selectedIndex;
 	  term( '\n' ).green("Selected: ", selectedText);
@@ -254,8 +284,8 @@ class Control {
 
 		console.clear();
 		
-		term(`>Import Mode<\n`)
-		term.cyan( 'Choose a file:\n' ) ;
+		term(this.language.importModeHeader)
+		term.cyan( this.language.chooseFileQuestion) ;
 
 		let items = await fs.readdirSync('./DataImport', {withFileTypes: true}).map(d => d.name ) ;
 			items.push('EXIT');
@@ -272,8 +302,8 @@ class Control {
 	
 	  console.clear()
 	
-		term(`>Choose Player<\n`) ;
-		term(`Please select a Player.\n`);
+		term(this.language.choosePlayerHeader) ;
+		term(this.language.choosePlayerQuestion);
 	  
 	  const response = await term.singleColumnMenu( userList ).promise;
 	  const selectedText = await response.selectedText;
@@ -289,8 +319,8 @@ class Control {
 	
 	  console.clear()
 	
-		term(`>Choose Game<\n`) ;
-		term(`Please select a Game.\n`);
+		term(this.language.chooseGameHeader) ;
+		term(this.language.chooseGameQuestion);
 	  
 	  const response = await term.singleColumnMenu( gameList ).promise;
 	  const selectedText = await response.selectedText;
@@ -303,7 +333,7 @@ class Control {
 	async decision(optionList, termTitle, question) {
 		let selectedIndex;
 	
-	  console.clear()
+	  	console.clear()
 	
 		term(`>${termTitle}<\n`) ;
 		term(question + '\n');
@@ -317,17 +347,19 @@ class Control {
 	async confirm(confirmQuestion) {
 
 			console.clear()
-		term(`${confirmQuestion} \n Insert`); term.red(` \"n\" to deny `); term(`or`);
-		term.green(` \"y\" to confirm \n`);
-		const result = await term.yesOrNo( { yes: [ 'y' , 'ENTER' ] , no: [ 'n' ] }).promise;
+			term(this.language.confirmQuestionCreator(confirmQuestion,0));
+			term.red(this.language.confirmQuestionCreator(confirmQuestion,1));
+			term(this.language.confirmQuestionCreator(confirmQuestion,2))
+			term.green(this.language.confirmQuestionCreator(confirmQuestion,3))
+			const result = await term.yesOrNo( { yes: [ 'y' , 'ENTER' ] , no: [ 'n' ] }).promise;
 		return result;
 	}
 
 	async addGameInput() {
 		
 		console.clear()
-		term('>Add Game<\n');
-		term.cyan('Enter the game you want to add: ')
+		term(this.language.addGameHeader);
+		term.cyan(this.language.addGameQuestion)
 		const gameName = await term.inputField().promise;
 		if(gameName !== ""){
 			return gameName;
@@ -339,10 +371,10 @@ class Control {
 
 	async addPlayerInput() {
 		console.clear()
-		term('>Add Player<\n')
-		term.cyan('Enter the name of the player: ');
+		term(this.language.addPlayerHeader)
+		term.cyan(this.language.addPlayerNameQuestion);
 		const playerName = await term.inputField().promise;
-		term.magenta(`\nEnter the games the player has. \n(Divide each game with a comma and if you're done, with a colon)\nExample: A,B,D,C; \n`)
+		term.magenta(this.language.addPlayerGameQuestion)
 		const gameList = await term.inputField().promise;
 		let listString = gameList.slice(0, -1).split(',');
 		
@@ -354,10 +386,10 @@ class Control {
 	
 	  console.clear()
 	
-		term(`>Export Mode<\n`) ;
-		term(`Please select an Option.\n`);
+		term(this.language.exportModeHeader) ;
+		term(this.language.mainMenuSelectTitle);
 	  
-	  const response = await term.singleColumnMenu( exportMenu ).promise;
+	  const response = await term.singleColumnMenu( this.languages.exportMenu ).promise;
 	  const selectedText = await response.selectedText;
 	  selectedIndex = await response.selectedIndex;
 	  term( '\n' ).green("Selected: ", selectedText);
@@ -368,11 +400,12 @@ class Control {
 
   async addExportFileName() {
 		console.clear();
-		term('>Create Export<\n');
-		term.cyan('Enter the name of the file: ');
+		term(this.language.createExportHeader);
+		term.cyan(this.language.createExportFileQuestion);
 		const fileName = await term.inputField().promise;
     return fileName;
 }
 }
+ 
 
 exports.Control = Control

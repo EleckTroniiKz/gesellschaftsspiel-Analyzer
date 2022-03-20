@@ -2,12 +2,13 @@ const GERMAN = {
 	ratingOptions:["Sehr gut", "Gut", "Nicht schlecht", "Nicht so gut", "Schlecht"],
 	mainMenu: [
 		"EXIT",
-		//"Sprache einstellen",
+		"Sprache einstellen",
 		"Importmodus",
 		"Anwendungsmodus",
 		"Verwaltungsmodus",
 		"Export Modus"
 	],
+	languages: ["Deutsch", "Italienisch", "Englisch", "Türkisch"],
 	managementModeMenu: [
 		"Zurück zum Hauptmenü",
 		"Spieler-Verwaltung",
@@ -45,6 +46,8 @@ const GERMAN = {
 		"Export-Datei erstellen"
 	],
 	mainMenuHeader: ">Hauptmenü<\n",
+	languageChangeHeader:">Sprachauswahl<\n",
+	languageChangeQuestion: "Zu welcher Sprache möchtest du wechseln?\n",
 	managementModeHeader: ">Verwaltungsmodus<\n",
 	applicationModeHeader: ">Anwendungsmodus<\n",
 	managePlayersHeader: ">Verwalte Spieler<\n",
@@ -97,12 +100,13 @@ const ENGLISH = {
 	ratingOptions:["very good", "good", "not bad", "not so good", "bad"],
 	mainMenu: [
 		"EXIT",
-		//"Change the language",
+		"Change the language",
 		"Import Mode",
 		"Application Mode",
 		"Management Mode",
 		"Export Mode"
 	],
+	languages: ["German", "Italian", "English", "Turkish"],
 	managementModeMenu: [
 		"Return to Main Menu",
 		"Player management",
@@ -139,6 +143,8 @@ const ENGLISH = {
 		"Return to Main Menu",
 		"Create Export file"
 	],
+	languageChangeHeader:">Language Select<\n",
+	languageChangeQuestion: "Which Language do you want to choose?\n",
 	mainMenuHeader: ">Main menu<\n",
 	managementModeHeader: ">Management Mode<\n",
 	applicationModeHeader: ">Application Mode<\n",
@@ -192,12 +198,13 @@ const ITALIAN = {
 	ratingOptions:["Molto bene", "Bene", "Non male", "É non molto bene", "Male"],
 	mainMenu: [
 		"EXIT",
-		//"Cambiare la lingua",
+		"Cambiare la lingua",
 		"Modelità di importazione",
 		"Modelità di applicazione",
 		"Modelità di amministrazione",
 		"Modelità di espotare"
 	],
+	languages: ["Tedesco", "Italiano", "Inglese", "Turco"],
 	managementModeMenu: [
 		"Indietro al menù principale",
 		"Amministrazione dei giocatori",
@@ -235,6 +242,8 @@ const ITALIAN = {
 		"Creare un file esporto"
 	],
 	mainMenuHeader: ">Menù principale<\n",
+	languageChangeHeader:">Selezione della lingua<\n",
+	languageChangeQuestion: "Quale lingua vuoi selezionare?\n",
 	managementModeHeader: ">Modelità di amministrazione<\n",
 	applicationModeHeader: ">Modelità di applicazione<\n",
 	managePlayersHeader: ">Gestisci i giocatori<\n",
@@ -287,12 +296,13 @@ const TURKISH = {
 	ratingOptions:["Çok iyi", "Iyi", "Fena değil", "Çok iyi değil", "Kötü"],
 	mainMenu: [
 		"EXIT",
-		//"Dili değiştir",
+		"Dili değiştir",
 		"İçe aktarma modu",
 		"Uygulama modu",
 		"Yönetim modu",
 		"İhracat modları"
 	],
+	languages: ["Almanca", "İtalyan", "İngilizce", "Türkçe"],
 	managementModeMenu: [
 		"Ana menüye dön",
 		"Oyuncu yönetimi",
@@ -330,6 +340,8 @@ const TURKISH = {
 		"Dışa aktarma dosyası oluştur"
 	],
 	mainMenuHeader: ">Ana menü<\n",
+	languageChangeHeader:">Dili değiştir<\n",
+	languageChangeQuestion: "Hangi dili seçmek istiyorsunuz?\n",
 	managementModeHeader: ">Yönetim modu<\n",
 	applicationModeHeader: ">Uygulama modu<\n",
 	managePlayersHeader: ">Oyuncuları yönet<\n",
@@ -381,10 +393,11 @@ const TURKISH = {
 
 const MODES = {
 	EXIT: 0,
-	IMPORT: 1,
-	APPLICATION: 2,
-	MANAGEMENT: 3,
-	EXPORT: 4
+	LANGUAGE: 1,
+	IMPORT: 2,
+	APPLICATION: 3,
+	MANAGEMENT: 4,
+	EXPORT: 5
 }
 
 const MANAGEMENT_MODES = {
@@ -426,3 +439,7 @@ exports.MANAGEMENT_PLAYERS_MODES = MANAGEMENT_PLAYERS_MODES
 exports.EDIT_PLAYERS = EDIT_PLAYERS
 exports.MANAGEMENT_GAMES_MODES = MANAGEMENT_GAMES_MODES
 exports.DELETE_GAME = DELETE_GAME
+exports.GERMAN = GERMAN;
+exports.TURKISH = TURKISH;
+exports.ENGLISH = ENGLISH;
+exports.ITALIAN = ITALIAN;
