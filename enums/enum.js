@@ -87,6 +87,7 @@ const GERMAN = {
 	mainMenuSelectTitle: "Bitte wähle einen Modus aus. \n",
 	exportLoopOutput: "Möchtest du das heutige Datum an den Dateinamen beifügen?",
 	addGameToPlayerQuestion: (gameName, playerName) => {return `Möchtest du wirklich das Spiel ${gameName} dem Spieler ${playerName} hinzufügen?`},
+	deleteGameFromPlayer: (gameToDelete, player) => {return `Bist du sicher, dass du das Spiel ${gameToDelete} vom Spieler ${player} löschen möchtest?`},
 	noData: "Keine Daten gefunden!",
 	importOrder: "Bitte importieren Sie zuerst Daten!",
 	optionTextGlobalOrIndividual: "Möchtest du dieses Spiel von einem Nutzer löschen oder global?",
@@ -94,6 +95,14 @@ const GERMAN = {
 	deleteConfirmText: "Löschen bestätigen",
 	deletePlayerQuestion: (playerName) => {return `Möchtest du wirklich den Spieler ${playerName} löschen?`},
 	exportDataMissingText: "Bitte starte zuerst den Anwensungsmodus und bewerte die Spiele!",
+	indexIssueOutput: "Mit dem Index ist etwas schief gelaufen!",
+	return: "Zurück",
+	player: "Spieler",
+	global: "Global",
+	yes: "Ja",
+	no: "Nein",
+	nextGame: "Nächstes Spiel",
+	changeRating: "Ändere Bewertung",
 }
 
 const ENGLISH = {
@@ -190,8 +199,17 @@ const ENGLISH = {
 	optionTextGlobalOrIndividual: "Do you want to delete game from a user or globally?",
 	deleteGameTitle: ">Delete Game<\n",
 	deleteConfirmText: "Confirm delete",
+	deleteGameFromPlayer: (gameToDelete, player) => {return `Are you sure, that you want to delete ${gameToDelete} from the player ${player}?`},
 	deletePlayerQuestion: (playerName) => {return `Do you really want to delete the player ${playerName}?`},
-	exportDataMissingText: "Please start the application mode first adn rate the games!",
+	exportDataMissingText: "Please start the application mode first and rate the games!",
+	indexIssueOutput: "Something went wrong with the index!",
+	return: "Return",
+	player: "Player",
+	global: "Globally",
+	yes: "Yes",
+	no: "No",
+	nextGame: "Next game",
+	changeRating: "Change rating",
 }
 
 const ITALIAN = {
@@ -269,6 +287,7 @@ const ITALIAN = {
 				return `\"y\" per accettare.\n`;
 		}
 	},
+	deleteGameFromPlayer: (gameToDelete, player) => {return `Sei sicuro di voler eliminare il gioco ${gameToDelete} dal giocatore ${player}?`},
 	addGameHeader: `>Aggiungi un gioco<\n`,
 	addGameQuestion: `Quale gioco vorresti aggiungere?\n`,
 	addPlayerHeader: `>Aggiungi giocatori<\n`,
@@ -290,6 +309,14 @@ const ITALIAN = {
 	deleteConfirmText: "Confermare il rimuoverazione",
 	deletePlayerQuestion: (playerName) => {return `Vuoi davvero rimuovere il giocatore ${playerName}?`},
 	exportDataMissingText: "Avvia prima la modalità applicazione e valuta i giochi!",
+	indexIssueOutput: "C'è und errore con l'indice!",
+	return: "Ritornare",
+	player: "Giocatore",
+	global: "Globalmente",
+	yes: "Sì",
+	no: "No",
+	nextGame: "Prossimo gioco",
+	changeRating: "Cambia valutazione",
 }
 
 const TURKISH = {
@@ -367,6 +394,7 @@ const TURKISH = {
 				return `\"y\" bas, kabul etmek istersen.\n`;
 		}
 	},
+	deleteGameFromPlayer: (gameToDelete, player) => {return `${gameToDelete} oyununu ${player} oyuncusundan silmek istediğinizden emin misiniz??`},
 	addGameHeader: `>Oyun ekle<\n`,
 	addGameQuestion: `Hangi oyunu eklemek istersin?\n`,
 	addPlayerHeader: `>Oyuncu ekle<\n`,
@@ -388,8 +416,15 @@ const TURKISH = {
 	deleteConfirmText: "Kaldırma işlemini onaylayın",
 	deletePlayerQuestion: (playerName) => {return `${playerName} adlı oyuncuyu gerçekten kaldırmak istiyor musunuz?`},
 	exportDataMissingText: "Önce uygulama modunu başlatın ve oyunları derecelendirin!",
+	indexIssueOutput: "Dizinde bir sorun var!",
+	return: "Dönüş",
+	player: "Oyuncu",
+	global: "Küresel olarak",
+	yes: "Evet",
+	no: "Hayir",
+	nextGame: "Sonraki oyun",
+	changeRating: "Derecelendirmeyi değiştir"
 }
-
 
 const MODES = {
 	EXIT: 0,

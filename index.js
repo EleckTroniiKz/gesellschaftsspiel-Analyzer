@@ -24,14 +24,14 @@ async function exportLoop(mode_index) {
     case 1:
     	let exportFileName = "Export";
     	exportFileName = await control.addExportFileName();
-    	let exportDate = await control.confirm("Do you want to add the date to the filename?");
+    	let exportDate = await control.confirm(control.getLanguage().exportLoopOutput);
     	let csvData = exp.setExportData();
     	exp.createExport(csvData,exportFileName,exportDate);
     	mainLoop();
       break;
       
     default:
-			console.log("Something wrong with the index!");
+			console.log(control.getLanguage().indexIssueOutput);
 			break;
  }
 }
@@ -39,9 +39,9 @@ async function exportLoop(mode_index) {
 async function gamesManagementLoop(mode_index){
 	
 	switch(mode_index){
-			case MANAGEMENT_GAMES_MODES.RETURN:
-				mainLoop(MODES.MANAGEMENT)
-				break;
+		case MANAGEMENT_GAMES_MODES.RETURN:
+			mainLoop(MODES.MANAGEMENT)
+			break;
 		case MANAGEMENT_GAMES_MODES.ADD:
 			//add GAME
 			//Input a Name for the game. Then choose if it should be added to a existing player or create a new player
@@ -53,9 +53,9 @@ async function gamesManagementLoop(mode_index){
 					filteredNameList.push(userList[i].name);
 					filteredIDList.push(userList[i].uID);
 				}
-				filteredNameList.push("RETURN")
+				filteredNameList.push(control.getLanguage().return)
 				let choosenPlayer = await control.choosePlayer(filteredNameList);
-				if(filteredNameList[choosenPlayer] !== "RETURN"){
+				if(filteredNameList[choosenPlayer] !== control.getLanguage().return){
 					let gameToAdd = await control.addGameInput();
 					
 					if(await control.confirm(control.getLanguage().addGameToPlayerQuestion(gameToAdd, filteredNameList[choosenPlayer]))){
@@ -82,14 +82,14 @@ async function gamesManagementLoop(mode_index){
 			break;
 		case MANAGEMENT_GAMES_MODES.DELETE:
 			let gameList = session.getGlobalGameList()
-			gameList.push("RETURN")
+			gameList.push(control.getLanguage().return)
 			let gameToDelete = await control.chooseGame(gameList)
-			let chosenAct = await control.decision(['GLOBAL', 'PLAYER', 'RETURN'],control.getLanguage().deleteGameTitle, control.getLanguage().optionTextGlobalOrIndividual)
-			if(gameToDelete !== "RETURN"){
-				if(chosenAct === "GLOBAL"){
+			let chosenAct = await control.decision([control.getLanguage().Global, control.getLanguage().player, control.getLanguage().return],control.getLanguage().deleteGameTitle, control.getLanguage().optionTextGlobalOrIndividual)
+			if(gameToDelete !== control.getLanguage().return){
+				if(chosenAct === control.getLanguage().Global){
 					session.deleteGameGlobally(gameToDelete);
 				}
-				else if(chosenAct === "PLAYER"){
+				else if(chosenAct === control.getLanguage().player){
 					let userList = session.getUserList();
 					let filteredNameList = []
 					let filteredIDList = []
@@ -97,13 +97,13 @@ async function gamesManagementLoop(mode_index){
 						filteredNameList.push(userList[i].name);
 						filteredIDList.push(userList[i].uID);
 					}
-					filteredNameList.push("RETURN")
+					filteredNameList.push(control.getLanguage().return)
 					let chosenIndex = await control.choosePlayer(filteredNameList)
-					if(filteredNameList[chosenIndex] === "RETURN"){
+					if(filteredNameList[chosenIndex] === control.getLanguage().return){
 						mainLoop(MODES.MANAGEMENT);
 					}
 					else {
-						if(await control.decision(["Yes", "No"], control.getLanguage().deleteConfirmText, `Are you sure you want to delete ${gameToDelete} from ${filteredNameList[chosenIndex]}`)){
+						if(await control.decision([control.getLanguage().yes, control.getLanguage().no], control.getLanguage().deleteConfirmText, control.getLanguage().deleteGameFromPlayer(gameToDelete,filteredNameList[chosenIndex]))){
 							session.deleteGameFromUser(filteredIDList[chosenIndex], gameToDelete);
 						}
 						else{
@@ -116,7 +116,7 @@ async function gamesManagementLoop(mode_index){
 			//Either for a player or globally
 			break;
 		default:
-			console.log("Something wrong with the index!")
+			console.log(control.getLanguage().indexIssueOutput)
 			break;
 	}
 }
@@ -129,7 +129,7 @@ async function playerManagementLoop(mode_index){
 				break;
 			case MANAGEMENT_PLAYERS_MODES.ADD:
 				control.addPlayerInput()
-			//muss noch liste der spiele und des spielernames returnen
+				//muss noch liste der spiele und des spielernames returnen
 				//add Player
 				//Input for Player Name, and the Games from the Player
 				break;
@@ -141,7 +141,7 @@ async function playerManagementLoop(mode_index){
 			case MANAGEMENT_PLAYERS_MODES.DELETE:
 			//userList = session.getUserList
 			const player = await control.choosePlayer(userList)
-			if(player !== "RETURN"){
+			if(player !== control.getLanguage().return){
 				const decision = await control.confirm(control.getLanguage().deletePlayerQuestion(player))
 				if(decision){
 					//lösch det zeug
@@ -157,7 +157,7 @@ async function playerManagementLoop(mode_index){
 				//YES --> delete |No --> RETURN
 				break;
 			default:
-				console.log("Something wrong with the index!55")
+				console.log(control.getLanguage().indexIssueOutput)
 				break;
 	}
 }
@@ -180,7 +180,7 @@ async function managementLoop(mode_index){
 			//Plan Gamenight
 			break;
 		default:
-			console.log("Something wrong with the index!")
+			console.log(control.getLanguage().indexIssueOutput)
 			break;
 	}
 }
@@ -212,6 +212,7 @@ async function applicationLoop(mode_index){
 					for(let g = 0; g < gameList.length; g++){
 						let gameName = gameList[g]
 						let rating = await control.setRating(playerName, gameName);
+						console.log(rating);
 						switch(rating){
 							case 0:
 								rating = 5;
@@ -260,8 +261,6 @@ async function applicationLoop(mode_index){
   
   
 }
-
-async function exportLoop(mode_index){}
 
 async function mainLoop(mainIndex = null) {
 	if(!mainIndex){
@@ -314,16 +313,16 @@ async function mainLoop(mainIndex = null) {
 		case MODES.EXPORT: //Export Mode
 			if(hasDataForExport){
 				//Abfrage, etc. pp
-        let exportIndex = await control.postExportMode();
-        exportLoop(exportIndex);
+        		let exportIndex = await control.postExportMode();
+        		exportLoop(exportIndex);
 			}
 			else{
-				let errorMsg = await control.decision(["Ok"], "No Data found.", "Please go through the application mode and rate the games first!");
+				let errorMsg = await control.decision(["Ok"], control.getLanguage().noData, control.getLanguage().exportDataMissingText);
 				mainLoop();
 			}
 	  		break;
 		default:
-			console.log("Something wrong with the index!");
+			console.log(control.getLanguage().indexIssueOutput);
 			break;
 	}
 }

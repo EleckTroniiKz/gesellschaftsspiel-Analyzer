@@ -19,7 +19,6 @@ class DataHandler {
 	 */
 	deleteGameGlobally(game){
 		let userList = this.getUserObjectList();
-		console.log(userList);
 		let currentPlayer;
 		let currentGames;
 		let userListWithoutGame = [];
@@ -34,7 +33,6 @@ class DataHandler {
 			}
 			userListWithoutGame.push(currentPlayer)
 		}
-		console.log(userListWithoutGame);
 		return;
 		this.saveUserObjectList(userListWithoutGame);
 	}
@@ -237,7 +235,6 @@ class DataHandler {
 
 	saveUserObjectList(list){
 		for(let i = 0; i < list.length; i++){
-			console.log(list[i].getRating())
 			let map = this.transformHashToString(list[i].getRating());
 			list[i].setBoardgameList(list[i].getBoardgames(), map);
 		}

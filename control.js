@@ -210,13 +210,12 @@ class Control {
 		term(this.language.rateGamesHeader);
 		
 		term(`${this.language.rateGameQuestion(gameName, playerName)}\n`)
-
 		const response = await term.singleColumnMenu( this.language.ratingOptions ).promise;
 		selectedIndex = await response.selectedIndex;
 		term('\n').green(this.language.ratingNoticeOutput(gameName, await response.selectedText));
 
-		let choice = await this.decision(["Next game", "Change rating"], this.language.ratingNoticeOutput(gameName,this.language.ratingOptions[selectedIndex]), this.language.ratingValidationQuestion(gameName));
-		if(choice === "Next game"){
+		let choice = await this.decision([this.language.nextGame, this.language.changeRating], this.language.ratingNoticeOutput(gameName,this.language.ratingOptions[selectedIndex]), this.language.ratingValidationQuestion(gameName));
+		if(choice === this.language.nextGame ){
 			return selectedIndex;
 		}
 		else{
@@ -388,8 +387,7 @@ class Control {
 	
 		term(this.language.exportModeHeader) ;
 		term(this.language.mainMenuSelectTitle);
-	  
-	  const response = await term.singleColumnMenu( this.languages.exportMenu ).promise;
+	  const response = await term.singleColumnMenu( this.language.exportMenu ).promise;
 	  const selectedText = await response.selectedText;
 	  selectedIndex = await response.selectedIndex;
 	  term( '\n' ).green("Selected: ", selectedText);
