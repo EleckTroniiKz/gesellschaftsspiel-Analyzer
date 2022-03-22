@@ -208,6 +208,7 @@ class DataHandler {
 				}
 			}
 		}
+		return gameObjects;
 		localStorage.setItem('gameList', JSON.stringify(gameObjects));
 	}
 
@@ -238,6 +239,7 @@ class DataHandler {
 			let map = this.transformHashToString(list[i].getRating());
 			list[i].setBoardgameList(list[i].getBoardgames(), map);
 		}
+		
 		localStorage.setItem('users', JSON.stringify(list));
 	}
 

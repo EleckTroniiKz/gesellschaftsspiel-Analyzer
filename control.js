@@ -1,5 +1,6 @@
 var term = require( 'terminal-kit' ).terminal ;
 const fs = require('fs');
+const { Player } = require('./applicationMode.js');
 const {ITALIAN, GERMAN, ENGLISH, TURKISH} = require("./enums/enum.js")
 
 
@@ -376,7 +377,7 @@ class Control {
 		term.magenta(this.language.addPlayerGameQuestion)
 		const gameList = await term.inputField().promise;
 		let listString = gameList.slice(0, -1).split(',');
-		
+		return [playerName, listString]
 	}
 
   //Export
