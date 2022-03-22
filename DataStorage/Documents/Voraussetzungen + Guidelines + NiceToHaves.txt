@@ -46,6 +46,7 @@ Mögliche Nice To haves:
 - Menüführung mit Pfeiltasten (und evtl. WASD) möglich?
 - nutzen von hashmaps für einfachere Speicherung und verwaltung der Ratings
 - ausgebe möglichkeit für alle spieler und spiele --> also liste von spielern ausgeben und liste von spielen ausgeben
+- Möglichkeit, bei der SPieler liste ienen spieler auszuwählen, oder ein Spiel und direkt von dort aus bearbeiten
 ___________________________
 Fertige NiceToHaves:
 - Übersetzungsoption zu Deutsch, Englisch, Italienisch, Türkisch
