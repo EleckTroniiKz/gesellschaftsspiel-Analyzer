@@ -13,7 +13,8 @@ const GERMAN = {
 		"Zurück zum Hauptmenü",
 		"Spieler-Verwaltung",
 		"Spiel-Verwaltung",
-		"Spielabend planung"
+		"Spielabend planung",
+		"Spieler Liste"
 	],
 	applicationModeMenu: [
 		"Zurück zum Hauptmenü",
@@ -55,6 +56,8 @@ const GERMAN = {
 	editPlayerHeader: ">Spieler bearbeiten<\n",
 	manageGamesHeader: ">Spiele bearbeiten<\n",
 	deleteGamesHeader: ">Spiele löschen<\n",
+	deletePlayerHeader: ">Spieler löschen<\n",
+	playerNotDeleted: "Spieler wurde nicht gelöscht!",
 	importModeHeader: ">Importiere Daten<\n",
 	chooseFileQuestion: "Wähle eine Datei: \n",
 	choosePlayerHeader: ">Spielerauswahl<\n",
@@ -103,6 +106,8 @@ const GERMAN = {
 	no: "Nein",
 	nextGame: "Nächstes Spiel",
 	changeRating: "Ändere Bewertung",
+	exportCompletedMsg: "Daten wurden exportiert!",
+	gameHasBeenAdded: "Das Spiel wurdem dem ausgewählten Spieler hinzugefügt!",
 }
 
 const ENGLISH = {
@@ -120,7 +125,8 @@ const ENGLISH = {
 		"Return to Main Menu",
 		"Player management",
 		"Game management",
-		"Gamenight planning"
+		"Gamenight planning",
+		"List of players"
 	],
 	applicationModeMenu: [
 		"Return to Main Menu",
@@ -166,6 +172,8 @@ const ENGLISH = {
 	chooseFileQuestion: "Choose a file: \n",
 	choosePlayerHeader: ">Player select<\n",
 	choosePlayerQuestion: "Choose a player\n",
+	deletePlayerHeader: ">Delete Player<\n",
+	playerNotDeleted: "Player has not been deleted!",
 	chooseGameHeader: ">Game select<\n",
 	chooseGameQuestion: "Choose a game\n",
 	confirmQuestionCreator: (confirmQuestion, i) => {
@@ -210,6 +218,8 @@ const ENGLISH = {
 	no: "No",
 	nextGame: "Next game",
 	changeRating: "Change rating",
+	exportCompletedMsg: "Data has been exported!",
+	gameHasBeenAdded: "Game has been added to chosen Player!",
 }
 
 const ITALIAN = {
@@ -227,7 +237,8 @@ const ITALIAN = {
 		"Indietro al menù principale",
 		"Amministrazione dei giocatori",
 		"Amministrazione dei giochi",
-		"Amministrazione del serale di gioco"
+		"Amministrazione del serale di gioco",
+		"Lista dei giocatori"
 	],
 	applicationModeMenu: [
 		"Ritorno al menù principale",
@@ -266,6 +277,8 @@ const ITALIAN = {
 	applicationModeHeader: ">Modelità di applicazione<\n",
 	managePlayersHeader: ">Gestisci i giocatori<\n",
 	rateGamesHeader: ">Valuta i giochi<\n",
+	deletePlayerHeader: ">Rimuovere il giocatore<\n",
+	playerNotDeleted: "Il giocatore non è stato rimuovuto!",
 	editPlayerHeader: ">Modifica giocatore<\n",
 	manageGamesHeader: ">Modifica i giochi<\n",
 	deleteGamesHeader: ">Rimuovere i giochi<\n",
@@ -317,6 +330,8 @@ const ITALIAN = {
 	no: "No",
 	nextGame: "Prossimo gioco",
 	changeRating: "Cambia valutazione",
+	exportCompletedMsg: "I dati sono stati esportati!",
+	gameHasBeenAdded: "Il gioco è stato aggiunto al giocantore!",
 }
 
 const TURKISH = {
@@ -334,7 +349,8 @@ const TURKISH = {
 		"Ana menüye dön",
 		"Oyuncu yönetimi",
 		"Oyun yönetimi",
-		"Oyun gecesi planlaması"
+		"Oyun gecesi planlaması",
+		"Oyuncu listesi"
 	],
 	aapplicationModeMenu: [
 		"Ana menüye dön",
@@ -375,6 +391,8 @@ const TURKISH = {
 	rateGamesHeader: ">Oyunları değerlendirin<\n",
 	editPlayerHeader: ">Oyuncuyu düzenle<\n",
 	manageGamesHeader: ">Oyunları düzenle<\n",
+	deletePlayerHeader: ">Oyuncuyu sil<\n",
+	playerNotDeleted: "Oyuncu silinmedi!",
 	deleteGamesHeader: ">Oyunları kaldır<\n",
 	importModeHeader: ">Verileri içe aktar<\n",
 	chooseFileQuestion: "Bir dosya seçin: \n",
@@ -423,7 +441,10 @@ const TURKISH = {
 	yes: "Evet",
 	no: "Hayir",
 	nextGame: "Sonraki oyun",
-	changeRating: "Derecelendirmeyi değiştir"
+	changeRating: "Derecelendirmeyi değiştir",
+	exportCompletedMsg: "Veriler dışa aktarıldı!",
+	gameHasBeenAdded: "Oyun oyuncuya eklendi!",
+
 }
 
 const MODES = {
@@ -439,7 +460,8 @@ const MANAGEMENT_MODES = {
 	RETURN: 0,
 	MANAGE_PLAYERS: 1,//MUST
 	MANAGE_GAMES: 2, //MUST
-	PLAN_GAMENIGHT: 3 //MUST
+	PLAN_GAMENIGHT: 3, //MUST
+	SHOW_PLAYERS: 4,
 }
 
 const MANAGEMENT_PLAYERS_MODES = {
