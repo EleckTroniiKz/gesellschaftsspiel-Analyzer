@@ -47,6 +47,7 @@ Mögliche Nice To haves:
 - nutzen von hashmaps für einfachere Speicherung und verwaltung der Ratings
 - ausgebe möglichkeit für alle spieler und spiele --> also liste von spielern ausgeben und liste von spielen ausgeben
 - Möglichkeit, bei der SPieler liste ienen spieler auszuwählen, oder ein Spiel und direkt von dort aus bearbeiten
+- Tutorial Mode --> gibt alle Unterfenster aus und erzählt bisschen was dazu
 ___________________________
 Fertige NiceToHaves:
 - Übersetzungsoption zu Deutsch, Englisch, Italienisch, Türkisch
