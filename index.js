@@ -235,6 +235,11 @@ async function applicationLoop(mode_index){
 		case 1:
 			if(hasImportedData){
 				let userList = session.getUserObjectList();
+				//oder vielleicht gamenight planning im verwaltungsmodus machen?
+				//fragen ob alle importieren Spieler in der gamenight dabei sind (vllt spielernamen ausgabe)
+				//falls ja --> direkt alle hinzufügen
+				//falls nein --> abfrage für jeden Spieler ob er dabei is
+				//selection wer in der gamenight ist
 				let gamesnight = new Gamesnight(userList);
 				let gameList = []
 				for(let i = 0; i < userList.length; i++){
