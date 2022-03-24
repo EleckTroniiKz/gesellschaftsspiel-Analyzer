@@ -40,6 +40,7 @@ class DataHandler {
 	setUpLocalStorages(){
 		localStorage.setItem('userIds', JSON.stringify(this.userIDs))
 		localStorage.setItem('gameList', JSON.stringify([]))
+		localStorage.setItem('gamesnight', JSON.stringify(""));
 	}
 
 	updateGlobalGameList(){
@@ -161,6 +162,29 @@ class DataHandler {
 		}
 		this.updateGlobalGameList()
 	}
+	
+	/**
+	 * 
+	 * @param {*} gamesNight 
+	 */
+	saveGamesNightObject(gamesNight){
+		gamesNight.setRatingHashmap(this.transformHashToString(gamesNight.getRating()));
+		gamesNight.setAmountOfRatingsSetHashmap(this.transformHashToString(gamesNight.getAmountOfRatingsSetHashmap()));
+		localStorage.setItem('gamesnight', JSON.stringify(gamesNight));
+	}
+
+	/**
+	 * 
+	 */
+	getGamesNightObject(){
+		let unparsedGamesnight = JSON.parse(localStorage.getItem('gamesnight'));
+		
+		let gamesnight = new Gamesnight(unparsedGamesnight.players);
+		gamesnight.setRatingHashmap(this.transformStringToHash(unparsedGamesnight.ratingHashmap));
+		gamesnight.setAmountOfRatingsSetHashmap(this.transformStringToHash(unparsedGamesnight.amountOfRatingsSetHashmap));
+		return gamesnight;
+	}
+
 
 	/**
 	 * @description adds game to the games list of an user
