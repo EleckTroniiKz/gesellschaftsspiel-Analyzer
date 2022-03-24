@@ -285,8 +285,9 @@ async function applicationLoop(mode_index){
 								rating = -1;
 								break;
 						}
-						player.setRating(gamesnight, gameName, rating);
-						
+						player.setRating(gameName, rating);
+            gamesnight.setRating(gameName, rating);
+						console.log(gamesnight.getRating());
 					}
 				} 
 				session.saveUserObjectList(userList);

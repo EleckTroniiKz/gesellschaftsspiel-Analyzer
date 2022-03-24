@@ -32,8 +32,6 @@ class Player {
     for(let i = 0; i < this.boardgames.length; i++) {
       this.ratingHashmap.set(this.boardgames[i], "No rating asigned yet!");
     }
-    //placeholder for an upcoming gamesnight
-    this.gamesnight;
   }
 
   getID() {
@@ -61,22 +59,9 @@ class Player {
     return this.ratingHashmap;
   }
 
-  setRating(gamesnight, boardgame, rating) {
-    this.gamesnight = gamesnight;
+  setRating(boardgame, rating) {
     if(this.ratingHashmap.has(boardgame)) {
       this.ratingHashmap.set(boardgame, rating);
-      this.gamesnight.setRating(boardgame, rating);
-      //Glaube wir brauchen das untern stehende nichtmehr, da die ratingabfrage vom Terminalkit gemacht wird
-      /*
-      let temp = prompt("Rate " + boardgame + " from 1 to 5: ");
-      if(temp == 1 || temp == 2 || temp == 3 || temp == 4 || temp == 5) {
-        this.ratingHashmap.set(boardgame, parseInt(temp));
-        this.gamesnight.setRating(boardgame, parseInt(temp));
-      } else {
-        console.log("You rated " + boardgame + " with an invalid value. Try again please.");
-        this.setRating(gamesnight, boardgame);
-      }
-      */
     }
   }
 
