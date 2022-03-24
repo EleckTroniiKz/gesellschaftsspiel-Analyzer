@@ -89,6 +89,7 @@ class Gamesnight {
   constructor(players) {
     this.players = players;
     this.ratingHashmap = new Map();
+    this.amountOfRatingsSetHashmap = new Map();
     if(!Array.isArray(players)) {
       this.boardgames = [];
       console.log("Your player input was not an array!");
@@ -104,6 +105,7 @@ class Gamesnight {
         }
         for(let j = 0; j < this.boardgames.length; j++) {
           this.ratingHashmap.set(this.boardgames[j], "No rating asigned yet!");
+          this.amountOfRatingsSetHashmap.set(this.boardgames[j], 0);
         }
         //this.players[i].setBoardgameList(this.boardgames, this.ratingHashmap);
         
@@ -130,13 +132,29 @@ class Gamesnight {
   getRating() {
     return this.ratingHashmap;
   }
-  
+
+  getAmountOfRatingsSetHashmap() {
+    return this.amountOfRatingsSetHashmap;
+  }
+
+  setAmountOfRatingsSetHashmap(map) {
+    this.amountOfRatingsSetHashmap = map;
+  }
   setRating(boardgame, rating) {
+    //schleife für avg rating setzen
+    for(let i = 0; i < this.players.length; i++) {
+      this.player[i].getRating();
+    }
+    //obsolete
     if(this.ratingHashmap.has(boardgame)) {
       if(this.ratingHashmap.get(boardgame) === "No rating asigned yet!") {
         this.ratingHashmap.set(boardgame, rating);
+        let temp = this.amountOfRatingsSetHashmap.get(boardgame);
+        this.amountOfRatingsSetHashmap.set(boardgame, temp + 1);
       } else {
-        let averageRating = (parseInt(this.ratingHashmap.get(boardgame)) + parseInt(rating)) / this.players.length;
+        let temp = this.amountOfRatingsSetHashmap.get(boardgame);
+        this.amountOfRatingsSetHashmap.set(boardgame, temp + 1);
+        let averageRating = (parseInt(this.ratingHashmap.get(boardgame)) + parseInt(rating)) / this.;
         this.ratingHashmap.set(boardgame, averageRating);  
       }
     }
