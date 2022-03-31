@@ -118,6 +118,10 @@ class Gamesnight {
   }
 
   getPlayers() {
+    return this.players;
+    //think this would be better 
+    /* if we return only the name, we have to iterate through the userList to find the user with that name and then do the operations. Just returning the oobject list is better imo
+    */
     let playerNames = [];
     for(let i = 0; i < this.players.length; i++) {
         playerNames.push(this.players[i].getName());
