@@ -108,6 +108,9 @@ const GERMAN = {
 	changeRating: "Ändere Bewertung",
 	exportCompletedMsg: "Daten wurden exportiert!",
 	gameHasBeenAdded: "Das Spiel wurdem dem ausgewählten Spieler hinzugefügt!",
+	oneByOne: "Füge die Spieler einzeln zu",
+	addEveryPlayer: "Füge jeden Spieler hinzu",
+	addToGameNightQuestion: "Möchtest du jeden Spieler einzeln hinzufügen oder alle Spieler direkt?",
 }
 
 const ENGLISH = {
@@ -220,6 +223,9 @@ const ENGLISH = {
 	changeRating: "Change rating",
 	exportCompletedMsg: "Data has been exported!",
 	gameHasBeenAdded: "Game has been added to chosen Player!",
+	oneByOne: "Add one by one",
+	addEveryPlayer: "Add every Player",
+	addToGameNightQuestion: "Do you want to add every Player or add them one by one to the gamenight?",
 }
 
 const ITALIAN = {
@@ -332,6 +338,9 @@ const ITALIAN = {
 	changeRating: "Cambia valutazione",
 	exportCompletedMsg: "I dati sono stati esportati!",
 	gameHasBeenAdded: "Il gioco è stato aggiunto al giocantore!",
+	oneByOne: "Aggiungi i giocatori uno per uno",
+	addEveryPlayer: "Aggiungi ogni giocatore",
+	addToGameNightQuestion: "Vuoi aggiungere ogni giocatore individualmente o tutti i giocatori direttamente? ",
 }
 
 const TURKISH = {
@@ -444,6 +453,9 @@ const TURKISH = {
 	changeRating: "Derecelendirmeyi değiştir",
 	exportCompletedMsg: "Veriler dışa aktarıldı!",
 	gameHasBeenAdded: "Oyun oyuncuya eklendi!",
+	oneByOne: "Oyuncuları tek tek ekleyin",
+	addEveryPlayer: "Her oyuncuyu ekle",
+	addToGameNightQuestion: "Her oyuncuyu tek tek mi yoksa tüm oyuncuları doğrudan mı eklemek istiyorsunuz?",
 
 }
 
