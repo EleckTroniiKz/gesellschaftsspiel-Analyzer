@@ -27,16 +27,15 @@ class Export{
  setPlayerRatingCSV() {
    //Initialize empty data string so you can append data with +=
    let data = "";
-    /*
-    For every player in userList this loop gets the ratings from the hashmap and writes
-    it into the data string in CSV format
-    */
-   for(let index = 0;index < this.userList.length;index++){
-     //header for each player
-     data += `Rating von ${this.userList[index].getName()};\n\n`;
-     data += "Game;Rating\n";
+  //todo --> get ratings from gamenight
+  //todo --> get gamesnight list
+  let userList = this.session.getUserObjectList();
+  let gameNight = this.session.getGamesNightObject();
+  for(let i = 0; i < userList.length; i++){
+    data += `User: ${this.userList[i].getName()}\n`
+    data += "Game;Rating\n";
      
-     let map = this.userList[index].getRating();
+     let map = this.userList[i].getRating();
      let k = Array.from(map.keys());
 
      //content
@@ -45,7 +44,13 @@ class Export{
      }
      //last line
      data += "\n";
-   }
+  }
+  data += `Average Ratings`
+  let ratingMap = gameNight.getRating();
+  let games = Array.from(ratingMap.keys());
+  for(let i = 0; i < games.length; i++){
+    data += `${games[i]}; ${ratingMap.get(games[i])}`;
+  }
    return data;
 }
 
