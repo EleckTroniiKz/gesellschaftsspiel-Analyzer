@@ -41,15 +41,15 @@ Casing:
 - Variablen: camelCase (bsp.: )
 ______________________________________________
 Mögliche Nice To haves:
-- Bestenliste bzgl. Beste Bewerte Spiele, Spieler die die meisten Spiele gespielt haben, und die SPiele die am meisten gespielt wurden 
+- Bestenliste bzgl. Beste Bewerte Spiele, Spieler die die meisten Spiele gespielt haben, und die SPiele die am meisten gespielt wurden (Wird auf jeden fall noch gemacht)
 - False input control
-- Menüführung mit Pfeiltasten (und evtl. WASD) möglich?
-- nutzen von hashmaps für einfachere Speicherung und verwaltung der Ratings
-- ausgebe möglichkeit für alle spieler und spiele --> also liste von spielern ausgeben und liste von spielen ausgeben
-- Möglichkeit, bei der SPieler liste ienen spieler auszuwählen, oder ein Spiel und direkt von dort aus bearbeiten
+- Menüführung mit Pfeiltasten (und evtl. WASD) möglich? (DONE ohne wasd)
+- nutzen von hashmaps für einfachere Speicherung und verwaltung der Ratings (DONE)
+- ausgebe möglichkeit für alle spieler und spiele --> also liste von spielern ausgeben und liste von spielen ausgeben (DONE)
+- Möglichkeit, bei der SPieler liste ienen spieler auszuwählen, oder ein Spiel und direkt von dort aus bearbeiten 
 - Tutorial Mode --> gibt alle Unterfenster aus und erzählt bisschen was dazu
 ___________________________
 Fertige NiceToHaves:
-- Übersetzungsoption zu Deutsch, Englisch, Italienisch, Türkisch
-- letztes Menüfeld wird markiert, wenn man zurück geht
-- Hashmap nutzung
+- Übersetzungsoption zu Deutsch, Englisch, Italienisch, Türkisch (DONE)
+- letztes Menüfeld wird markiert, wenn man zurück geht (DONE aber noch kleine stellen wo man es fixen muss)
+- Hashmap nutzung (DONE)
