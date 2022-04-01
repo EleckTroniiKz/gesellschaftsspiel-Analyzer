@@ -49,7 +49,7 @@ class Export{
   let ratingMap = gameNight.getRating();
   let games = Array.from(ratingMap.keys());
   for(let i = 0; i < games.length; i++){
-    data += `${games[i]}; ${ratingMap.get(games[i])}`;
+    data += `${games[i]}; ${ratingMap.get(games[i])}\n`;
   }
    return data;
 }
