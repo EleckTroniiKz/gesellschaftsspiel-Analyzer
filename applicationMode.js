@@ -144,10 +144,23 @@ class Gamesnight {
   setAmountOfRatingsSetHashmap(map) {
     this.amountOfRatingsSetHashmap = map;
   }
+
+  calculateAverages(){
+    for(let i = 0; i < this.boardgames.length; i++){
+      let ratingSum = this.ratingHashmap.get(this.boardgames[i]);
+      let ratingAmount = this.amountOfRatingsSetHashmap.get(this.boardgames[i]);
+      this.ratingHashmap.set(this.boardgames[i], (ratingSum/ratingAmount));
+    }
+  }
+
+  setRatingHashmap(map) {
+    this.ratingHashmap = map;
+  }
+
   setRating(boardgame, rating) {
     //schleife für avg rating setzen
     for(let i = 0; i < this.players.length; i++) {
-      this.player[i].getRating();
+      this.players[i].getRating();
     }
     //obsolete
     if(this.ratingHashmap.has(boardgame)) {
@@ -158,8 +171,9 @@ class Gamesnight {
       } else {
         let temp = this.amountOfRatingsSetHashmap.get(boardgame);
         this.amountOfRatingsSetHashmap.set(boardgame, temp + 1);
-        let averageRating = (parseInt(this.ratingHashmap.get(boardgame)) + parseInt(rating)) / this.;
-        this.ratingHashmap.set(boardgame, averageRating);  
+        let ratingSum = (parseInt(this.ratingHashmap.get(boardgame)) + parseInt(rating));
+        //let averageRating = (parseInt(this.ratingHashmap.get(boardgame)) + parseInt(rating)) / this.players.length;
+        this.ratingHashmap.set(boardgame, ratingSum);  
       }
     }
   }
