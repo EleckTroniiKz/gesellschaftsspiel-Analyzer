@@ -5,6 +5,8 @@ const { ITALIAN, GERMAN, ENGLISH, TURKISH } = require("./enums/enum.js");
 
 //Arrays mit den Menüs
 
+let setveto = false;
+
 const ratingOptions = ["very good", "good", "not bad", "not so good", "bad"];
 
 const mainMenu = [
@@ -207,44 +209,78 @@ class Control {
     return selectedIndex;
   }
 
+  async ConfirmRating(gameName, selectedIndex, playerName, usedVeto) {
+    let vetoState = "";
+    let choice;
+    if(setveto){
+      vetoState = "VETO RESET"
+    }
+    else{
+      vetoState = "VETO SET"
+    }
+    if(usedVeto){
+      choice = await this.decision(
+        [this.language.nextGame, this.language.changeRating],
+        this.language.ratingNoticeOutput(
+          gameName,
+          this.language.ratingOptions[selectedIndex]
+        ),
+        this.language.ratingValidationQuestion(gameName)
+      );
+    }
+    else{
+      choice = await this.decision(
+        [this.language.nextGame, this.language.changeRating, vetoState],
+        this.language.ratingNoticeOutput(
+          gameName,
+          this.language.ratingOptions[selectedIndex]
+        ),
+        this.language.ratingValidationQuestion(gameName)
+      );
+    }
+
+    if(choice === this.language.nextGame){
+      let veto = setveto;
+      setveto = false;
+      if(usedVeto){
+        return [selectedIndex, false];
+      }
+      else{
+        return [selectedIndex, veto];
+      }
+      
+    }
+    else if(choice === this.language.changeRating){
+      return await this.setRating(playerName, gameName, usedVeto);
+    }
+    else{
+      //setveto call this confirm Rating again
+      if(setveto){
+        setveto = false;
+        return await this.ConfirmRating(gameName, selectedIndex, playerName, usedVeto);
+        //remove veto;
+      }
+      else{
+        setveto = true;
+        return await this.ConfirmRating(gameName, selectedIndex, playerName, usedVeto);
+        //add veto
+      }
+    }
+  }
+
   async setRating(playerName, gameName, usedVeto) {
+    //usedVeto --> ob Spieler schon gevetod hat
     let selectedIndex;
     console.clear();
     let options = this.language.ratingOptions;
-    let ind = options.indexOf("VETO");
     term(this.language.rateGamesHeader);
     term(`${this.language.rateGameQuestion(gameName, playerName)}\n`);
-    if(!usedVeto){
-      options = this.language.ratingOptions;
-      if(ind === -1){
-        options.push("VETO");
-      }
-    }
-    else{
-      if(ind !== -1){
-        options.pop();
-      }
-    }
-    const response = await term.singleColumnMenu(options)
-      .promise;
+    const response = await term.singleColumnMenu(options).promise;
     selectedIndex = await response.selectedIndex;
     term("\n").green(
       this.language.ratingNoticeOutput(gameName, await response.selectedText)
     );
-
-    let choice = await this.decision(
-      [this.language.nextGame, this.language.changeRating],
-      this.language.ratingNoticeOutput(
-        gameName,
-        this.language.ratingOptions[selectedIndex]
-      ),
-      this.language.ratingValidationQuestion(gameName)
-    );
-    if (choice === this.language.nextGame) {
-      return selectedIndex;
-    } else {
-      return await this.setRating(playerName, gameName, usedVeto);
-    }
+     return await this.ConfirmRating(gameName, selectedIndex, playerName, usedVeto);
   }
 
   //NicetoHave

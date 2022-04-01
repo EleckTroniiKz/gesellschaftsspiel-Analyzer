@@ -119,14 +119,16 @@ class Gamesnight {
         }
         for(let j = 0; j < this.boardgames.length; j++) {
           this.ratingHashmap.set(this.boardgames[j], "No rating asigned yet!");
-          this.amountOfRatingsSetHashmap.set(this.boardgames[j], 0);
-          this.vetoHash.set(this.boardgames[i], false);
         }
         //this.players[i].setBoardgameList(this.boardgames, this.ratingHashmap);
         
       }
       for(let i = 0; i < this.players.length; i++) {
         this.players[i].addBoardgameToList(this.boardgames);  
+      }
+      for(let i = 0; i < this.boardgames.length; i++){
+        this.amountOfRatingsSetHashmap.set(this.boardgames[i], 0);
+        this.vetoHash.set(this.boardgames[i], false);
       }
       
     }
@@ -181,32 +183,18 @@ class Gamesnight {
   }
 
   setRating(boardgame, rating) {
-    //schleife für avg rating setzen
-    for(let i = 0; i < this.players.length; i++) {
-      this.players[i].getRating();
-    }
-    //obsolete
     if(this.ratingHashmap.has(boardgame)) {
       if(this.ratingHashmap.get(boardgame) === "No rating asigned yet!") {
-        if(rating === "VETO"){
-          this.ratingHashmap.set(boardgame, 0);
-          let temp = this.amountOfRatingsSetHashmap.get(boardgame);
-          this.amountOfRatingsSetHashmap.set(boardgame, temp + 1);
-        }
-        else{
-          this.ratingHashmap.set(boardgame, rating);
-          let temp = this.amountOfRatingsSetHashmap.get(boardgame);
-          this.amountOfRatingsSetHashmap.set(boardgame, temp + 1);
-        }
+        this.ratingHashmap.set(boardgame, rating);
+        let temp = this.amountOfRatingsSetHashmap.get(boardgame);
+        this.amountOfRatingsSetHashmap.set(boardgame, temp + 1);
+        
       } else {
         let temp = this.amountOfRatingsSetHashmap.get(boardgame);
-        if(rating !== "VETO"){
-          this.amountOfRatingsSetHashmap.set(boardgame, temp + 1);
-          let ratingSum = (parseInt(this.ratingHashmap.get(boardgame)) + parseInt(rating));
-          //let averageRating = (parseInt(this.ratingHashmap.get(boardgame)) + parseInt(rating)) / this.players.length;
-          this.ratingHashmap.set(boardgame, ratingSum);
-          this.amountOfRatingsSetHashmap.set(boardgame, temp + 1);
-        }
+        let ratingSum = (parseInt(this.ratingHashmap.get(boardgame)) + parseInt(rating));
+        //let averageRating = (parseInt(this.ratingHashmap.get(boardgame)) + parseInt(rating)) / this.players.length;
+        this.ratingHashmap.set(boardgame, ratingSum);
+        this.amountOfRatingsSetHashmap.set(boardgame, temp + 1);
       }
     }
   }

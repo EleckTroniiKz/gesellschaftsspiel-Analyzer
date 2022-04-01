@@ -283,7 +283,6 @@ async function planGamenightLoop(mode_index) {
         add = false;
       }
       if (gameNightUsers !== []) {
-        console.log(gameNightUsers);
         let night = new Gamesnight(gameNightUsers);
         session.saveGamesNightObject(night);
         createdGamenight = true;
@@ -373,13 +372,15 @@ async function applicationLoop(mode_index) {
         }
 
         for (let i = 0; i < spieler.length; i++) {
-          let playerUsedVetoForGame = false;
           let player = spieler[i];
           let playerName = player.getName();
           for (let g = 0; g < gameList.length; g++) {
             let gameName = gameList[g];
             let usedVeto = player.getVeto();
-            let rating = await control.setRating(playerName, gameName, usedVeto);
+            let ratings = await control.setRating(playerName, gameName, usedVeto);
+            let rating = ratings[0];
+            let vetoSetted = ratings[1];  
+            console.log(ratings)
             switch (rating) {
               case 0:
                 rating = 5;
@@ -396,21 +397,15 @@ async function applicationLoop(mode_index) {
               case 4:
                 rating = 1;
                 break;
-              case 5:
-                player.setVeto(true);
-                playerUsedVetoForGame = true;
-                gamesnight.setVeto(gameName, true);
-                player.setRating(gameName);
-                gamesnight.setRating(gameName, "VETO");
-                break;
               default:
                 rating = -1;
                 break;
             }
-            if(playerUsedVetoForGame){
-              gamesnight.setVeto(gameName, true);
-              player.setRating(gameName, "VETO");
-              gamesnight.setRating(gameName, "VETO");
+            if(vetoSetted){
+              gamesnight.setVeto(gameName, vetoSetted);
+              player.setRating(gameName, rating);
+              player.setVeto(vetoSetted);
+              gamesnight.setRating(gameName, rating);
             }
             else{
               player.setRating(gameName, rating);
