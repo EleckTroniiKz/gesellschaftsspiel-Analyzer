@@ -213,27 +213,33 @@ class Gamesnight {
       highestRating = this.getRating().get(this.getBoardgames[i]);
       
     }
-    if() {
-      
-    }
   }
 
-  sortByRating(ratingHashmap) {
-    for(let i = 0; i < ratingHashmap.length; i++) {
-      //last i elements are already in place  
-      for(let j = 0; j < ( ratingHashmap.length - i - 1 ) ; j++) {
-        //checking if the item at present iteration 
-        //is greater than the next iteration
-        if(this.getRating().get(this.getBoardgames[j]) > this.getRating().get(this.getBoardgames[j + 1])) {
-          //if the condition is true then swap them
-          let temp = this.getRating().get(this.getBoardgames[j]);
-          this.getRating().get(this.getBoardgames[j]) = this.getRating().get(this.getBoardgames[j + 1]);
-          this.getRating().get(this.getBoardgames[j + 1]) = temp;
+  sortByRating() {
+    let keys = Array.from(this.ratingHashmap.keys());;
+    let newKeys = keys;
+    let values = [];
+    for(let i = 0; i < keys.length; i++){
+      values.push(this.ratingHashmap.get(keys[i]));
+    }
+    for(let k = 0; k < keys.length; k++){
+      for(let j = 0; j < keys.length - k-1; j++){
+        if(values[j] > values[j+1]){
+          let tempVal = values[j];
+          let tempKey = newKeys[j];
+          values[j] = values[j+1];
+          newKeys[j] = newKeys[j+1];
+          values[j+1] = tempVal;
+          newKeys[j+1] = tempKey;
         }
       }
     }
+    let newMap = new Map();
+    for(let i = 0; i < newKeys.length; i++){
+      newMap.set(newKeys[i], values[i]);
+    }
+    this.setRatingHashmap(newMap);
     // Print the sorted array
-    console.log(ratingHashmap);
   }
   
 }

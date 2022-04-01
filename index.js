@@ -428,6 +428,7 @@ async function applicationLoop(mode_index) {
         }
         session.saveUserObjectList(userList);
         gamesnight.calculateAverages();
+        gamesnight.sortByRating();
         session.saveGamesNightObject(gamesnight);
         //show average ratings
         hasDataForExport = true;
