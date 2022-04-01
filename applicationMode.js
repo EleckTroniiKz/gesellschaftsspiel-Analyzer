@@ -203,6 +203,39 @@ class Gamesnight {
     //val should be boolean!
     this.vetoHash.set(game, val);
   }
+
+  chooseBoardgame() {
+    //TODO
+    let highestRatedBoardgame = "";
+    let highestRating = 0;
+    for (let i = 0; i < this.getRating().length; i++) {
+      highestRatedBoardgame = this.getBoardgames[i];
+      highestRating = this.getRating().get(this.getBoardgames[i]);
+      
+    }
+    if() {
+      
+    }
+  }
+
+  sortByRating(ratingHashmap) {
+    for(let i = 0; i < ratingHashmap.length; i++) {
+      //last i elements are already in place  
+      for(let j = 0; j < ( ratingHashmap.length - i - 1 ) ; j++) {
+        //checking if the item at present iteration 
+        //is greater than the next iteration
+        if(this.getRating().get(this.getBoardgames[j]) > this.getRating().get(this.getBoardgames[j + 1])) {
+          //if the condition is true then swap them
+          let temp = this.getRating().get(this.getBoardgames[j]);
+          this.getRating().get(this.getBoardgames[j]) = this.getRating().get(this.getBoardgames[j + 1]);
+          this.getRating().get(this.getBoardgames[j + 1]) = temp;
+        }
+      }
+    }
+    // Print the sorted array
+    console.log(ratingHashmap);
+  }
+  
 }
 exports.Boardgame = Boardgame;
 exports.Player = Player;
