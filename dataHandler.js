@@ -170,6 +170,7 @@ class DataHandler {
 	saveGamesNightObject(gamesNight){
 		gamesNight.setRatingHashmap(this.transformHashToString(gamesNight.getRating()));
 		gamesNight.setAmountOfRatingsSetHashmap(this.transformHashToString(gamesNight.getAmountOfRatingsSetHashmap()));
+		gamesNight.setVetoList(this.transformHashToString(gamesNight.getVetoList()));
 		localStorage.setItem('gamesnight', JSON.stringify(gamesNight));
 	}
 
@@ -185,11 +186,14 @@ class DataHandler {
 			let ratings = unparsedGamesnight.players[i].ratingHashmap;
 			let id = unparsedGamesnight.players[i].id;
 			let player = new Player(name, games, id);
+			player.setVeto(unparsedGamesnight.players[i].usedVeto);
+			player.setRatingMap(this.transformStringToHash(ratings));
 			playerObjectList.push(player);
 		}
 		let gamesnight = new Gamesnight(playerObjectList);
 		gamesnight.setRatingHashmap(this.transformStringToHash(unparsedGamesnight.ratingHashmap));
 		gamesnight.setAmountOfRatingsSetHashmap(this.transformStringToHash(unparsedGamesnight.amountOfRatingsSetHashmap));
+		gamesnight.setVetoList(this.transformStringToHash(unparsedGamesnight.vetoHash));
 		return gamesnight;
 	}
 
@@ -252,6 +256,7 @@ class DataHandler {
 		let objectList = [];
 		for(let i = 0; i < list.length; i++){
 			let a = new Player(list[i].name, list[i].boardgames, list[i].id);
+			a.setVeto(list[i].usedVeto);
 			a.setBoardgameList(a.getBoardgames(), this.transformStringToHash(list[i].ratingHashmap));
 			objectList.push(a)
 		}

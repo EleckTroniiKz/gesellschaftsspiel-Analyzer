@@ -358,7 +358,6 @@ async function applicationLoop(mode_index) {
         }
         let gameList = []; //alle spiele der spieler die aktuell in der gamesnight drinnen sind
         let spieler = gamesnight.getPlayers();
-        console.log(spieler);
         for (let i = 0; i < spieler.length; i++) {
           let currentUsersGames = spieler[i].getBoardgames();
           for (let j = 0; j < currentUsersGames.length; j++) {
@@ -374,11 +373,13 @@ async function applicationLoop(mode_index) {
         }
 
         for (let i = 0; i < spieler.length; i++) {
+          let playerUsedVetoForGame = false;
           let player = spieler[i];
           let playerName = player.getName();
           for (let g = 0; g < gameList.length; g++) {
             let gameName = gameList[g];
-            let rating = await control.setRating(playerName, gameName);
+            let usedVeto = player.getVeto();
+            let rating = await control.setRating(playerName, gameName, usedVeto);
             switch (rating) {
               case 0:
                 rating = 5;
@@ -396,14 +397,25 @@ async function applicationLoop(mode_index) {
                 rating = 1;
                 break;
               case 5:
-                rating = 0;
+                player.setVeto(true);
+                playerUsedVetoForGame = true;
+                gamesnight.setVeto(gameName, true);
+                player.setRating(gameName);
+                gamesnight.setRating(gameName, "VETO");
                 break;
               default:
                 rating = -1;
                 break;
             }
-            player.setRating(gameName, rating);
-            gamesnight.setRating(gameName, rating);
+            if(playerUsedVetoForGame){
+              gamesnight.setVeto(gameName, true);
+              player.setRating(gameName, "VETO");
+              gamesnight.setRating(gameName, "VETO");
+            }
+            else{
+              player.setRating(gameName, rating);
+              gamesnight.setRating(gameName, rating);
+            } 
           }
         }
         //Die spieler der gamenight werden mit den psielern der gesamten userlist getauscht.
@@ -422,6 +434,7 @@ async function applicationLoop(mode_index) {
         session.saveUserObjectList(userList);
         gamesnight.calculateAverages();
         session.saveGamesNightObject(gamesnight);
+        //show average ratings
         hasDataForExport = true;
         //Ab hier wurden alle Games gerated nehme ich an.
         //ich weiß leider nicht ganz was dann passieren soll xD

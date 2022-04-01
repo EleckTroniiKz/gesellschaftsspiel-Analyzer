@@ -207,13 +207,25 @@ class Control {
     return selectedIndex;
   }
 
-  async setRating(playerName, gameName) {
+  async setRating(playerName, gameName, usedVeto) {
     let selectedIndex;
     console.clear();
+    let options = this.language.ratingOptions;
+    let ind = options.indexOf("VETO");
     term(this.language.rateGamesHeader);
-
     term(`${this.language.rateGameQuestion(gameName, playerName)}\n`);
-    const response = await term.singleColumnMenu(this.language.ratingOptions)
+    if(!usedVeto){
+      options = this.language.ratingOptions;
+      if(ind === -1){
+        options.push("VETO");
+      }
+    }
+    else{
+      if(ind !== -1){
+        options.pop();
+      }
+    }
+    const response = await term.singleColumnMenu(options)
       .promise;
     selectedIndex = await response.selectedIndex;
     term("\n").green(
@@ -231,7 +243,7 @@ class Control {
     if (choice === this.language.nextGame) {
       return selectedIndex;
     } else {
-      this.setRating(playerName, gameName);
+      return await this.setRating(playerName, gameName, usedVeto);
     }
   }
 

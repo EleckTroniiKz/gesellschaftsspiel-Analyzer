@@ -19,6 +19,7 @@ class Player {
   constructor(name, boardgames, id) {
     this.name = name;
     this.id = id;
+    this.usedVeto = false;
     if(!Array.isArray(boardgames)) {
       this.boardgames = [];
     } else {
@@ -32,6 +33,14 @@ class Player {
     for(let i = 0; i < this.boardgames.length; i++) {
       this.ratingHashmap.set(this.boardgames[i], "No rating asigned yet!");
     }
+  }
+
+  getVeto(){
+    return this.usedVeto;
+  }
+
+  setVeto(val){
+    this.usedVeto = val;
   }
 
   getID() {
@@ -65,6 +74,10 @@ class Player {
     }
   }
 
+  setRatingMap(map){
+    this.ratingHashmap = map;
+  }
+
   setBoardgameList(boardgames, ratingHashmap) {
     this.boardgames = boardgames;
     this.ratingHashmap = ratingHashmap;
@@ -89,6 +102,7 @@ class Gamesnight {
   constructor(players) {
     this.players = players;
     this.ratingHashmap = new Map();
+    this.vetoHash = new Map();
     this.amountOfRatingsSetHashmap = new Map();
     if(!Array.isArray(players)) {
       this.boardgames = [];
@@ -106,6 +120,7 @@ class Gamesnight {
         for(let j = 0; j < this.boardgames.length; j++) {
           this.ratingHashmap.set(this.boardgames[j], "No rating asigned yet!");
           this.amountOfRatingsSetHashmap.set(this.boardgames[j], 0);
+          this.vetoHash.set(this.boardgames[i], false);
         }
         //this.players[i].setBoardgameList(this.boardgames, this.ratingHashmap);
         
@@ -115,6 +130,14 @@ class Gamesnight {
       }
       
     }
+  }
+
+  getVetoList(){
+    return this.vetoHash;
+  }
+
+  setVetoList(map){
+    this.vetoHash = map;
   }
 
   getPlayers() {
@@ -165,17 +188,32 @@ class Gamesnight {
     //obsolete
     if(this.ratingHashmap.has(boardgame)) {
       if(this.ratingHashmap.get(boardgame) === "No rating asigned yet!") {
-        this.ratingHashmap.set(boardgame, rating);
-        let temp = this.amountOfRatingsSetHashmap.get(boardgame);
-        this.amountOfRatingsSetHashmap.set(boardgame, temp + 1);
+        if(rating === "VETO"){
+          this.ratingHashmap.set(boardgame, 0);
+          let temp = this.amountOfRatingsSetHashmap.get(boardgame);
+          this.amountOfRatingsSetHashmap.set(boardgame, temp + 1);
+        }
+        else{
+          this.ratingHashmap.set(boardgame, rating);
+          let temp = this.amountOfRatingsSetHashmap.get(boardgame);
+          this.amountOfRatingsSetHashmap.set(boardgame, temp + 1);
+        }
       } else {
         let temp = this.amountOfRatingsSetHashmap.get(boardgame);
-        this.amountOfRatingsSetHashmap.set(boardgame, temp + 1);
-        let ratingSum = (parseInt(this.ratingHashmap.get(boardgame)) + parseInt(rating));
-        //let averageRating = (parseInt(this.ratingHashmap.get(boardgame)) + parseInt(rating)) / this.players.length;
-        this.ratingHashmap.set(boardgame, ratingSum);  
+        if(rating !== "VETO"){
+          this.amountOfRatingsSetHashmap.set(boardgame, temp + 1);
+          let ratingSum = (parseInt(this.ratingHashmap.get(boardgame)) + parseInt(rating));
+          //let averageRating = (parseInt(this.ratingHashmap.get(boardgame)) + parseInt(rating)) / this.players.length;
+          this.ratingHashmap.set(boardgame, ratingSum);
+          this.amountOfRatingsSetHashmap.set(boardgame, temp + 1);
+        }
       }
     }
+  }
+
+  setVeto(game, val){
+    //val should be boolean!
+    this.vetoHash.set(game, val);
   }
 }
 exports.Boardgame = Boardgame;

@@ -47,9 +47,10 @@ class Export{
   }
   data += `Average Ratings`
   let ratingMap = gameNight.getRating();
+  let vetoMap = gameNight.getVetoList();
   let games = Array.from(ratingMap.keys());
   for(let i = 0; i < games.length; i++){
-    data += `${games[i]}; ${ratingMap.get(games[i])}\n`;
+    data += `${games[i]}; ${ratingMap.get(games[i])}; Has Veto -> ${vetoMap.get(games[i])}\n`;
   }
    return data;
 }
