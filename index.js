@@ -24,7 +24,6 @@ let hasImportedData = false;
 let control = new Control();
 let exp = new Export();
 control.postWelcome();
-//Check if there is already Data saved
 mainLoop();
 
 async function exportLoop(mode_index) {
@@ -189,6 +188,9 @@ async function playerManagementLoop(mode_index) {
     case MANAGEMENT_PLAYERS_MODES.ADD:
       let valueArr = await control.addPlayerInput();
       session.addUser(valueArr[0], valueArr[1]);
+      if(session.getUserObjectList().length >= 2){
+        hasImportedData = true;
+      }
       //muss noch liste der spiele und des spielernames returnen
       //add Player
       //Input for Player Name, and the Games from the Player
@@ -380,7 +382,6 @@ async function applicationLoop(mode_index) {
             let ratings = await control.setRating(playerName, gameName, usedVeto);
             let rating = ratings[0];
             let vetoSetted = ratings[1];  
-            console.log(ratings)
             switch (rating) {
               case 0:
                 rating = 5;
@@ -432,6 +433,10 @@ async function applicationLoop(mode_index) {
         session.saveGamesNightObject(gamesnight);
         //show average ratings
         hasDataForExport = true;
+        gamesnight = session.getGamesNightObject();
+        let bet = gamesnight.chooseBoardgame();
+        let gameChoice = await control.decision(["Ok", "Revote"], "chosenGame", bet)
+        //let cont = await control.decision(["OK", "Vote again"], "GAMING CHOOSE", gamesnight.chooseBoardgame());
         //Ab hier wurden alle Games gerated nehme ich an.
         //ich weiß leider nicht ganz was dann passieren soll xD
       } else {

@@ -120,8 +120,6 @@ class Gamesnight {
         for(let j = 0; j < this.boardgames.length; j++) {
           this.ratingHashmap.set(this.boardgames[j], "No rating asigned yet!");
         }
-        //this.players[i].setBoardgameList(this.boardgames, this.ratingHashmap);
-        
       }
       for(let i = 0; i < this.players.length; i++) {
         this.players[i].addBoardgameToList(this.boardgames);  
@@ -144,14 +142,6 @@ class Gamesnight {
 
   getPlayers() {
     return this.players;
-    //think this would be better 
-    /* if we return only the name, we have to iterate through the userList to find the user with that name and then do the operations. Just returning the oobject list is better imo
-    */
-    let playerNames = [];
-    for(let i = 0; i < this.players.length; i++) {
-        playerNames.push(this.players[i].getName());
-    }
-    return playerNames;
   }
 
   getBoardgames() {
@@ -207,11 +197,65 @@ class Gamesnight {
   chooseBoardgame() {
     //TODO
     let highestRatedBoardgame = "";
+    let currentHighest = 0
+    let currentHighestName = ""
     let highestRating = 0;
-    for (let i = 0; i < this.getRating().length; i++) {
-      highestRatedBoardgame = this.getBoardgames[i];
-      highestRating = this.getRating().get(this.getBoardgames[i]);
-      
+    let highestOfAll = "";
+    let hasVeto = [];
+    let iterations = 0;
+    for (let i = 0; i < Array.from(this.ratingHashmap.keys()).length
+    ; i++) {
+      highestRatedBoardgame = this.boardgames[i];
+      highestRating = this.ratingHashmap.get(this.boardgames[i]);
+      if(highestRating > currentHighest){
+        currentHighest = highestRating;
+        currentHighestName = highestRatedBoardgame;
+        highestOfAll = currentHighestName;
+      }
+    }
+    if(this.vetoHash.get(currentHighestName)){
+      while(iterations < 5){
+        for(let i = 0; i < Array.from(this.ratingHashmap.keys()).length; i++){
+          if(hasVeto.indexOf(this.boardgames[i]) === -1){
+            if(this.ratingHashmap.get(this.boardgames[i]) > highestRating){
+              currentHighest = this.ratingHashmap.get(this.boardgames[i]);
+              currentHighestName = this.boardgames[i];
+            }
+          }
+        }
+        if(this.getVetoList().get(currentHighestName)){
+          iterations++;
+          hasVeto.push(currentHighestName);
+        }
+      }
+      if(iterations === 5){
+        let noVeto = [];
+        let highestNoVetoValue = 0;
+        let highestWithoutVeto = "";
+        for(let i = 0; i < Array.from(this.vetoHash.keys()).length; i++){
+          if(this.vetoHash.get(this.boardgames[i]) === false){
+            noVeto.push(this.boardgames[i]);
+          }
+        }
+        if(noVeto.length !== 0){
+          for(let i = 0; i < noVeto.length; i++){
+            if(this.ratingHashmap.get(noVeto[i]) > highestNoVetoValue){
+              highestNoVetoValue = this.ratingHashmap.get(noVeto[i]);
+              highestWithoutVeto = noVeto[i];
+            }
+          }
+          return highestWithoutVeto;
+        }
+        else{
+          return highestOfAll
+        }
+      }
+      else{
+        return currentHighestName;
+      }
+    }
+    else{
+      return currentHighestName;
     }
   }
 
@@ -241,6 +285,7 @@ class Gamesnight {
     this.setRatingHashmap(newMap);
     // Print the sorted array
   }
+
   
 }
 exports.Boardgame = Boardgame;
