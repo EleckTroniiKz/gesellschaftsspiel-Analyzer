@@ -420,6 +420,7 @@ async function applicationLoop(mode_index) {
           }
         }
         session.saveUserObjectList(userList);
+        gamesnight.calculateAverages();
         session.saveGamesNightObject(gamesnight);
         hasDataForExport = true;
         //Ab hier wurden alle Games gerated nehme ich an.
