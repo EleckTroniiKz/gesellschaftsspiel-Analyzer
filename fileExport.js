@@ -27,11 +27,8 @@ class Export{
  setPlayerRatingCSV() {
    //Initialize empty data string so you can append data with +=
    let data = "";
-  //todo --> get ratings from gamenight
-  //todo --> get gamesnight list
-  let userList = this.session.getUserObjectList();
-  let gameNight = this.session.getGamesNightObject();
-  for(let i = 0; i < userList.length; i++){
+   let userList = this.session.getUserObjectList();
+   for(let i = 0; i < userList.length; i++){
     data += `User: ${this.userList[i].getName()}\n`
     data += "Game;Rating\n";
      
@@ -44,13 +41,6 @@ class Export{
      }
      //last line
      data += "\n";
-  }
-  data += `Average Ratings`
-  let ratingMap = gameNight.getRating();
-  let vetoMap = gameNight.getVetoList();
-  let games = Array.from(ratingMap.keys());
-  for(let i = 0; i < games.length; i++){
-    data += `${games[i]}; ${ratingMap.get(games[i])}; Has Veto -> ${vetoMap.get(games[i])}\n`;
   }
    return data;
 }
@@ -66,11 +56,16 @@ class Export{
  setAvgRatingCSV(){
    //Initialize empty data string so you can append data with +=
    let data = "";
-   data += "Average Rating for each Game;\n\n";
-   data += "Game;Rating\n";
+   data += "Average Rating for each Game;\n";
+   data += "Game;Average Rating\n";
    
-    //Hier alle Games und Ratings ausgeben
-   
+   let gameNight = this.session.getGamesNightObject();
+   let ratingMap = gameNight.getRating();
+   let vetoMap = gameNight.getVetoList();
+   let games = Array.from(ratingMap.keys());
+   for(let i = 0; i < games.length; i++){
+     data += `${games[i]}; ${ratingMap.get(games[i])}; Has Veto -> ${vetoMap.get(games[i])}\n`;
+  }
    return data;
   }
 
