@@ -276,16 +276,13 @@ async function planGamenightLoop(mode_index) {
           "Add players to gamenight",
           `Do you want to add the playe ${userList[i].getName()}`
         );
-        if (chooseToAdd === "Ja") {
-          add = true;
-        }
-        if (add) {
+        if(chooseToAdd === "Ja") {
           gameNightUsers.push(userList[i]);
         }
-        add = false;
       }
-      if (gameNightUsers !== []) {
+      if(gameNightUsers !== []) {
         let night = new Gamesnight(gameNightUsers);
+        
         session.saveGamesNightObject(night);
         createdGamenight = true;
       }
@@ -436,9 +433,6 @@ async function applicationLoop(mode_index) {
         gamesnight = session.getGamesNightObject();
         let bet = gamesnight.chooseBoardgame();
         let gameChoice = await control.decision(["Ok", "Revote"], "chosenGame", bet)
-        //let cont = await control.decision(["OK", "Vote again"], "GAMING CHOOSE", gamesnight.chooseBoardgame());
-        //Ab hier wurden alle Games gerated nehme ich an.
-        //ich weiß leider nicht ganz was dann passieren soll xD
       } else {
         let errorMsg = await control.decision(
           ["Ok"],

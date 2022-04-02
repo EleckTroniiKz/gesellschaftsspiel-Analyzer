@@ -179,6 +179,7 @@ class DataHandler {
 	 */
 	getGamesNightObject(){
 		let unparsedGamesnight = JSON.parse(localStorage.getItem('gamesnight'));
+		
 		let playerObjectList = [];
 		for(let i=0; i < unparsedGamesnight.players.length; i++){
 			let name = unparsedGamesnight.players[i].name;
@@ -187,7 +188,9 @@ class DataHandler {
 			let id = unparsedGamesnight.players[i].id;
 			let player = new Player(name, games, id);
 			player.setVeto(unparsedGamesnight.players[i].usedVeto);
-			player.setRatingMap(this.transformStringToHash(ratings));
+			if(Object.keys(ratings).length !== 0){
+				player.setRatingMap(this.transformStringToHash(ratings));
+			}
 			playerObjectList.push(player);
 		}
 		let gamesnight = new Gamesnight(playerObjectList);
