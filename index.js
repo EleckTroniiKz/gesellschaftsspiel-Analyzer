@@ -252,7 +252,7 @@ async function showPlayersList(list, objectList) {
   }
 }
 
-async function planGamenightLoop(mode_index) {
+async function planGamenightLoop(mode_index, fromManagement = true) {
   let userList;
   let add = false;
   let lang = control.getLanguage()
@@ -262,8 +262,12 @@ async function planGamenightLoop(mode_index) {
       userList = session.getUserObjectList();
       session.saveGamesNightObject(new Gamesnight(userList));
       createdGamenight = true;
-      mainLoop(MODES.MANAGEMENT);
-      break;
+      if(fromManagement){
+        mainLoop(MODES.MANAGEMENT);
+      }
+      else{
+        return
+      }
     case lang.oneByOne:
       //getUserList. Iterate through the list and ask if they want to add that user to the list --> if so add them into the new user list || if not dont add the
       //create instance of the gamenight and send them to the dataHandler so it can be saved in the localStorage
@@ -272,9 +276,9 @@ async function planGamenightLoop(mode_index) {
       for (let i = 0; i < userList.length; i++) {
         //ask if they want to add them.
         let chooseToAdd = await control.decision(
-          ["Ja", "Nein"],
-          "Add players to gamenight",
-          `Do you want to add the playe ${userList[i].getName()}`
+          [lang.yes, lang.no],
+          lang.addPlayersToGameNightTitle,
+          lang.addPlayerToGameNightQuestion(userList[i].getName())
         );
         if(chooseToAdd === "Ja") {
           gameNightUsers.push(userList[i]);
@@ -286,7 +290,12 @@ async function planGamenightLoop(mode_index) {
         session.saveGamesNightObject(night);
         createdGamenight = true;
       }
-      mainLoop(MODES.MANAGEMENT);
+      if(fromManagement){
+        mainLoop(MODES.MANAGEMENT);
+      }
+      else{
+        return
+      }
       break;
     default:
       console.log(control.getLanguage().indexIssueOutput);
@@ -343,16 +352,12 @@ async function applicationLoop(mode_index) {
     case 1:
       if (hasImportedData) {
         let userList = session.getUserObjectList();
-        //oder vielleicht gamenight planning im verwaltungsmodus machen?
-        //fragen ob alle importieren Spieler in der gamenight dabei sind (vllt spielernamen ausgabe)
-        //falls ja --> direkt alle hinzufügen
-        //falls nein --> abfrage für jeden Spieler ob er dabei is
-        //selection wer in der gamenight ist
         if (createdGamenight) {
           gamesnight = session.getGamesNightObject();
         } else {
-          //hier ist keine Gamesnight konfiguriert worden. Entweder direkt alle Spieler reinstecken oder zum gamesnight planning menu senden?
-          gamesnight = new Gamesnight(userList);
+          planGamenightIndex = await control.postGameNightPlanMenu();
+          planGamenightLoop(planGamenightIndex, false);
+          gamesnight = session.getGamesNightObject();
         }
         let gameList = []; //alle spiele der spieler die aktuell in der gamesnight drinnen sind
         let spieler = gamesnight.getPlayers();
@@ -427,12 +432,21 @@ async function applicationLoop(mode_index) {
         session.saveUserObjectList(userList);
         gamesnight.calculateAverages();
         gamesnight.sortByRating();
+        console.log(gamesnight.getRating());
         session.saveGamesNightObject(gamesnight);
         //show average ratings
         hasDataForExport = true;
         gamesnight = session.getGamesNightObject();
-        let bet = gamesnight.chooseBoardgame();
-        let gameChoice = await control.decision(["Ok", "Revote"], "chosenGame", bet)
+        let chosenGame = gamesnight.chooseBoardgame();
+        let gameChoice = await control.decision(["Ok", control.getLanguage().revoteChoice], control.getLanguage().choosenGameChoice, chosenGame)
+        if(gameChoice === "Ok"){
+          //back to main Menu
+          mainLoop()
+        }
+        else{
+          let applicationIndex = await control.postApplicationMode();
+          applicationLoop(applicationIndex);
+        }
       } else {
         let errorMsg = await control.decision(
           ["Ok"],
