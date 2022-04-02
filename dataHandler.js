@@ -118,6 +118,9 @@ class DataHandler {
 			}
 		}
 		if(vanish.length !== 0){
+			for(let i = 0; i < vanish.length; i++){
+				this.deleteGameGlobally(vanish[i]);
+			}
 			//deleteGameGLobally and from all ratings
 		}
 		localStorage.setItem('users', JSON.stringify(filteredList))
