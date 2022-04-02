@@ -166,13 +166,12 @@ class Control {
 
   async postApplicationMode() {
     let selectedIndex;
-
-    console.clear();
-
     let startIndex = managementModeMenu.indexOf(this.lastOption);
     if (startIndex === -1) {
       startIndex = 0;
     }
+
+    console.clear();
 
     term(this.language.applicationModeHeader);
     term(this.language.mainMenuSelectTitle);

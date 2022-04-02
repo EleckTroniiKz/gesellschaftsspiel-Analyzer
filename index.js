@@ -266,7 +266,7 @@ async function planGamenightLoop(mode_index, fromManagement = true) {
         mainLoop(MODES.MANAGEMENT);
       }
       else{
-        return
+        return;
       }
     case lang.oneByOne:
       //getUserList. Iterate through the list and ask if they want to add that user to the list --> if so add them into the new user list || if not dont add the
@@ -319,8 +319,18 @@ async function managementLoop(mode_index) {
       gamesManagementLoop(managementIndex);
       break;
     case MANAGEMENT_MODES.PLAN_GAMENIGHT:
-      planGamenightIndex = await control.postGameNightPlanMenu();
-      planGamenightLoop(planGamenightIndex);
+      if(hasImportedData){
+        planGamenightIndex = await control.postGameNightPlanMenu();
+        planGamenightLoop(planGamenightIndex);
+      }
+      else{
+        let errorMsg = await control.decision(
+          ["Ok"],
+          control.getLanguage().noData,
+          control.getLanguage().importOrder
+        );
+        mainLoop()
+      }
       break;
     case MANAGEMENT_MODES.SHOW_PLAYERS:
       if (hasImportedData) {
@@ -356,10 +366,10 @@ async function applicationLoop(mode_index) {
           gamesnight = session.getGamesNightObject();
         } else {
           planGamenightIndex = await control.postGameNightPlanMenu();
-          planGamenightLoop(planGamenightIndex, false);
+          await planGamenightLoop(planGamenightIndex, false);
           gamesnight = session.getGamesNightObject();
         }
-        let gameList = []; //alle spiele der spieler die aktuell in der gamesnight drinnen sind
+        let gameList = []; 
         let spieler = gamesnight.getPlayers();
         for (let i = 0; i < spieler.length; i++) {
           let currentUsersGames = spieler[i].getBoardgames();
@@ -432,21 +442,12 @@ async function applicationLoop(mode_index) {
         session.saveUserObjectList(userList);
         gamesnight.calculateAverages();
         gamesnight.sortByRating();
-        console.log(gamesnight.getRating());
         session.saveGamesNightObject(gamesnight);
         //show average ratings
         hasDataForExport = true;
         gamesnight = session.getGamesNightObject();
         let chosenGame = gamesnight.chooseBoardgame();
         let gameChoice = await control.decision(["Ok", control.getLanguage().revoteChoice], control.getLanguage().choosenGameChoice, chosenGame)
-        if(gameChoice === "Ok"){
-          //back to main Menu
-          mainLoop()
-        }
-        else{
-          let applicationIndex = await control.postApplicationMode();
-          applicationLoop(applicationIndex);
-        }
       } else {
         let errorMsg = await control.decision(
           ["Ok"],

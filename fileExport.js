@@ -32,7 +32,7 @@ class Export{
     data += `User: ${this.userList[i].getName()}\n`
     data += "Game;Rating\n";
      
-     let map = this.userList[i].getRating();
+     let map = userList[i].getRating();
      let k = Array.from(map.keys());
 
      //content
