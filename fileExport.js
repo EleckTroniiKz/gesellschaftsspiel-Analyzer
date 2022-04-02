@@ -45,6 +45,14 @@ class Export{
    return data;
 }
 
+  setMostPlayedCSV(){
+    let data = "\n";
+    let mostPlayed = this.session.getPlayedGamesMap();
+    let games = Array.from(mostPlayed.keys());
+    data += `Most played games \n 1.Place: ${games[games.length-1]}\n2.Place: ${games[games.length-2]}\n3.Place: ${games[games.length-3]}`;
+    return data;
+  }
+
   setBestRatedCSV(){
     let data = "\n";
     let gamesnight = this.session.getGamesNightObject();
@@ -93,6 +101,7 @@ class Export{
     data += this.setPlayerRatingCSV();
     data += this.setAvgRatingCSV();
     data += this.setBestRatedCSV();
+    data += this.setMostPlayedCSV();
     return data;
   }
 

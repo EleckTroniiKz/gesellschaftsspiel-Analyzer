@@ -438,13 +438,15 @@ async function applicationLoop(mode_index) {
         }
         session.saveUserObjectList(userList);
         gamesnight.calculateAverages();
-        gamesnight.sortByRating();
+        session.hashMapSorter(gamesnight.getRating())
+        //gamesnight.sortByRating();
         session.saveRatingsIntoGlobalGameList(gamesnight);
         session.saveGamesNightObject(gamesnight);
         //show average ratings
         hasDataForExport = true;
         gamesnight = session.getGamesNightObject();
         let chosenGame = gamesnight.chooseBoardgame();
+        session.saveChosenGameIntoHashmap(chosenGame)
         let gameChoice = await control.decision(["Ok", control.getLanguage().revoteChoice], control.getLanguage().choosenGameChoice, chosenGame)
         if(gameChoice === control.getLanguage().revoteChoice){
           mainLoop(MODES.APPLICATION);
@@ -452,7 +454,6 @@ async function applicationLoop(mode_index) {
         else{
           control.setLastOption("Application Mode")
           mainLoop();
-          
         }
       } else {
         let errorMsg = await control.decision(

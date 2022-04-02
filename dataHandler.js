@@ -48,6 +48,61 @@ class DataHandler {
 		localStorage.setItem('gamesnight', JSON.stringify(""));
 	}
 
+	hashMapSorter(map){
+		let keys = Array.from(map.keys());
+		let tempKeys = keys;
+		let values = [];
+		for(let i = 0; i < keys.length; i++){
+			values.push(map.get(keys[i]));
+		}
+		for(let k = 0; k < keys.length; k++){
+			for(let j = 0; j < (keys.length -(k+1)); j++){
+				if(values[j] > values[j+1]){
+					let a = values[j];
+					let b = tempKeys[j];
+					values[j] = values[j+1];
+					tempKeys[j] = tempKeys[j+1];
+					values[j+1] = a;
+					tempKeys[j+1] = b;
+				}
+			}
+		}
+		let sortedMap = new Map();
+		for(let i = 0; i < tempKeys.length; i++){
+			sortedMap.set(tempKeys[i], values[i]);
+		}
+		return sortedMap;
+	}
+
+	getPlayedGamesMap(){
+		let chosenGames = this.transformStringToHash(localStorage.getItem("playedGames"));
+		//chosenGames = this.hashMapSorter(chosenGames);
+		return this.hashMapSorter(chosenGames)
+	}
+
+	saveChosenGameIntoHashmap(game){
+		let ratingMap;
+		if(localStorage.getItem('playedGames') === null){
+			//create New Map
+			ratingMap = new Map();
+			let games = this.getGamesObjectList();
+			for(let i = 0; i < games.length; i++){
+				ratingMap.set(games[i].getName(), 0);
+			}
+			ratingMap.set(game, ratingMap.get(game)+1);
+		}
+		else{
+			ratingMap = this.transformStringToHash(localStorage.getItem('playedGames'));
+			let keyList = Array.from(ratingMap.keys());
+			if(keyList.includes(game)){
+				ratingMap.set(game, ratingMap.get(game)+1);
+			}
+			else{
+				ratingMap.set(game, 1);
+			}
+		}
+		localStorage.setItem('playedGames', this.transformHashToString(ratingMap))
+	}
 
 	saveRatingsIntoGlobalGameList(gamesnight){
 		let ratings = gamesnight.getRating();
