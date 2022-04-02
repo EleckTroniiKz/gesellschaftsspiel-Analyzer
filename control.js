@@ -7,8 +7,6 @@ const { ITALIAN, GERMAN, ENGLISH, TURKISH } = require("./enums/enum.js");
 
 let setveto = false;
 
-const ratingOptions = ["very good", "good", "not bad", "not so good", "bad"];
-
 const mainMenu = [
   "Exit",
   "Set Language",
@@ -51,6 +49,9 @@ const deleteGamesMenu = [
 
 const exportMenu = ["Return", "Create Export"];
 
+/**
+ * @description onClick handler to terminate the code
+ */
 function terminate() {
   term.grabInput(false);
   console.clear();
@@ -60,31 +61,52 @@ function terminate() {
   }, 100);
 }
 
+/**
+ * @description mapping handler to keyboard keys
+ */
 term.on("key", function (name, matches, data) {
   if (name === "CTRL_C" || name === "ESCAPE") {
     terminate();
   }
 });
 
+/**
+ * @params lastOption: last menu page which was visited (for nicetohave) 
+ * @params language: contains the current language enums (german, turkish, english or italian)
+ */
 class Control {
   constructor() {
     this.lastOption = "Main Menu";
     this.language = GERMAN;
   }
 
+  /**
+   * @description sets new language enum
+   * @param language language enum 
+   */
   setLanguage(language) {
     this.language = language;
     this.lastOption = "Set Language";
   }
 
+  /**
+   * @description sets last visited menu option
+   * @param opt last option 
+   */
   setLastOption(opt) {
     this.lastOption = opt
   }
 
+  /**
+   * @returns current language value 
+   */
   getLanguage() {
     return this.language;
   }
 
+  /**
+   * @description logs the welcome ascii art
+   */
   postWelcome() {
     console.clear();
     console.log(`
@@ -95,6 +117,10 @@ class Control {
 	─▀─▀───▀▀──▀▀──▀▀──▀▀──▀───▀──▀▀\n`);
   }
 
+  /**
+   * @description posts selection menu for language select
+   * @returns selectedindex of chosen menu item
+   */
   async languageSelectionMenu() {
     let selectedIndex;
     console.clear();
@@ -119,6 +145,10 @@ class Control {
     return selectedIndex;
   }
 
+  /**
+   * @descriptions posts main menu
+   * @returns selectedindex of chosen menu item
+   */
   async postMainMenu() {
     let selectedIndex;
     console.clear();
@@ -144,6 +174,10 @@ class Control {
     return selectedIndex;
   }
 
+  /**
+   * @description posts management menu
+   * @returns selectedindex of chosen menu item
+   */
   async postManagementMode() {
     let selectedIndex;
 
@@ -172,6 +206,10 @@ class Control {
     return selectedIndex;
   }
 
+  /**
+   * @description posts application mode menu
+   * @returns selectedindex of chosen menu item
+   */
   async postApplicationMode() {
     let selectedIndex;
     let startIndex = managementModeMenu.indexOf(this.lastOption);
@@ -197,6 +235,10 @@ class Control {
     return selectedIndex;
   }
 
+  /**
+   * @description posts management players menu
+   * @returns selectedindex of chosen menu item
+   */
   async postManagePlayersMenu() {
     let selectedIndex;
 
@@ -216,6 +258,14 @@ class Control {
     return selectedIndex;
   }
 
+  /**
+   * @description posts the game rating confirmation
+   * @param gameName
+   * @param selectedIndex 
+   * @param playerName 
+   * @param usedVeto 
+   * @returns array with 2 elements: selected index and veto
+   */
   async ConfirmRating(gameName, selectedIndex, playerName, usedVeto) {
     let vetoState = "";
     console.clear();
@@ -276,8 +326,14 @@ class Control {
     }
   }
 
+  /**
+   * @description posts rating question for amge
+   * @param playerName player that is rating
+   * @param gameName name of game which is rated
+   * @param usedVeto boolean if veto has been set
+   * @returns 
+   */
   async setRating(playerName, gameName, usedVeto) {
-    //usedVeto --> ob Spieler schon gevetod hat
     let selectedIndex;
     console.clear();
     let options = this.language.ratingOptions;
@@ -291,7 +347,10 @@ class Control {
      return await this.ConfirmRating(gameName, selectedIndex, playerName, usedVeto);
   }
 
-  //NicetoHave
+  /**
+   * @description posts edit player menu
+   * @returns 
+   */
   async postEditPlayersMenu() {
     let selectedIndex;
 
@@ -311,6 +370,10 @@ class Control {
     return selectedIndex;
   }
 
+  /**
+   * @description posts manage games menu
+   * @returns selectedIndex of menu
+   */
   async postManageGamesMenu() {
     let selectedIndex;
 
@@ -330,6 +393,10 @@ class Control {
     return selectedIndex;
   }
 
+  /**
+   * @description posts menu of the delete games process
+   * @returns index of selected menu item
+   */
   async postDeleteGamesMenu() {
     let selectedIndex;
 
@@ -347,6 +414,10 @@ class Control {
     return selectedIndex;
   }
 
+  /**
+   * @description posts file selector for data import
+   * @returns the filename which has been selected
+   */
   async postFileSelector() {
     console.clear();
 
@@ -366,6 +437,11 @@ class Control {
     return selectedText;
   }
 
+  /**
+   * @description posts choosePlayer menu
+   * @param userList 
+   * @returns returns index of selected player
+   */
   async choosePlayer(userList) {
     let selectedIndex;
 
@@ -382,6 +458,11 @@ class Control {
     return selectedIndex;
   }
 
+  /**
+   * @description posts game selector
+   * @param gameList list of games that are selectable 
+   * @returns index of selected game
+   */
   async chooseGame(gameList) {
     let selectedIndex;
 
@@ -398,6 +479,13 @@ class Control {
     return selectedIndex;
   }
 
+  /**
+   * @description post a decision
+   * @param optionList  options which are selectable
+   * @param termTitle title of the decision post
+   * @param question question which has to be decided
+   * @returns text which was selected from optionlist
+   */
   async decision(optionList, termTitle, question) {
     let selectedIndex;
 
@@ -412,6 +500,11 @@ class Control {
     return selectedText;
   }
 
+  /**
+   * @description posts confirmation question
+   * @param confirmQuestion question which has to be confirmed 
+   * @returns boolean value true or false
+   */
   async confirm(confirmQuestion) {
     console.clear();
     term(this.language.confirmQuestionCreator(confirmQuestion, 0));
@@ -423,6 +516,10 @@ class Control {
     return result;
   }
 
+  /**
+   * @description asks for input for a game name, which will be added to a user
+   * @returns game which will be added to a user
+   */
   async addGameInput() {
     console.clear();
     term(this.language.addGameHeader);
@@ -435,6 +532,10 @@ class Control {
     }
   }
 
+  /**
+   * @description asks for input for a player name and games, which will be added to new a user
+   * @returns array of playerName and gamelist
+   */
   async addPlayerInput() {
     console.clear();
     term(this.language.addPlayerHeader);
@@ -446,7 +547,10 @@ class Control {
     return [playerName, listString];
   }
 
-  //Export
+  /**
+   * @description posts export menu
+   * @returns index of selected menu item
+   */
   async postExportMode() {
     let selectedIndex;
 
@@ -464,6 +568,10 @@ class Control {
     return selectedIndex;
   }
 
+  /**
+   * @description asks for filename input for a new export file which will be created
+   * @returns name of file
+   */
   async addExportFileName() {
     console.clear();
     term(this.language.createExportHeader);
@@ -472,6 +580,10 @@ class Control {
     return fileName;
   }
 
+  /**
+   * @description posts menu for gamenight plannign
+   * @returns response
+   */
   async postGameNightPlanMenu() {
     let selectedIndex;
     let lang = this.getLanguage();

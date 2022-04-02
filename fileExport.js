@@ -6,28 +6,15 @@ const LocalStorage = require('node-localstorage').LocalStorage;
 const localStorage = new LocalStorage('./DataStorage/storage');
 const fs = require('fs');
 
-/*
-@description This class contains all Methods required to export a file in CSV format
-*/
-
 class Export{
-	constructor() {
-		this.session = new DataHandler('dos.csv');
-		this.userList = this.session.getUserObjectList();
-	}
-
-  /*
-  @description This method creates a string formatted in CSV, which contains data about
-               the rating of each game for each player
-  @return type = string
-      This method returns the rating of each game for each player
-      formatted in CSV, basically the data for the export file
-  */
-	
- setPlayerRatingCSV() {
-   //Initialize empty data string so you can append data with +=
+	/**
+   * @description puts player names, games and rating values into string
+   * @param session instance of DataHandler class 
+   * @returns data string
+   */
+ setPlayerRatingCSV(session) {
    let data = "";
-   let userList = this.session.getUserObjectList();
+   let userList = session.getUserObjectList();
    for(let i = 0; i < userList.length; i++){
     data += `User: ${userList[i].getName()}\n`
     data += "Game;Rating\n";
@@ -45,17 +32,27 @@ class Export{
    return data;
 }
 
-  setMostPlayedCSV(){
+  /**
+   * @description gets the most played games from localstorage and puts them into a string
+   * @param session instance of DataHandler class 
+   * @returns data string
+   */
+  setMostPlayedCSV(session){
     let data = "\n";
-    let mostPlayed = this.session.getPlayedGamesMap();
+    let mostPlayed = session.getPlayedGamesMap();
     let games = Array.from(mostPlayed.keys());
     data += `Most played games \n 1.Place: ${games[games.length-1]}\n2.Place: ${games[games.length-2]}\n3.Place: ${games[games.length-3]}`;
     return data;
   }
 
-  setBestRatedCSV(){
+  /**
+   * @description gets the best rated games from localstorage (only from the same gamenight) and puts them into a string
+   * @param session instance of DataHandler class 
+   * @returns data string
+   */
+  setBestRatedCSV(session){
     let data = "\n";
-    let gamesnight = this.session.getGamesNightObject();
+    let gamesnight = session.getGamesNightObject();
     data += "Top 3 Games\n"
     let ratings = gamesnight.getRating();
     let ratingKeys = Array.from(ratings.keys())
@@ -65,21 +62,18 @@ class Export{
     return data;
   }
 
-  /*
-  @description This method creates a string formatted in CSV, which contains data about
-               the average of each game
-  @return type = string
-      This method returns the average rating for each game
-      formatted in CSV, basically the data for the export file
-  */
-
- setAvgRatingCSV(){
+  /**
+   * @description puts the average rating for every game from the gamenight into datastring
+   * @param session instance of DataHandler class  
+   * @returns data string
+   */
+ setAvgRatingCSV(session){
    //Initialize empty data string so you can append data with +=
    let data = "";
    data += "Average Rating for each Game;\n";
    data += "Game;Average Rating\n";
    
-   let gameNight = this.session.getGamesNightObject();
+   let gameNight = session.getGamesNightObject();
    let ratingMap = gameNight.getRating();
    let vetoMap = gameNight.getVetoList();
    let games = Array.from(ratingMap.keys());
@@ -89,30 +83,26 @@ class Export{
    return data;
   }
 
-  /*
-  @description This method combines the methods setPlayerRatingCSV and setAvgRatingCSV
-  @return type = string | This method returns the full rating Export data formatted in
-                          CSV
-  */
-
-  setExportData(){
+/**
+ * @description calls the functions to get all the data for the export
+ * @param session instance of DataHandler class 
+ * @returns data string
+ */
+  setExportData(session){
     //Initialize empty data string so you can append data with +=
     let data = "";
-    data += this.setPlayerRatingCSV();
-    data += this.setAvgRatingCSV();
-    data += this.setBestRatedCSV();
-    data += this.setMostPlayedCSV();
+    data += this.setPlayerRatingCSV(session);
+    data += this.setAvgRatingCSV(session);
+    data += this.setBestRatedCSV(session);
+    data += this.setMostPlayedCSV(session);
     return data;
   }
 
-  /*
-  @param
-  data: This parameter is required, it needs the data string that has to be formatted
-        in CSV
-  name: This parameter is for the name of the export file, default is set to export
-  addDateToFile: Boolean value if the Date should be added to the Filename
-
-  @description This method creates the export file inside DataExport
+ /**
+  * 
+  * @param data data which will be written into the file
+  * @param name name of file
+  * @param addDateToFile determines of the file will have the creation date as a suffix 
   */
  createExport(data,name = "export",addDateToFile = true){
    

@@ -1,20 +1,45 @@
+/**
+ * @description Boardgame Class
+ * @param name Boardgame name
+ * @param rating average rating value
+ */
 class Boardgame {
   constructor(name) {
     this.name = name;
     this.rating = null;
   }
+
+  /**
+   * @returns boardgame name 
+   */
   getName() {
     return this.name;
   }
+
+  /**
+   * @returns boardgame rating 
+   */
   getRating() {
     return this.rating;
   }
   
+  /**
+   * @description sets the ratingvalue of a boardgame
+   * @param ratingValue 
+   */
   setRating(ratingValue) {
     this.rating = ratingValue
   }
 }
 
+/**
+ * @description Player class
+ * @param name Playername
+ * @param boardgames list of boardgames owned by player
+ * @param id id of Player
+ * @param ratingHashmap Hashmap with the ratings for every boardgame by the player
+ * @param usedVeto determines if the one available veto has been used
+ */
 class Player {
   constructor(name, boardgames, id) {
     this.name = name;
@@ -35,30 +60,54 @@ class Player {
     }
   }
 
+  /**
+   * @returns veto boolean 
+   */
   getVeto(){
     return this.usedVeto;
   }
 
+  /**
+   * @description sets if player used veto already
+   * @param {*} val new boolean value 
+   */
   setVeto(val){
     this.usedVeto = val;
   }
 
+  /**
+   * @returns id
+   */
   getID() {
     return this.id;
   }
 
+  /**
+   * @returns Player name 
+   */
   getName() {
     return this.name;
   }
 
+  /**
+   * @description sets player name
+   * @param name new Name of player 
+   */
   setName(name) {
     this.name = name;
   }
   
+  /**
+   * @returns list of boardgames from the player 
+   */
   getBoardgames() {
     return this.boardgames;
   }
 
+  /**
+   * @description adds new boardgame to boardgame list
+   * @param boardgamestring name of new boardgame 
+   */
   addBoardgame(boardgamestring) {
     if(typeof(boardgamestring) === "string") {
       let boardgameobject = new Boardgame(boardgamestring);
@@ -68,29 +117,54 @@ class Player {
     }
   }
 
+  /**
+   * @returns rating hashmap of player
+   */
   getRating() {
     return this.ratingHashmap;
   }
 
+  /**
+   * @description sets rating value for boardgame
+   * @param boardgame rated boardgame 
+   * @param rating ring for boardgame 
+   */
   setRating(boardgame, rating) {
     if(this.ratingHashmap.has(boardgame)) {
       this.ratingHashmap.set(boardgame, rating);
     }
   }
 
+  /**
+   * @description set the ratingmap
+   * @param map 
+   */
   setRatingMap(map){
     this.ratingHashmap = map;
   }
 
+  /**
+   * @description sets boardgamelist and ratinghashmap 
+   * @param boardgames list of boardgames
+   * @param ratingHashmap hashmap with ratings for the games
+   */
   setBoardgameList(boardgames, ratingHashmap) {
     this.boardgames = boardgames;
     this.ratingHashmap = ratingHashmap;
   }
 
+  /**
+   * @description replaces players boardgame list with new list
+   * @param boardgames new boardgame list
+   */
   setBoardgame(boardgames){
     this.boardgames = boardgames;
   }
 
+  /**
+   * @description adds boardgames from a list to the  players boardgame list
+   * @param boardgames list of new boardgames 
+   */
   addBoardgameToList(boardgames) {
     for(let i = 0; i < boardgames.length; i++) {
       if(!this.boardgames.includes(boardgames[i])) {
@@ -102,6 +176,14 @@ class Player {
   
 }
 
+/**
+ * @description Gamesnight class
+ * @param players List of players that are 
+ * @param ratingHashmap hashmap with average ratings of the gamenight
+ * @param vetoHash hashmap which displays on which game a veto has been used
+ * @param amountOfRatingsSetHashmap hashmap with amount of ratings per game
+ * @param boardgames list of boardgames
+ */
 class Gamesnight {
   constructor(players) {
     this.players = players;
@@ -136,34 +218,60 @@ class Gamesnight {
     }
   }
 
+  /**
+   * @returns returns veto map
+   */
   getVetoList(){
     return this.vetoHash;
   }
 
+  /**
+   * @param map 
+   * @description sets veto list with
+   */
   setVetoList(map){
     this.vetoHash = map;
   }
 
+  /**
+   * @returns list of player
+   */
   getPlayers() {
     return this.players;
   }
 
+  /**
+   * @returns lsit of boardgames
+   */
   getBoardgames() {
     return this.boardgames;
   }
   
+  /**
+   * @returns rating hashmap
+   */
   getRating() {
     return this.ratingHashmap;
   }
 
+  /**
+   * @returns hashmap with rating amount
+   */
   getAmountOfRatingsSetHashmap() {
     return this.amountOfRatingsSetHashmap;
   }
 
+  /**
+   * @param map
+   * @description sets hashmap with amount of ratings per game 
+   */
   setAmountOfRatingsSetHashmap(map) {
     this.amountOfRatingsSetHashmap = map;
   }
 
+  /**
+   * @description calculates average ratings of the games from the gamesnight
+   */
   calculateAverages(){
     for(let i = 0; i < this.boardgames.length; i++){
       let ratingSum = this.ratingHashmap.get(this.boardgames[i]);
@@ -172,10 +280,19 @@ class Gamesnight {
     }
   }
 
+  /**
+   * @description a setter for the rating hashmap
+   * @param map map which will be set as rating map for gamenight
+   */
   setRatingHashmap(map) {
     this.ratingHashmap = map;
   }
 
+  /**
+   * @description increases rating value of a boardgame
+   * @param boardgame boardgame which was rated
+   * @param rating rating value
+   */
   setRating(boardgame, rating) {
     if(this.ratingHashmap.has(boardgame)) {
       if(this.ratingHashmap.get(boardgame) === "No rating asigned yet!") {
@@ -193,11 +310,20 @@ class Gamesnight {
     }
   }
 
+  /**
+   * @description sets if a veto was used for that game
+   * @param game game where a veto was used
+   * @param val true or false
+   */
   setVeto(game, val){
     //val should be boolean!
     this.vetoHash.set(game, val);
   }
 
+  /**
+   * @description calculated which boardgame was rated highest without veto and returns that game (matchmaking)
+   * @returns chosen game
+   */
   chooseBoardgame() {
     let ratingKeys = Array.from(this.ratingHashmap.keys())
     let index = ratingKeys.length-1;
@@ -219,32 +345,7 @@ class Gamesnight {
     
   }
 
-  sortByRating() {
-    let keys = Array.from(this.ratingHashmap.keys());;
-    let newKeys = keys;
-    let values = [];
-    for(let i = 0; i < keys.length; i++){
-      values.push(this.ratingHashmap.get(keys[i]));
-    }
-    for(let k = 0; k < keys.length; k++){
-      for(let j = 0; j < keys.length - k-1; j++){
-        if(values[j] > values[j+1]){
-          let tempVal = values[j];
-          let tempKey = newKeys[j];
-          values[j] = values[j+1];
-          newKeys[j] = newKeys[j+1];
-          values[j+1] = tempVal;
-          newKeys[j+1] = tempKey;
-        }
-      }
-    }
-    let newMap = new Map();
-    for(let i = 0; i < newKeys.length; i++){
-      newMap.set(newKeys[i], values[i]);
-    }
-    this.setRatingHashmap(newMap);
-    // Print the sorted array
-  }
+ 
 
   
 }

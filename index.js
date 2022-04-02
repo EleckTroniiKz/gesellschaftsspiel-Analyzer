@@ -26,6 +26,11 @@ let exp = new Export();
 control.postWelcome();
 mainLoop();
 
+
+/**
+ * @description creates a data export if data was imported and the application mode was started
+ * @param mode_index chosen Menu index
+ */
 async function exportLoop(mode_index) {
   switch (mode_index) {
     case 0:
@@ -37,7 +42,7 @@ async function exportLoop(mode_index) {
       let exportDate = await control.confirm(
         control.getLanguage().exportLoopOutput
       );
-      let csvData = exp.setExportData();
+      let csvData = exp.setExportData(session);
       exp.createExport(csvData, exportFileName, exportDate);
       mainLoop();
       break;
@@ -47,14 +52,17 @@ async function exportLoop(mode_index) {
   }
 }
 
+/**
+ * @description handles actions from the games management menu
+ * @param mode_index chosen Menu index
+ */
 async function gamesManagementLoop(mode_index) {
+  language = control.getLanguage()
   switch (mode_index) {
     case MANAGEMENT_GAMES_MODES.RETURN:
       mainLoop(MODES.MANAGEMENT);
       break;
     case MANAGEMENT_GAMES_MODES.ADD:
-      //add GAME
-      //Input a Name for the game. Then choose if it should be added to a existing player or create a new player
       if (hasImportedData) {
         let userList = session.getUserObjectList();
         let filteredNameList = [];
@@ -63,35 +71,31 @@ async function gamesManagementLoop(mode_index) {
           filteredNameList.push(userList[i].getName());
           filteredIDList.push(userList[i].getID());
         }
-        filteredNameList.push(control.getLanguage().return);
+        filteredNameList.push(language.return);
         let choosenPlayer = await control.choosePlayer(filteredNameList);
-        if (filteredNameList[await choosenPlayer] !== control.getLanguage().return) {
+        if (filteredNameList[await choosenPlayer] !== language.return) {
           let gameToAdd = await control.addGameInput();
-          let a = await control.confirm(control.getLanguage().addGameToPlayerQuestion(gameToAdd,filteredNameList[choosenPlayer]));
-          if (await a) {
+          let addGameConfirmation = await control.confirm(language.addGameToPlayerQuestion(gameToAdd,filteredNameList[choosenPlayer]));
+          if (addGameConfirmation) {//might needs await a
             session.addGame(filteredIDList[choosenPlayer], gameToAdd);
             await control.decision(
               ["Ok"],
-              control.getLanguage().addGameHeader,
-              control.getLanguage().gameHasBeenAdded
+              language.addGameHeader,
+              language.gameHasBeenAdded
             );
           } else {
             await control.decision(
               ["Ok"],
-              control.getLanguage().noData,
-              control.getLanguage().importOrder
+              language.noData,
+              language.importOrder
             );
           }
-          //Wollen sie spiel x zu user y hinzufügen --> ja und nein
-          //session.addGame(userID, newGame).
-          //Dann ausgeben, dass SPiel x zu User y hinzugefügt wurde.
-          //vllt die spiele liste vom user ausgeben. -->
         }
       } else {
         let errorMsg = await control.decision(
           ["Ok"],
-          control.getLanguage().noData,
-          control.getLanguage().importOrder
+          language.noData,
+          language.importOrder
         );
       }
       mainLoop(MODES.MANAGEMENT);
@@ -107,22 +111,22 @@ async function gamesManagementLoop(mode_index) {
       for (let i = 0; i < gameList.length; i++) {
         tempList.push(gameList[i].getName());
       }
-      tempList.push(control.getLanguage().return);
+      tempList.push(language.return);
       let gameToDeleteIndex = await control.chooseGame(tempList);
       let gameToDelete = tempList[gameToDeleteIndex];
       let chosenAct = await control.decision(
         [
-          control.getLanguage().global,
-          control.getLanguage().player,
-          control.getLanguage().return,
+          language.global,
+          language.player,
+          language.return,
         ],
-        control.getLanguage().deleteGameTitle,
-        control.getLanguage().optionTextGlobalOrIndividual
+        language.deleteGameTitle,
+        language.optionTextGlobalOrIndividual
       );
-      if (gameToDelete !== control.getLanguage().return) {
-        if (chosenAct === control.getLanguage().global) {
+      if (gameToDelete !== language.return) {
+        if (chosenAct === language.global) {
           session.deleteGameGlobally(gameToDelete);
-        } else if (chosenAct === control.getLanguage().player) {
+        } else if (chosenAct === language.player) {
           let userList = session.getUserObjectList();
           let filteredNameList = [];
           let filteredIDList = [];
@@ -133,12 +137,12 @@ async function gamesManagementLoop(mode_index) {
             }
           }
           if(filteredNameList.length !== 0 || filteredNameList.length !== undefined){
-            filteredNameList.push(control.getLanguage().return);
+            filteredNameList.push(language.return);
             let chosenIndex = await control.choosePlayer(filteredNameList);
-            if (filteredNameList[chosenIndex] === control.getLanguage().return) {
+            if (filteredNameList[chosenIndex] === language.return) {
               mainLoop(MODES.MANAGEMENT);
             } else {
-              if (await control.decision([control.getLanguage().yes, control.getLanguage().no],control.getLanguage().deleteConfirmText,control.getLanguage().deleteGameFromPlayer(gameToDelete,filteredNameList[await chosenIndex])) === control.getLanguage().yes) {
+              if (await control.decision([language.yes, language.no],language.deleteConfirmText,language.deleteGameFromPlayer(gameToDelete,filteredNameList[await chosenIndex])) === control.getLanguage().yes) {
                 session.deleteGameFromUser(
                   filteredIDList[chosenIndex],
                   gameToDelete
@@ -151,7 +155,7 @@ async function gamesManagementLoop(mode_index) {
           else{
             let errorMsg = await control.decision(
               ["Ok"],
-              control.getLanguage().noData,
+              language.noData,
               "No Player found"
             );
           }
@@ -159,7 +163,7 @@ async function gamesManagementLoop(mode_index) {
         else{
           let errorMsg = await control.decision(
             ["Ok"],
-            control.getLanguage().noData,
+            language.noData,
             "No Player found"
           );
         }
@@ -173,7 +177,12 @@ async function gamesManagementLoop(mode_index) {
   }
 }
 
+/**
+ * @description handles actions from the player management menu
+ * @param mode_index chosen Menu index
+ */
 async function playerManagementLoop(mode_index) {
+  language = control.getLanguage()
   switch (mode_index) {
     case MANAGEMENT_PLAYERS_MODES.RETURN:
       mainLoop(MODES.MANAGEMENT);
@@ -185,9 +194,6 @@ async function playerManagementLoop(mode_index) {
         hasImportedData = true;
       }
       mainLoop(MODES.MANAGEMENT);
-      //muss noch liste der spiele und des spielernames returnen
-      //add Player
-      //Input for Player Name, and the Games from the Player
       break;
     case MANAGEMENT_PLAYERS_MODES.EDIT:
       //edit Player
@@ -202,19 +208,19 @@ async function playerManagementLoop(mode_index) {
         names.push(userList[i].getName());
         ids.push(userList[i].getID());
       }
-      names.push(control.getLanguage().return);
+      names.push(language.return);
       const player = await control.choosePlayer(names);
-      if (names[player] !== control.getLanguage().return) {
+      if (names[player] !== language.return) {
         const decision = await control.confirm(
-          control.getLanguage().deletePlayerQuestion(player)
+          language.deletePlayerQuestion(player)
         );
         if (decision) {
           session.deleteUser(ids[player]);
         } else {
           let exportMsg = await control.decision(
             ["Ok"],
-            control.getLanguage().deletePlayerHeader,
-            control.getLanguage().playerNotDeleted
+            language.deletePlayerHeader,
+            language.playerNotDeleted
           );
         }
       }
@@ -226,6 +232,12 @@ async function playerManagementLoop(mode_index) {
   }
 }
 
+/**
+ * @description shows list of games
+ * @param list list of games
+ * @param playersList list of players (needed for recursion reasons)
+ * @param objectList list of objects (needed for recursion reasons)
+ */
 async function showGamesList(list, playersList, objectList) {
   let chosenGame = await control.chooseGame(list);
   if (list[chosenGame] === control.getLanguage().return) {
@@ -235,8 +247,12 @@ async function showGamesList(list, playersList, objectList) {
   }
 }
 
+/**
+ * @description shows list of players
+ * @param list list of Player objects (for recursion reasons) 
+ * @param objectList list of objects (for recursion reasons)
+ */
 async function showPlayersList(list, objectList) {
-  
   let chosenPlayer = await control.choosePlayer(list);
   if (list[chosenPlayer] !== control.getLanguage().return) {
     let gameList = objectList[chosenPlayer].getBoardgames();
@@ -247,12 +263,17 @@ async function showPlayersList(list, objectList) {
   }
 }
 
+/**
+ * @description handles actions regarding planning the gamenight
+ * @param mode_index chosen Menu index
+ * @param fromManagement determines if planGamenightLoop was called from Management or not
+ * @returns 
+ */
 async function planGamenightLoop(mode_index, fromManagement = true) {
   let userList;
-  let add = false;
-  let lang = control.getLanguage()
+  language = control.getLanguage();
   switch (mode_index) {
-    case lang.addEveryPlayer:
+    case language.addEveryPlayer:
       userList = session.getUserObjectList();
       session.saveGamesNightObject(new Gamesnight(userList));
       createdGamenight = true;
@@ -263,19 +284,16 @@ async function planGamenightLoop(mode_index, fromManagement = true) {
         return;
       }
       break;
-    case lang.oneByOne:
-      //getUserList. Iterate through the list and ask if they want to add that user to the list --> if so add them into the new user list || if not dont add the
-      //create instance of the gamenight and send them to the dataHandler so it can be saved in the localStorage
+    case language.oneByOne:
       userList = session.getUserObjectList();
       let gameNightUsers = [];
       for (let i = 0; i < userList.length; i++) {
-        //ask if they want to add them.
         let chooseToAdd = await control.decision(
-          [lang.yes, lang.no],
-          lang.addPlayersToGameNightTitle,
-          lang.addPlayerToGameNightQuestion(userList[i].getName())
+          [language.yes, language.no],
+          language.addPlayersToGameNightTitle,
+          language.addPlayerToGameNightQuestion(userList[i].getName())
         );
-        if(chooseToAdd === control.getLanguage().yes) {
+        if(chooseToAdd === language.yes) {
           gameNightUsers.push(userList[i]);
         }
       }
@@ -293,13 +311,18 @@ async function planGamenightLoop(mode_index, fromManagement = true) {
       }
       break;
     default:
-      console.log(control.getLanguage().indexIssueOutput);
+      console.log(language.indexIssueOutput);
       mainLoop(MODES.MANAGEMENT);
       break;
   }
 }
 
+/** 
+ * @description handles actions in management menu
+ * @param mode_index chosen menu index from menu
+ */
 async function managementLoop(mode_index) {
+  language = control.getLanguage()
   let managementIndex;
   switch (mode_index) {
     case MANAGEMENT_MODES.RETURN:
@@ -321,8 +344,8 @@ async function managementLoop(mode_index) {
       else{
         let errorMsg = await control.decision(
           ["Ok"],
-          control.getLanguage().noData,
-          control.getLanguage().importOrder
+          language.noData,
+          language.importOrder
         );
         mainLoop()
       }
@@ -335,26 +358,36 @@ async function managementLoop(mode_index) {
         for (let i = 0; i < userList.length; i++) {
           userNames.push(userList[i].getName());
         }
-        userNames.push(control.getLanguage().return);
+        userNames.push(language.return);
         
         await showPlayersList(userNames, userList);
       } else {
         let errorMsg = await control.decision(
           ["Ok"],
-          control.getLanguage().noData,
-          control.getLanguage().importOrder
+          language.noData,
+          language.importOrder
         );
       }
       mainLoop(MODES.MANAGEMENT);
       break;
     default:
-      console.log(control.getLanguage().indexIssueOutput);
+      let errorMsg = await control.decision(
+        ["Ok"],
+        "",
+        language.indexIssueOutput
+      );
+      mainLoop(MODES.MANAGEMENT);
       break;
   }
 }
 
+/**
+ * @description iterates through every game from gamenight and asks players to rate them
+ * @param mode_index chosen menu index 
+ */
 async function applicationLoop(mode_index) {
   let gamesnight;
+  language = control.getLanguage()
   switch (mode_index) {
     case 1:
       if (hasImportedData) {
@@ -423,8 +456,6 @@ async function applicationLoop(mode_index) {
             } 
           }
         }
-        //Die spieler der gamenight werden mit den psielern der gesamten userlist getauscht.
-        // also die spieler daten in der userlist werden mit den spieler daten der gamenight aktualisiert
         for (let i = 0; i < spieler.length; i++) {
           let found = false;
           for (let j = 0; j < userList.length; j++) {
@@ -439,16 +470,14 @@ async function applicationLoop(mode_index) {
         session.saveUserObjectList(userList);
         gamesnight.calculateAverages();
         session.hashMapSorter(gamesnight.getRating())
-        //gamesnight.sortByRating();
         session.saveRatingsIntoGlobalGameList(gamesnight);
         session.saveGamesNightObject(gamesnight);
-        //show average ratings
         hasDataForExport = true;
         gamesnight = session.getGamesNightObject();
         let chosenGame = gamesnight.chooseBoardgame();
         session.saveChosenGameIntoHashmap(chosenGame)
-        let gameChoice = await control.decision(["Ok", control.getLanguage().revoteChoice], control.getLanguage().choosenGameChoice, chosenGame)
-        if(gameChoice === control.getLanguage().revoteChoice){
+        let gameChoice = await control.decision(["Ok", language.revoteChoice], language.choosenGameChoice, chosenGame)
+        if(gameChoice === language.revoteChoice){
           mainLoop(MODES.APPLICATION);
         }
         else{
@@ -458,20 +487,21 @@ async function applicationLoop(mode_index) {
       } else {
         let errorMsg = await control.decision(
           ["Ok"],
-          control.getLanguage().noData,
-          control.getLanguage().importOrder
+          language.noData,
+          language.importOrder
         );
       }
-      break;
-    case 0:
       break;
     default:
       break;
   }
   mainLoop();
-  //TO DO
 }
 
+/**
+ * @description represents the root or main function of the project
+ * @param mainIndex chosen menu item index
+ */
 async function mainLoop(mainIndex = null) {
   if (!mainIndex) {
     mainIndex = await control.postMainMenu();
@@ -501,7 +531,7 @@ async function mainLoop(mainIndex = null) {
       }
       mainLoop();
       break;
-    case MODES.IMPORT: //Import Mode
+    case MODES.IMPORT:
       const fileText = await control.postFileSelector();
       if (fileText !== "EXIT") {
         session = new DataHandler(fileText);
@@ -511,30 +541,34 @@ async function mainLoop(mainIndex = null) {
       }
       mainLoop();
       break;
-    case MODES.APPLICATION: // Application Mode
+    case MODES.APPLICATION:
       let applicationIndex = await control.postApplicationMode();
       applicationLoop(applicationIndex);
       break;
-    case MODES.MANAGEMENT: //Management Mode
+    case MODES.MANAGEMENT:
       let managementIndex = await control.postManagementMode();
       managementLoop(managementIndex);
       break;
-    case MODES.EXPORT: //Export Mode
+    case MODES.EXPORT:
       if (hasDataForExport) {
-        //Abfrage, etc. pp
         let exportIndex = await control.postExportMode();
         exportLoop(exportIndex);
       } else {
         let errorMsg = await control.decision(
           ["Ok"],
-          control.getLanguage().noData,
-          control.getLanguage().exportDataMissingText
+          language.noData,
+          language.exportDataMissingText
         );
         mainLoop();
       }
       break;
     default:
-      console.log(control.getLanguage().indexIssueOutput);
+      let errorMsg = await control.decision(
+        ["Ok"],
+        "",
+        language.indexIssueOutput
+      );
+      mainLoop();
       break;
   }
 }
