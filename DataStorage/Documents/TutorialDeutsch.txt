@@ -7,8 +7,9 @@ In diesem Tutorial erklären wir Ihnen schrittweise in welcher Reihenfolge Sie d
   			Schritt 5: Navigieren Sie zu "Starte Anwendung" um einen Spielabend zu planen. Dafür muss man nun entscheiden ob man alle aktuell verfügbaren Spieler miteinbezieht oder ob man die Spieler einzeln auswählt.
   			Schritt 6: Navigieren Sie für jedes Gesellschaftsspiel zu einer Bewertung, die Ihrer Meinung nach angemessen ist für das jeweilige Spiel.
   			Schritt 7: Wenn Sie eine Bewertung ändern möchten, dann navigieren Sie zu "Ändere Bewertung". Wenn Sie ein Veto einlegen möchten, damit dieses Spiel am Spielabend auf keinen Fall gespielt wird, dann navigieren Sie zu VETO setzen (es kann nur maximal 1 VETO pro Spieler pro Spielabend gesetzt werden). Wenn Sie zufrieden sind mit Ihrer Bewertung des Spieles und dem VETO Zustand, dann navigieren Sie zu "Nächstes Spiel" um zur Bewertung des nächsten Gesellschaftsspiels zu gelangen.
-  			Schritt 8: Nachdem alle Spiele bewertet wurden und die VETOs gesetzt wurden, gibt das Matchmaking das ausgewählte Spiel an. Navigieren Sie zu "Ok" um wieder ins Hauptmenü zu gelangen.
-  			Schritt 9: Navigieren Sie zu "Exportmodus" um diesen auszuwählen.
-  			Schritt 10: Navigieren Sie zu "Export-Datei erstellen" und geben Sie einen angemessenen Namen an. 
-  			Schritt 11: Wenn Sie das aktuelle Datum nicht als Suffix beim Exportdateinamen haben möchten, dann drücken Sie n. Wenn Sie das aktuelle Datum als Suffix beim Exportdateinamen haben möchten, dann drücken Sie y.
-  			Schritt 12: Navigieren Sie zu "Ok" um zurück zum Hauptmenü zu gelangen.
+  			Schritt 9: (Optional) Wenn Sie während den Bewertungen die Bewertungsabfrage stoppen wollen, navigieren Sie auf "Bewertung abbrechen". Dies bricht die Bewertung für den aktuell gewählten Spielabend ab. Dies geschieht dann nach einer Bestätigung des Abbruchs. Wenn Sie es wirklich abbrechen möchten, drücken sie y. Sollten Sie sich nur verdrückt haben, drücken Sie auf n. 
+        Schritt 10: Nachdem alle Spiele bewertet wurden und die VETOs gesetzt wurden, gibt das Matchmaking das ausgewählte Spiel an. Navigieren Sie zu "Ok" um wieder ins Hauptmenü zu gelangen.
+  			Schritt 11: Navigieren Sie zu "Exportmodus" um diesen auszuwählen.
+  			Schritt 12: Navigieren Sie zu "Export-Datei erstellen" und geben Sie einen angemessenen Namen an. 
+  			Schritt 13: Wenn Sie das aktuelle Datum nicht als Suffix beim Exportdateinamen haben möchten, dann drücken Sie n. Wenn Sie das aktuelle Datum als Suffix beim Exportdateinamen haben möchten, dann drücken Sie y.
+  			Schritt 14: Navigieren Sie zu "Ok" um zurück zum Hauptmenü zu gelangen.
