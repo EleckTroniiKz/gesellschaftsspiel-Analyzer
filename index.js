@@ -187,10 +187,11 @@ async function playerManagementLoop(mode_index) {
       break;
     case MANAGEMENT_PLAYERS_MODES.ADD:
       let valueArr = await control.addPlayerInput();
-      session.addUser(valueArr[0], valueArr[1]);
+      session.addUser(await valueArr[0], await valueArr[1]);
       if(session.getUserObjectList().length >= 2){
         hasImportedData = true;
       }
+      mainLoop(MODES.MANAGEMENT);
       //muss noch liste der spiele und des spielernames returnen
       //add Player
       //Input for Player Name, and the Games from the Player
