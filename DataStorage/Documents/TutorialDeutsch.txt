@@ -1,0 +1,14 @@
+In diesem Tutorial erklären wir Ihnen schrittweise in welcher Reihenfolge Sie den Gesellschaftsanalyzer bedienen dürfen. Wenn in einem Schritt steht, dass Sie zu einer bestimmten Stelle navigieren sollen, dann geschieht dies immer mittels der Pfeiltasten und musst mit Enter bestätigt werden um in die entsprechende Stelle reinzukommen:\\
+  			Schritt 0 (Optional): Navigieren Sie im Hauptmenü zu "Sprache einstellen" um die Sprache einzustellen.
+  			Schritt 1: Navigieren Sie im Hauptmenü zu "Importmodus" um diesen auszuwählen.
+  			Schritt 2: Navigieren Sie zur gewünschten Importdatei um diese Datei zu importieren.
+  			Schritt 3 (Optional): Sie befinden sich nach dem Import wieder im Hauptmenü. Navigieren Sie zu "Verwaltungsmodus" um diesen auszuwählen. In diesem Modus können Sie die Spieler verwalten, deren Spiele verwalten, einen Spielabend planen und die aktuelle Spieler Liste mit deren Spielen einsehen.
+  			Schritt 4: Navigieren Sie zu "Anwendungsmodus" um diesen auszuwählen.
+  			Schritt 5: Navigieren Sie zu "Starte Anwendung" um einen Spielabend zu planen. Dafür muss man nun entscheiden ob man alle aktuell verfügbaren Spieler miteinbezieht oder ob man die Spieler einzeln auswählt.
+  			Schritt 6: Navigieren Sie für jedes Gesellschaftsspiel zu einer Bewertung, die Ihrer Meinung nach angemessen ist für das jeweilige Spiel.
+  			Schritt 7: Wenn Sie eine Bewertung ändern möchten, dann navigieren Sie zu "Ändere Bewertung". Wenn Sie ein Veto einlegen möchten, damit dieses Spiel am Spielabend auf keinen Fall gespielt wird, dann navigieren Sie zu VETO setzen (es kann nur maximal 1 VETO pro Spieler pro Spielabend gesetzt werden). Wenn Sie zufrieden sind mit Ihrer Bewertung des Spieles und dem VETO Zustand, dann navigieren Sie zu "Nächstes Spiel" um zur Bewertung des nächsten Gesellschaftsspiels zu gelangen.
+  			Schritt 8: Nachdem alle Spiele bewertet wurden und die VETOs gesetzt wurden, gibt das Matchmaking das ausgewählte Spiel an. Navigieren Sie zu "Ok" um wieder ins Hauptmenü zu gelangen.
+  			Schritt 9: Navigieren Sie zu "Exportmodus" um diesen auszuwählen.
+  			Schritt 10: Navigieren Sie zu "Export-Datei erstellen" und geben Sie einen angemessenen Namen an. 
+  			Schritt 11: Wenn Sie das aktuelle Datum nicht als Suffix beim Exportdateinamen haben möchten, dann drücken Sie n. Wenn Sie das aktuelle Datum als Suffix beim Exportdateinamen haben möchten, dann drücken Sie y.
+  			Schritt 12: Navigieren Sie zu "Ok" um zurück zum Hauptmenü zu gelangen.
