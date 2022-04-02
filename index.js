@@ -39,14 +39,8 @@ async function exportLoop(mode_index) {
       );
       let csvData = exp.setExportData();
       exp.createExport(csvData, exportFileName, exportDate);
-      let exportMsg = await control.decision(
-        ["Ok"],
-        control.getLanguage().noData,
-        control.getLanguage().importOrder
-      );
       mainLoop();
       break;
-
     default:
       console.log(control.getLanguage().indexIssueOutput);
       break;
@@ -242,6 +236,7 @@ async function showGamesList(list, playersList, objectList) {
 }
 
 async function showPlayersList(list, objectList) {
+  
   let chosenPlayer = await control.choosePlayer(list);
   if (list[chosenPlayer] !== control.getLanguage().return) {
     let gameList = objectList[chosenPlayer].getBoardgames();
@@ -268,6 +263,7 @@ async function planGamenightLoop(mode_index, fromManagement = true) {
       else{
         return;
       }
+      break;
     case lang.oneByOne:
       //getUserList. Iterate through the list and ask if they want to add that user to the list --> if so add them into the new user list || if not dont add the
       //create instance of the gamenight and send them to the dataHandler so it can be saved in the localStorage
@@ -333,6 +329,7 @@ async function managementLoop(mode_index) {
       }
       break;
     case MANAGEMENT_MODES.SHOW_PLAYERS:
+      control.setLastOption("Gameslist")
       if (hasImportedData) {
         let userList = session.getUserObjectList();
         let userNames = [];
@@ -340,6 +337,7 @@ async function managementLoop(mode_index) {
           userNames.push(userList[i].getName());
         }
         userNames.push(control.getLanguage().return);
+        
         await showPlayersList(userNames, userList);
       } else {
         let errorMsg = await control.decision(
@@ -452,7 +450,9 @@ async function applicationLoop(mode_index) {
           mainLoop(MODES.APPLICATION);
         }
         else{
+          control.setLastOption("Application Mode")
           mainLoop();
+          
         }
       } else {
         let errorMsg = await control.decision(

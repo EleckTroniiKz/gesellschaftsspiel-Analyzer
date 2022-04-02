@@ -11,6 +11,7 @@ const ratingOptions = ["very good", "good", "not bad", "not so good", "bad"];
 
 const mainMenu = [
   "Exit",
+  "Set Language",
   "Import Mode",
   "Application Mode",
   "Management Mode",
@@ -22,6 +23,7 @@ const managementModeMenu = [
   "Player management",
   "Game management",
   "Gamenight planning",
+  "Gameslist"
 ];
 const applicationModeMenu = ["Return to Main Menu", "Start Game"];
 
@@ -72,6 +74,11 @@ class Control {
 
   setLanguage(language) {
     this.language = language;
+    this.lastOption = "Set Language";
+  }
+
+  setLastOption(opt) {
+    this.lastOption = opt
   }
 
   getLanguage() {
@@ -79,6 +86,7 @@ class Control {
   }
 
   postWelcome() {
+    console.clear();
     console.log(`
 	█───█─▄▀▀─█───▄▀▀─▄▀▀▄─█▄─▄█─▄▀▀
 	█───█─█───█───█───█──█─█▀▄▀█─█──
@@ -210,6 +218,7 @@ class Control {
 
   async ConfirmRating(gameName, selectedIndex, playerName, usedVeto) {
     let vetoState = "";
+    console.clear();
     let choice;
     if(setveto){
       vetoState = "VETO RESET"
@@ -353,6 +362,7 @@ class Control {
     const selectedIndex = await response.selectedIndex;
     term("\n").green("Selected: ", selectedText);
 
+    this.lastOption = "Import Mode";
     return selectedText;
   }
 

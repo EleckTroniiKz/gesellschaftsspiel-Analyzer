@@ -29,7 +29,7 @@ class Export{
    let data = "";
    let userList = this.session.getUserObjectList();
    for(let i = 0; i < userList.length; i++){
-    data += `User: ${this.userList[i].getName()}\n`
+    data += `User: ${userList[i].getName()}\n`
     data += "Game;Rating\n";
      
      let map = userList[i].getRating();
@@ -106,9 +106,9 @@ class Export{
      fs.writeFile(`.//DataExport//${name}_${strDate}.csv`,data, (err) => {
        if (err) throw err;
        console.log("Export Completed!");
+       return;
      }
                  );
-
 
    } else{
      //without date in filename
@@ -116,6 +116,7 @@ class Export{
      fs.writeFile(`.//DataExport//${name}.csv`,data, (err) => {
        if (err) throw err;
        console.log("Export Completed!");
+       return;
      }
                  );
    }
