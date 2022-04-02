@@ -215,7 +215,9 @@ class DataHandler {
 				if(!this.checkIfGameExists(game, userList)){
 					//Add to Rating of everyone
 				}
-				userList[i].addBoardgameToList([game]);
+				let oldGames = userList[i].getBoardgames();
+				oldGames.push(game);
+				userList[i].addBoardgameToList(oldGames);
 				this.saveUserObjectList(userList);
 				break;
 			}

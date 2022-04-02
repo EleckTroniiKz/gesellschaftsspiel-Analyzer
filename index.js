@@ -62,28 +62,19 @@ async function gamesManagementLoop(mode_index) {
       //add GAME
       //Input a Name for the game. Then choose if it should be added to a existing player or create a new player
       if (hasImportedData) {
-        let userList = session.getUserList();
+        let userList = session.getUserObjectList();
         let filteredNameList = [];
         let filteredIDList = [];
         for (let i = 0; i < userList.length; i++) {
-          filteredNameList.push(userList[i].name);
-          filteredIDList.push(userList[i].uID);
+          filteredNameList.push(userList[i].getName());
+          filteredIDList.push(userList[i].getID());
         }
         filteredNameList.push(control.getLanguage().return);
         let choosenPlayer = await control.choosePlayer(filteredNameList);
-        if (filteredNameList[choosenPlayer] !== control.getLanguage().return) {
+        if (filteredNameList[await choosenPlayer] !== control.getLanguage().return) {
           let gameToAdd = await control.addGameInput();
-
-          if (
-            await control.confirm(
-              control
-                .getLanguage()
-                .addGameToPlayerQuestion(
-                  gameToAdd,
-                  filteredNameList[choosenPlayer]
-                )
-            )
-          ) {
+          let a = await control.confirm(control.getLanguage().addGameToPlayerQuestion(gameToAdd,filteredNameList[choosenPlayer]));
+          if (await a) {
             session.addGame(filteredIDList[choosenPlayer], gameToAdd);
             await control.decision(
               ["Ok"],
