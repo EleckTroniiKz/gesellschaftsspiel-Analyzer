@@ -50,6 +50,10 @@ class Player {
   getName() {
     return this.name;
   }
+
+  setName(name) {
+    this.name = name;
+  }
   
   getBoardgames() {
     return this.boardgames;
