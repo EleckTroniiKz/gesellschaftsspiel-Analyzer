@@ -111,6 +111,10 @@ const GERMAN = {
 	oneByOne: "Füge die Spieler einzeln zu",
 	addEveryPlayer: "Füge jeden Spieler hinzu",
 	addToGameNightQuestion: "Möchtest du jeden Spieler einzeln hinzufügen oder alle Spieler direkt?",
+	addPlayersToGameNightTitle: "Füge Spieler zum Spielabend hinzu",
+	addPlayerToGameNightQuestion: (playerName) => {return `Möchtest du den Spieler ${playerName} zum Spielabend hinzufügen?`},
+	revoteChoice: "Wir wollen nochmal wählen",
+	choosenGameChoice: "Laut den Bewertungen sollte dieses Spiel gespielt werden:",
 }
 
 const ENGLISH = {
@@ -226,6 +230,10 @@ const ENGLISH = {
 	oneByOne: "Add one by one",
 	addEveryPlayer: "Add every Player",
 	addToGameNightQuestion: "Do you want to add every Player or add them one by one to the gamenight?",
+	addPlayersToGameNightTitle: "Add Players to gamesnight",
+	addPlayerToGameNightQuestion: (playerName) => {return `Do you want to add the Player ${playerName} to the Gamesnight?`},
+	revoteChoice: "We want to vote again",
+	choosenGameChoice: "According to the reviews, this game should be played:",
 }
 
 const ITALIAN = {
@@ -341,6 +349,10 @@ const ITALIAN = {
 	oneByOne: "Aggiungi i giocatori uno per uno",
 	addEveryPlayer: "Aggiungi ogni giocatore",
 	addToGameNightQuestion: "Vuoi aggiungere ogni giocatore individualmente o tutti i giocatori direttamente? ",
+	addPlayersToGameNightTitle: "Aggiungi i giocatori alla serata di gioco ",
+	addPlayerToGameNightQuestion: (playerName) => {return `Vuoi aggiungere il giocatore ${playerName} alla serata di gioco?`},
+	revoteChoice: "Vogliamo votare di nuovo",
+	choosenGameChoice: "Secondo le recensioni, questo gioco è giocato:",
 }
 
 const TURKISH = {
@@ -456,7 +468,10 @@ const TURKISH = {
 	oneByOne: "Oyuncuları tek tek ekleyin",
 	addEveryPlayer: "Her oyuncuyu ekle",
 	addToGameNightQuestion: "Her oyuncuyu tek tek mi yoksa tüm oyuncuları doğrudan mı eklemek istiyorsunuz?",
-
+	addPlayersToGameNightTitle: "Oyun gecesine oyuncu ekle",
+	addPlayerToGameNightQuestion: (playerName) => {return `Ouncuyu ${playerName}'i oyun gecesine eklemek ister misiniz?`},
+	revoteChoice: "Tekrar oy istiyoruz",
+	choosenGameChoice: "İncelemelere göre, bu oyun oynanır:",
 }
 
 const MODES = {
