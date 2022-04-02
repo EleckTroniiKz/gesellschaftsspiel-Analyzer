@@ -20,20 +20,25 @@ class DataHandler {
 	deleteGameGlobally(game){
 		let userList = this.getUserObjectList();
 		let currentPlayer;
-		let currentGames;
+		let currentGames = [];
+		let updatedGames = [];
 		let userListWithoutGame = [];
 		for(let i = 0; i < userList.length; i++){
 			currentPlayer = userList[i];
 			currentGames = currentPlayer.getBoardgames();
+
 			if(currentGames.includes(game)){
-				currentGames = currentGames.filter((value) => {if(value!==game){return value;}});
+				for(let j = 0; j < currentGames.length; j++){
+					if(currentGames[j] !== game){
+						updatedGames.push(currentGames[j]);
+					}
+				}
 				let map = currentPlayer.getRating();
 				map.delete(game);
-				currentPlayer.setBoardgameList(currentGames, this.transformHashToString(map));
+				currentPlayer.setBoardgameList(updatedGames,map);
 			}
 			userListWithoutGame.push(currentPlayer)
 		}
-		return;
 		this.saveUserObjectList(userListWithoutGame);
 	}
 
@@ -154,13 +159,18 @@ class DataHandler {
 				}
 				userList[i].setBoardgame(gameList);
 				if(!this.checkIfGameExists(game, userList)){
-					//Delete game globally and from all ratings
+					this.deleteGameGlobally(game)
+					break;
 				}
-				this.saveUserObjectList(userList);
-				break;
+				else{
+					this.saveUserObjectList(userList);
+					break;
+				}
 			}
 		}
+		
 		this.updateGlobalGameList()
+		
 	}
 	
 	/**

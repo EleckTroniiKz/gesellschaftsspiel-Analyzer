@@ -114,10 +114,11 @@ async function gamesManagementLoop(mode_index) {
         tempList.push(gameList[i].getName());
       }
       tempList.push(control.getLanguage().return);
-      let gameToDelete = await control.chooseGame(tempList);
+      let gameToDeleteIndex = await control.chooseGame(tempList);
+      let gameToDelete = tempList[gameToDeleteIndex];
       let chosenAct = await control.decision(
         [
-          control.getLanguage().Global,
+          control.getLanguage().global,
           control.getLanguage().player,
           control.getLanguage().return,
         ],
@@ -125,41 +126,48 @@ async function gamesManagementLoop(mode_index) {
         control.getLanguage().optionTextGlobalOrIndividual
       );
       if (gameToDelete !== control.getLanguage().return) {
-        if (chosenAct === control.getLanguage().Global) {
+        if (chosenAct === control.getLanguage().global) {
           session.deleteGameGlobally(gameToDelete);
         } else if (chosenAct === control.getLanguage().player) {
-          let userList = session.getUserList();
+          let userList = session.getUserObjectList();
           let filteredNameList = [];
           let filteredIDList = [];
           for (let i = 0; i < userList.length; i++) {
-            filteredNameList.push(userList[i].getName());
-            filteredIDList.push(userList[i].getID());
-          }
-          filteredNameList.push(control.getLanguage().return);
-          let chosenIndex = await control.choosePlayer(filteredNameList);
-          if (filteredNameList[chosenIndex] === control.getLanguage().return) {
-            mainLoop(MODES.MANAGEMENT);
-          } else {
-            if (
-              await control.decision(
-                [control.getLanguage().yes, control.getLanguage().no],
-                control.getLanguage().deleteConfirmText,
-                control
-                  .getLanguage()
-                  .deleteGameFromPlayer(
-                    gameToDelete,
-                    filteredNameList[chosenIndex]
-                  )
-              )
-            ) {
-              session.deleteGameFromUser(
-                filteredIDList[chosenIndex],
-                gameToDelete
-              );
-            } else {
-              mainLoop(MODES.MANAGEMENT);
+            if(userList[i].getBoardgames().includes(gameToDelete)){
+              filteredNameList.push(userList[i].getName());
+              filteredIDList.push(userList[i].getID());
             }
           }
+          if(filteredNameList.length !== 0 || filteredNameList.length !== undefined){
+            filteredNameList.push(control.getLanguage().return);
+            let chosenIndex = await control.choosePlayer(filteredNameList);
+            if (filteredNameList[chosenIndex] === control.getLanguage().return) {
+              mainLoop(MODES.MANAGEMENT);
+            } else {
+              if (await control.decision([control.getLanguage().yes, control.getLanguage().no],control.getLanguage().deleteConfirmText,control.getLanguage().deleteGameFromPlayer(gameToDelete,filteredNameList[await chosenIndex])) === control.getLanguage().yes) {
+                session.deleteGameFromUser(
+                  filteredIDList[chosenIndex],
+                  gameToDelete
+                );
+              } else {
+                mainLoop(MODES.MANAGEMENT);
+              }
+            }
+          }
+          else{
+            let errorMsg = await control.decision(
+              ["Ok"],
+              control.getLanguage().noData,
+              "No Player found"
+            );
+          }
+        }
+        else{
+          let errorMsg = await control.decision(
+            ["Ok"],
+            control.getLanguage().noData,
+            "No Player found"
+          );
         }
       }
       mainLoop(MODES.MANAGEMENT);
@@ -440,6 +448,12 @@ async function applicationLoop(mode_index) {
         gamesnight = session.getGamesNightObject();
         let chosenGame = gamesnight.chooseBoardgame();
         let gameChoice = await control.decision(["Ok", control.getLanguage().revoteChoice], control.getLanguage().choosenGameChoice, chosenGame)
+        if(gameChoice === control.getLanguage().revoteChoice){
+          mainLoop(MODES.APPLICATION);
+        }
+        else{
+          mainLoop();
+        }
       } else {
         let errorMsg = await control.decision(
           ["Ok"],
