@@ -373,7 +373,7 @@ const TURKISH = {
 		"Oyun gecesi planlaması",
 		"Oyuncu listesi"
 	],
-	aapplicationModeMenu: [
+	applicationModeMenu: [
 		"Ana menüye dön",
 		"Uygulamayı başlat"
 	],

@@ -280,7 +280,7 @@ async function planGamenightLoop(mode_index, fromManagement = true) {
           lang.addPlayersToGameNightTitle,
           lang.addPlayerToGameNightQuestion(userList[i].getName())
         );
-        if(chooseToAdd === "Ja") {
+        if(chooseToAdd === control.getLanguage().yes) {
           gameNightUsers.push(userList[i]);
         }
       }
