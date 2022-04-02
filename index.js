@@ -253,7 +253,6 @@ async function planGamenightLoop(mode_index, fromManagement = true) {
   let lang = control.getLanguage()
   switch (mode_index) {
     case lang.addEveryPlayer:
-      //getUserList and just pass that list into gamenight
       userList = session.getUserObjectList();
       session.saveGamesNightObject(new Gamesnight(userList));
       createdGamenight = true;
@@ -440,6 +439,7 @@ async function applicationLoop(mode_index) {
         session.saveUserObjectList(userList);
         gamesnight.calculateAverages();
         gamesnight.sortByRating();
+        session.saveRatingsIntoGlobalGameList(gamesnight);
         session.saveGamesNightObject(gamesnight);
         //show average ratings
         hasDataForExport = true;

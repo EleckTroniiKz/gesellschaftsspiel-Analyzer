@@ -45,6 +45,18 @@ class Export{
    return data;
 }
 
+  setBestRatedCSV(){
+    let data = "\n";
+    let gamesnight = this.session.getGamesNightObject();
+    data += "Top 3 Games\n"
+    let ratings = gamesnight.getRating();
+    let ratingKeys = Array.from(ratings.keys())
+    data += `1. Place: ${ratingKeys[ratingKeys.length-1]} with a rating of ${ratings.get(ratingKeys[ratingKeys.length-1])}\n`
+    data += `2. Place: ${ratingKeys[ratingKeys.length-2]} with a rating of ${ratings.get(ratingKeys[ratingKeys.length-2])}\n`
+    data += `3. Place: ${ratingKeys[ratingKeys.length-3]} with a rating of ${ratings.get(ratingKeys[ratingKeys.length-3])}\n`
+    return data;
+  }
+
   /*
   @description This method creates a string formatted in CSV, which contains data about
                the average of each game
@@ -80,6 +92,7 @@ class Export{
     let data = "";
     data += this.setPlayerRatingCSV();
     data += this.setAvgRatingCSV();
+    data += this.setBestRatedCSV();
     return data;
   }
 

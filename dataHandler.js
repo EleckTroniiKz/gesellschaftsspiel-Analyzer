@@ -48,34 +48,38 @@ class DataHandler {
 		localStorage.setItem('gamesnight', JSON.stringify(""));
 	}
 
+
+	saveRatingsIntoGlobalGameList(gamesnight){
+		let ratings = gamesnight.getRating();
+		let gameKeys = Array.from(ratings.keys());
+		let gamesGlobal = JSON.parse(localStorage.getItem('gameList'))
+		let gamesWithRatings = []
+		for(let i = 0; i < gamesGlobal.length; i++){
+			gamesWithRatings.push(new Boardgame(gamesGlobal[i].name))
+			if(gameKeys.includes(gamesGlobal[i].name)){
+				gamesWithRatings[gamesWithRatings.length-1].setRating(ratings.get(gamesGlobal[i].name))
+			}
+		}
+		localStorage.setItem('gameList', JSON.stringify(gamesWithRatings))
+	}
+
 	updateGlobalGameList(){
 		// geht durch die aktuellen Spieler, schaut sich die Ratings and --> falls alle gerated haben, gibts ein average
 		// kriegt die objekt liste aller spiele
 		let userList = this.getUserObjectList();
-		return;
-		
-		//let globalGameList = JSON.parse(localStorage.getItem('gameList'));
-		
-		let gameNames = [];
+		let gamesOfPlayer = [];
+		let globalBoardGameNameList = [];
+		let globalBoardGameObjectList = [];
 		for(let i = 0; i < userList.length; i++){
-			let currentUser = new Player(userList[i].name, userList[i].boardgames, userList[i].id)
-			let games = currentUser.getBoardgames().length;
-			for(let j = 0; j < games.length; j++){
-				let currentGame = games[j];
-				//gotta check if game name is in 
-				if(!gameNames.includes(currentGame.name)){
-					gameNames.push(currentGame.name);
-					let game = new Boardgame(currentGame.name);
-					if(currentGame.rating !== null){
-						//Implement setRating method in boardgame with value setter
-						//game.setRating(currentGame.rating);
-					}
-					globalGameList.push(game);
+			gamesOfPlayer = userList[i].getBoardgames();
+			for(let j = 0; j < gamesOfPlayer.length; j++){
+				if(!globalBoardGameNameList.includes(gamesOfPlayer[j])){
+					globalBoardGameNameList.push(gamesOfPlayer[j]);
+					globalBoardGameObjectList.push(new Boardgame(gamesOfPlayer[j]));
 				}
 			}
 		}
-		globalGameList = this.searchDuplicates(globalGameList)
-		localStorage.setItem('gameList', JSON.stringify(globalGameList))
+		localStorage.setItem('gameList', JSON.stringify(globalBoardGameObjectList))
 	}
 
 	/**
@@ -171,9 +175,6 @@ class DataHandler {
 				}
 			}
 		}
-		
-		this.updateGlobalGameList()
-		
 	}
 	
 	/**
@@ -270,7 +271,7 @@ class DataHandler {
 	 * @returns List of Player Objects
 	 */
 	getUserObjectList(){
-		let list = this.getUserList();
+		let list = JSON.parse(localStorage.getItem('users'));
 		let objectList = [];
 		for(let i = 0; i < list.length; i++){
 			let a = new Player(list[i].name, list[i].boardgames, list[i].id);
@@ -278,15 +279,9 @@ class DataHandler {
 			a.setBoardgameList(a.getBoardgames(), this.transformStringToHash(list[i].ratingHashmap));
 			objectList.push(a)
 		}
+		
 		return objectList;
 		//returned Userliste, aber die elemente sind Instanzen von Player
-	}
-
-	/**
-	 * @returns a JSON Object of the user storage 
-	 */
-	getUserList(){
-		return JSON.parse(localStorage.getItem('users'));
 	}
 
 	saveUserObjectList(list){
@@ -296,6 +291,7 @@ class DataHandler {
 		}
 		
 		localStorage.setItem('users', JSON.stringify(list));
+		this.updateGlobalGameList()
 	}
 
 	/**
@@ -434,13 +430,6 @@ class DataHandler {
 			}
 			this.saveUserData(importedData);
 		})
-	}
-
-	/**
-	 *  @description takes the file path of the import file and extracts the data from a .xlsx file
-	 */
-	importEXCEL() {
-		console.log("importing EXCEL")
 	}
 
 	/**  
