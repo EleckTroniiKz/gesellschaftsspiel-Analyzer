@@ -309,8 +309,11 @@ class DataHandler {
    * @returns instance of Gamesnight
    */
   getGamesNightObject() {
+    if(localStorage.getItem("gamesnight") === "" || localStorage.getItem("gamesnight") === null || localStorage.getItem("gamesnight") === null){
+      return []
+    }
+    else{
     let unparsedGamesnight = JSON.parse(localStorage.getItem("gamesnight"));
-
     let playerObjectList = [];
     for (let i = 0; i < unparsedGamesnight.players.length; i++) {
       let name = unparsedGamesnight.players[i].name;
@@ -335,6 +338,7 @@ class DataHandler {
       this.transformStringToHash(unparsedGamesnight.vetoHash)
     );
     return gamesnight;
+    }
   }
 
   /**

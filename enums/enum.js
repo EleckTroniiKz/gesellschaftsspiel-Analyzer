@@ -52,6 +52,7 @@ const GERMAN = {
 		"Zurück zum Hauptmenü",
 		"Export-Datei erstellen"
 	],
+	gameNightPlanHeader: ">Spielabend Planung<",
 	mainMenuHeader: ">Hauptmenü<\n",
 	languageChangeHeader:">Sprachauswahl<\n",
 	languageChangeQuestion: "Zu welcher Sprache möchtest du wechseln?\n",
@@ -222,6 +223,7 @@ const ENGLISH = {
 		"Return to Main Menu",
 		"Create Export file"
 	],
+	gameNightPlanHeader: ">Gamenight planning<",
 	languageChangeHeader:">Language Select<\n",
 	languageChangeQuestion: "Which Language do you want to choose?\n",
 	mainMenuHeader: ">Main menu<\n",
@@ -392,6 +394,7 @@ const ITALIAN = {
 		"Ritorno al menù principale",
 		"Creare un file esporto"
 	],
+	gameNightPlanHeader: ">Pianificazione della serata di gioco<",
 	mainMenuHeader: ">Menù principale<\n",
 	languageChangeHeader:">Selezione della lingua<\n",
 	languageChangeQuestion: "Quale lingua vuoi selezionare?\n",
@@ -562,6 +565,7 @@ const TURKISH = {
 		"Ana menüye dön",
 		"Dışa aktarma dosyası oluştur"
 	],
+	gameNightPlanHeader: ">Oyun akşamı planlaması<",
 	mainMenuHeader: ">Ana menü<\n",
 	languageChangeHeader:">Dili değiştir<\n",
 	languageChangeQuestion: "Hangi dili seçmek istiyorsunuz?\n",

@@ -182,9 +182,6 @@ class Control {
     term(this.language.applicationModeHeader);
     term(this.language.mainMenuSelectTitle);
     let options = this.language.applicationModeMenu;
-    if(!options.includes(this.language.return)){
-      options.push(this.language.return)
-    }
 
     const response = await term.singleColumnMenu(
       this.language.applicationModeMenu
@@ -571,10 +568,11 @@ class Control {
 
     const response = await this.decision(
       [lang.oneByOne, lang.addEveryPlayer, lang.return],
-      lang.gamenightplanHeader,
+      lang.gameNightPlanHeader,
       lang.addToGameNightQuestion
     );
 
+    //response is the selected Text
     return response;
   }
 

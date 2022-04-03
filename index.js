@@ -34,8 +34,6 @@ mainLoop();
 async function exportLoop(mode_index) {
   switch (mode_index) {
     case 0:
-      console.log("HELLo");
-      process.exit();
       mainLoop();
       break;
     case 1:
@@ -473,6 +471,9 @@ async function planGamenightLoop(mode_index, fromManagement = true) {
         session.saveGamesNightObject(night);
         createdGamenight = true;
       }
+      else{
+        createdGamenight = false;
+      }
       if (fromManagement) {
         mainLoop(MODES.MANAGEMENT);
       } else {
@@ -480,7 +481,12 @@ async function planGamenightLoop(mode_index, fromManagement = true) {
       }
       break;
     case language.return:
-      mainLoop(MODES.MANAGEMENT);
+      if(fromManagement){
+        mainLoop(MODES.MANAGEMENT);
+      }
+      else{
+        return "return";
+      }
       break;
     default:
       mainLoop(MODES.MANAGEMENT);
@@ -562,6 +568,8 @@ async function managementLoop(mode_index) {
  */
 async function applicationLoop(mode_index) {
   let gamesnight;
+  let foundGameNight = true;
+  let a;
   language = control.getLanguage();
   switch (mode_index) {
     case 1:
@@ -574,132 +582,149 @@ async function applicationLoop(mode_index) {
       } else if (userList.length >= 2) {
         if (createdGamenight) {
           gamesnight = session.getGamesNightObject();
+          if(gamesnight.length === 0){
+            foundGameNight = false;
+          }
         } else {
           planGamenightIndex = await control.postGameNightPlanMenu();
-          await planGamenightLoop(planGamenightIndex, false);
-          gamesnight = session.getGamesNightObject();
+          a = await planGamenightLoop(planGamenightIndex, false);
+          if(a === "return"){
+            mainLoop(MODES.APPLICATION)
+          }
+          else{
+            gamesnight = session.getGamesNightObject();
+            if(gamesnight.length === 0){
+              foundGameNight = false;
+            }
+          }
         }
-        if (gamesnight.getPlayers().length > 1) {
-          let gameList = [];
-          let spieler = gamesnight.getPlayers();
-          for (let i = 0; i < spieler.length; i++) {
-            let currentUsersGames = spieler[i].getBoardgames();
-            for (let j = 0; j < currentUsersGames.length; j++) {
-              let gameName = currentUsersGames[j];
-              if (!gameList.includes(gameName)) {
-                gameList.push(gameName);
+        if(a!== "return"){
+          if(foundGameNight){
+            if (gamesnight.getPlayers().length > 1) {
+              let gameList = [];
+              let spieler = gamesnight.getPlayers();
+              for (let i = 0; i < spieler.length; i++) {
+                let currentUsersGames = spieler[i].getBoardgames();
+                for (let j = 0; j < currentUsersGames.length; j++) {
+                  let gameName = currentUsersGames[j];
+                  if (!gameList.includes(gameName)) {
+                    gameList.push(gameName);
+                  }
+                }
               }
-            }
-          }
-          let gameObjects = [];
-          for (let i = 0; i < gameList.length; i++) {
-            gameObjects.push(new Boardgame(gameList[i]));
-          }
-          let globalGames = []
-          let gamesOjectListGlobal = session.getGamesObjectList();
-          for(let i = 0; i < gamesOjectListGlobal.length; i++){
-            globalGames.push(gamesOjectListGlobal[i].getName());
-          }
-          for(let i = 0; i < userList.length; i++){
-            userList[i].addBoardgameToList(globalGames)
-          }
-
-          for (let i = 0; i < spieler.length; i++) {
-            //Voting process for a player
-            spieler[i].setVeto(false);
-            let player = spieler[i];
-            let playerName = player.getName();
-            for (let g = 0; g < gameList.length; g++) {
-              let gameName = gameList[g];
-              let usedVeto = player.getVeto();
-              let ratings = await control.setRating(
-                playerName,
-                gameName,
-                usedVeto
+              let gameObjects = [];
+              for (let i = 0; i < gameList.length; i++) {
+                gameObjects.push(new Boardgame(gameList[i]));
+              }
+              let globalGames = []
+              let gamesOjectListGlobal = session.getGamesObjectList();
+              for(let i = 0; i < gamesOjectListGlobal.length; i++){
+                globalGames.push(gamesOjectListGlobal[i].getName());
+              }
+              for(let i = 0; i < userList.length; i++){
+                userList[i].addBoardgameToList(globalGames)
+              }
+    
+              for (let i = 0; i < spieler.length; i++) {
+                //Voting process for a player
+                spieler[i].setVeto(false);
+                let player = spieler[i];
+                let playerName = player.getName();
+                for (let g = 0; g < gameList.length; g++) {
+                  let gameName = gameList[g];
+                  let usedVeto = player.getVeto();
+                  let ratings = await control.setRating(
+                    playerName,
+                    gameName,
+                    usedVeto
+                  );
+                  if (ratings === "CANCELLED") {
+                    mainLoop();
+                    return;
+                  } else {
+                    let rating = ratings[0];
+                    let vetoSetted = ratings[1];
+                    switch (rating) {
+                      case 0:
+                        rating = 5;
+                        break;
+                      case 1:
+                        rating = 4;
+                        break;
+                      case 2:
+                        rating = 3;
+                        break;
+                      case 3:
+                        rating = 2;
+                        break;
+                      case 4:
+                        rating = 1;
+                        break;
+                      default:
+                        rating = -1;
+                        break;
+                    }
+                    if (vetoSetted) {
+                      gamesnight.setVeto(gameName, vetoSetted);
+                      player.setRating(gameName, rating);
+                      player.setVeto(vetoSetted);
+                      gamesnight.setRating(gameName, rating);
+                    } else {
+                      player.setRating(gameName, rating);
+                      gamesnight.setRating(gameName, rating);
+                    }
+                  }
+                }
+              }
+              for (let i = 0; i < spieler.length; i++) {
+                let found = false;
+                //puts the new data from the gamesnight into userList which is saved into localstorage
+                //this is important, if not every saved player participates in the gamenight 
+                for (let j = 0; j < userList.length; j++) {
+                  if (!found) {
+                    if (userList[j].getID() === spieler[i].getID()) {
+                      userList[j] = spieler[i];
+                      found = true;
+                    }
+                  }
+                }
+              }
+              session.saveUserObjectList(userList);
+              gamesnight.calculateAverages();
+              gamesnight.setRatingHashmap(
+                session.hashMapSorter(gamesnight.getRating())
               );
-              if (ratings === "CANCELLED") {
-                mainLoop();
-                return;
-              } else {
-                let rating = ratings[0];
-                let vetoSetted = ratings[1];
-                switch (rating) {
-                  case 0:
-                    rating = 5;
-                    break;
-                  case 1:
-                    rating = 4;
-                    break;
-                  case 2:
-                    rating = 3;
-                    break;
-                  case 3:
-                    rating = 2;
-                    break;
-                  case 4:
-                    rating = 1;
-                    break;
-                  default:
-                    rating = -1;
-                    break;
-                }
-                if (vetoSetted) {
-                  gamesnight.setVeto(gameName, vetoSetted);
-                  player.setRating(gameName, rating);
-                  player.setVeto(vetoSetted);
-                  gamesnight.setRating(gameName, rating);
-                } else {
-                  player.setRating(gameName, rating);
-                  gamesnight.setRating(gameName, rating);
-                }
-              }
+              session.saveRatingsIntoGlobalGameList(gamesnight);
+              session.saveGamesNightObject(gamesnight);
+              hasDataForExport = true;
+              gamesnight = session.getGamesNightObject();
+              let chosenGame = gamesnight.chooseBoardgame();
+              latestGameNightGame = chosenGame;
+              session.saveChosenGameIntoHashmap(chosenGame);
+              let gameChoice = await control.decision(
+                ["Ok"],
+                language.choosenGameChoice,
+                chosenGame
+              );
+              mainLoop();
+            } else {
+              createdGamenight = false;
+              let errorMsg = await control.decision(
+                ["Ok"],
+                language.notEoughPlayersError,
+                language.notEnoughPlayersOrder
+              );
             }
-          }
-          for (let i = 0; i < spieler.length; i++) {
-            let found = false;
-            //puts the new data from the gamesnight into userList which is saved into localstorage
-            //this is important, if not every saved player participates in the gamenight 
-            for (let j = 0; j < userList.length; j++) {
-              if (!found) {
-                if (userList[j].getID() === spieler[i].getID()) {
-                  userList[j] = spieler[i];
-                  found = true;
-                }
-              }
-            }
-          }
-          session.saveUserObjectList(userList);
-          gamesnight.calculateAverages();
-          gamesnight.setRatingHashmap(
-            session.hashMapSorter(gamesnight.getRating())
-          );
-          session.saveRatingsIntoGlobalGameList(gamesnight);
-          session.saveGamesNightObject(gamesnight);
-          hasDataForExport = true;
-          gamesnight = session.getGamesNightObject();
-          let chosenGame = gamesnight.chooseBoardgame();
-          latestGameNightGame = chosenGame;
-          session.saveChosenGameIntoHashmap(chosenGame);
-          let gameChoice = await control.decision(
-            ["Ok"],
-            language.choosenGameChoice,
-            chosenGame
-          );
-          mainLoop();
-        } else {
-          createdGamenight = false;
-          let errorMsg = await control.decision(
-            ["Ok"],
-            language.notEoughPlayersError,
-            language.notEnoughPlayersOrder
-          );
+        }
         }
       }
       break;
     default:
       break;
   }
-  mainLoop();
+  if(a !== "return"){
+    mainLoop();
+  }
 }
 
 /**
@@ -756,7 +781,6 @@ async function mainLoop(mainIndex = null) {
       break;
     case MODES.APPLICATION:
       let applicationIndex = await control.postApplicationMode();
-      control.setLastOption(MODES.APPLICATION);
       applicationLoop(applicationIndex);
       break;
     case MODES.MANAGEMENT:
