@@ -1,0 +1,14 @@
+This tutorial teaches you step by step how to use the application. If a step tells you to navigate to a certain spot you are supposed to do so with the arrow keys and you need to confirmwith the enter key.
+	step 0: Navigate to "Sprache einstellen" to change the language from german (default) to english.
+	step 1: Navigate to "Importmode" to enter it.
+	step 2: Navigate to your desired import file to import it.
+	step 3 (optional): After the import you are sent back to the main menu. Navigate to "Management Mode" to enter it. In this mode you can manage players, their boardgames, set up a games night and check the current list of players.
+	step 4: Navigate to "Application Mode" to enter it.
+	step 5: Navigate to "Start Application" to set up a games night. To do so you need to choose if you want to include all players from the current list of players or if you want to choose certain people.
+	step 6: Navigate to an appropriate rating for each boardgame.
+	step 7: Navigate to "Change Rating" if you want to change a rating you just set. Navigate to "set VETO" (only 1 VETO can be set per player per games night) if you do not want to play that game during the games night.
+	step 8: The matchmaking system will choose a boardgame after all boardgames have been rated and VETOs have been set. Navigate to "Ok" to get back to the main manu.
+	step 9: Navigate to "Export Mode" to enter it.
+	step 10: Navigate to "Create Export file" and name it appropriately.
+	step 11: Press n if you do not want to set the current date as suffix after the given export file name. Press y if you do want to set the current date as suffix after the given export file name.
+	step 12: Navigate to "Ok" to get back to the main manu.
