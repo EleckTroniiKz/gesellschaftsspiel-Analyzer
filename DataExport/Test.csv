@@ -1,0 +1,51 @@
+
+-------
+Spieler: Spieler A
+Spiel;Rating
+Game 1, 5
+Game 3 , 3
+Game 5, 1
+Game 6, 2
+Game 7, 4
+
+-------
+Spieler: Spieler B
+Spiel;Rating
+Game 5, 2
+Game 1, 3
+Game 3 , 1
+Game 6, 5
+Game 7, 4
+
+-------
+Spieler: Spieler C
+Spiel;Rating
+Game 6, 4
+Game 7, 3
+Game 1, 2
+Game 3 , 3
+Game 5, 1
+
+-------
+Durchschnittsbewertung der Spiele des letzten Spielabends
+Spiel; Rating; Hat Veto
+Game 5; 1.3333333333333333; Hat kein Veto
+Game 3 ; 2.3333333333333335; Hat kein Veto
+Game 1; 3.3333333333333335; Hat kein Veto
+Game 6; 3.6666666666666665; Hat kein Veto
+Game 7; 3.6666666666666665; Hat kein Veto
+
+-------
+Top 3 der best bewertesten Spiele dieses Spielabends
+1.Platz: Game 7 mit einer Bewertung von 3.6666666666666665
+2.Platz: Game 6 mit einer Bewertung von 3.6666666666666665
+3.Platz: Game 1 mit einer Bewertung von 3.3333333333333335
+-------
+Beim letzen Spielabend wurde dieses Spiel gespielt: 
+Game 7
+
+-------
+Meist gespielten Spiele
+1.Platz: Game 7
+2.Platz: Game 6
+3.Platz: Game 5
