@@ -6,19 +6,17 @@ class Export{
    * @param session instance of DataHandler class 
    * @returns data string
    */
- setPlayerRatingCSV(session) {
+ setPlayerRatingCSV(session, language) {
    let data = "";
    let userList = session.getUserObjectList();
    for(let i = 0; i < userList.length; i++){
-    data += `User: ${userList[i].getName()}\n`
-    data += "Game;Rating\n";
-     
+     data += language.playerRatingHeader(userList[i].getName())
      let map = userList[i].getRating();
      let k = Array.from(map.keys());
 
      //content
      for(let key = 0; key < k.length; key++){
-       data += `${k[key]};${map.get(k[key])}\n`;
+       data += language.playerRatingLine(k[key], map.get(k[key]))
      }
      //last line
      data += "\n";
@@ -31,11 +29,11 @@ class Export{
    * @param session instance of DataHandler class 
    * @returns data string
    */
-  setMostPlayedCSV(session){
+  setMostPlayedCSV(session, language){
     let data = "\n";
     let mostPlayed = session.getPlayedGamesMap();
     let games = Array.from(mostPlayed.keys());
-    data += `Most played games \n1.Place: ${games[games.length-1]}\n2.Place: ${games[games.length-2]}\n3.Place: ${games[games.length-3]}`;
+    data += language.threeMostPlayed([games[games.length-1], games[games.length-2], games[games.length-3]])
     return data;
   }
 
@@ -44,15 +42,12 @@ class Export{
    * @param session instance of DataHandler class 
    * @returns data string
    */
-  setBestRatedCSV(session){
+  setBestRatedCSV(session, language){
     let data = "\n";
     let gamesnight = session.getGamesNightObject();
-    data += "Top 3 Games\n"
     let ratings = gamesnight.getRating();
     let ratingKeys = Array.from(ratings.keys())
-    data += `1. Place: ${ratingKeys[ratingKeys.length-1]} with a rating of ${ratings.get(ratingKeys[ratingKeys.length-1])}\n`
-    data += `2. Place: ${ratingKeys[ratingKeys.length-2]} with a rating of ${ratings.get(ratingKeys[ratingKeys.length-2])}\n`
-    data += `3. Place: ${ratingKeys[ratingKeys.length-3]} with a rating of ${ratings.get(ratingKeys[ratingKeys.length-3])}\n`
+    data += language.topThreeGames([ratingKeys[ratingKeys.length-1], ratings.get(ratingKeys[ratingKeys.length-1]), ratingKeys[ratingKeys.length-2], ratings.get(ratingKeys[ratingKeys.length-2]), ratingKeys[ratingKeys.length-3], ratings.get(ratingKeys[ratingKeys.length-3])])
     return data;
   }
 
@@ -61,18 +56,16 @@ class Export{
    * @param session instance of DataHandler class  
    * @returns data string
    */
- setAvgRatingCSV(session){
+ setAvgRatingCSV(session, language){
    //Initialize empty data string so you can append data with +=
    let data = "";
-   data += "Average Rating for each Game;\n";
-   data += "Game;Average Rating\n";
-   
+   data += language.averageRatingHeader();
    let gameNight = session.getGamesNightObject();
    let ratingMap = gameNight.getRating();
    let vetoMap = gameNight.getVetoList();
    let games = Array.from(ratingMap.keys());
    for(let i = 0; i < games.length; i++){
-     data += `${games[i]}; ${ratingMap.get(games[i])}; Has Veto -> ${vetoMap.get(games[i])}\n`;
+     data += language.averageRatingLine(games[i], ratingMap.get(games[i]), vetoMap.get(games[i]));
   }
    return data;
   }
@@ -82,13 +75,13 @@ class Export{
  * @param session instance of DataHandler class 
  * @returns data string
  */
-  setExportData(session){
+  setExportData(session, language){
     //Initialize empty data string so you can append data with +=
     let data = "";
-    data += this.setPlayerRatingCSV(session);
-    data += this.setAvgRatingCSV(session);
-    data += this.setBestRatedCSV(session);
-    data += this.setMostPlayedCSV(session);
+    data += this.setPlayerRatingCSV(session, language);
+    data += this.setAvgRatingCSV(session, language);
+    data += this.setBestRatedCSV(session, language);
+    data += this.setMostPlayedCSV(session, language);
     return data;
   }
 
@@ -113,8 +106,7 @@ class Export{
        if (err) throw err;
        console.log("Export Completed!");
        return;
-     }
-                 );
+     });
 
    } else{
      //without date in filename
@@ -123,8 +115,7 @@ class Export{
        if (err) throw err;
        console.log("Export Completed!");
        return;
-     }
-                 );
+     });
    }
  }
 }

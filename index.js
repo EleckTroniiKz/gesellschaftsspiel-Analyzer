@@ -42,7 +42,7 @@ async function exportLoop(mode_index) {
       let exportDate = await control.confirm(
         control.getLanguage().exportLoopOutput
       );
-      let csvData = exp.setExportData(session);
+      let csvData = exp.setExportData(session, control.getLanguage());
       exp.createExport(csvData, exportFileName, exportDate);
       mainLoop();
       break;

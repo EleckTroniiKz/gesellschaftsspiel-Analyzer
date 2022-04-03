@@ -26,6 +26,11 @@ const GERMAN = {
 		"Spieler bearbeiten",
 		"Spieler löschen"
 	],
+	editGameMenu: [
+		"Zurück", 
+		"Name bearbeiten",
+		"Spiel löschen"
+	],
 	editPlayersMenu: [
 		"Zurück", 
 		"Name bearbeiten",
@@ -97,7 +102,7 @@ const GERMAN = {
 	deleteGameTitle: "Lösche Spiel",
 	deleteConfirmText: "Löschen bestätigen",
 	deletePlayerQuestion: (playerName) => {return `Möchtest du wirklich den Spieler ${playerName} löschen?`},
-	exportDataMissingText: "Bitte starte zuerst den Anwensungsmodus und bewerte die Spiele!",
+	exportDataMissingText: "Bitte starte zuerst den Anwendungsmodus und bewerte die Spiele!",
 	indexIssueOutput: "Mit dem Index ist etwas schief gelaufen!",
 	return: "Zurück",
 	player: "Spieler",
@@ -115,6 +120,31 @@ const GERMAN = {
 	addPlayerToGameNightQuestion: (playerName) => {return `Möchtest du den Spieler ${playerName} zum Spielabend hinzufügen?`},
 	revoteChoice: "Wir wollen nochmal wählen",
 	choosenGameChoice: "Laut den Bewertungen sollte dieses Spiel gespielt werden:",
+	editPlayerQuestion: "Möchtest du den Spielernamen oder ein Spiel des Spielers bearbeiten?",
+	changeGameQuestion: "Welches Spiel möchtest du bearbeiten?",
+	changeGameEditChoice: "Möchtest du den Namen vom Spiel ändern oder es vom Spieler löschen?",
+	changeGameNameQuestion: "Möchtest du den Namen des Spiels ändern (Global)?",
+	topThreeGames: (arr) => {return `-------\nTop 3 der best bewertesten Spiele dieses Spielabends\n1.Platz: ${arr[0]} mit einer Bewertung von ${arr[1]}\n2.Platz: ${arr[2]} mit einer Bewertung von ${arr[3]}\n3.Platz: ${arr[4]} mit einer Bewertung von ${arr[5]}\n`},
+	threeMostPlayed: (arr) => {return `-------\nMeist gespielten Spiele\n1.Platz: ${arr[0]}\n2.Platz: ${arr[1]}\n3.Platz: ${arr[2]}\n`},
+	playerRatingHeader: (name) => {return `-------\nSpieler: ${name}\nSpiel;Rating\n`},
+	playerRatingLine: (name, rating) => {
+		if(rating === "No rating asigned yet!"){
+			return `${name}, nicht vom Spieler bewertet\n`
+		}
+		else{
+			return `${name}, ${rating}\n`
+		}
+	},
+	averageRatingHeader: () => {return `-------\nDurchschnittsbewertung der Spiele des letzten Spielabends\nSpiel; Rating; Hat Veto\n`},
+	averageRatingLine: (name, rating, veto) => {
+		if(veto){
+			return `${name}; ${rating}; Hat mindestens ein Veto\n`
+		}
+		else{
+			return `${name}; ${rating}; Hat kein Veto\n`
+		}
+		
+	}
 }
 
 const ENGLISH = {
@@ -144,6 +174,11 @@ const ENGLISH = {
 		"Add player",
 		"Edit player",
 		"Delete player"
+	],
+	editGameMenu: [
+		"Return",
+		"Edit name", 
+		"Delete game"
 	],
 	editPlayersMenu: [
 		"Return", 
@@ -234,6 +269,30 @@ const ENGLISH = {
 	addPlayerToGameNightQuestion: (playerName) => {return `Do you want to add the Player ${playerName} to the Gamesnight?`},
 	revoteChoice: "We want to vote again",
 	choosenGameChoice: "According to the reviews, this game should be played:",
+	editPlayerQuestion: "Do you want to change the name of a player or edit a game of the player?",
+	changeGameQuestion: "Which game do you want to edit?",
+	changeGameEditChoice: "Do you want to delete the name of the game or delete it from the player?",
+	changeGameNameQuestion: "Do you want to change the name of the game (globally)?",
+	topThreeGames: (arr) => {return `-------\nTop 3 best rated Boardgames\n1.Place: ${arr[0]} with a rating of ${arr[1]}\n2.Place: ${arr[2]} with a rating of ${arr[3]}\n3.Place: ${arr[4]} with a rating of ${arr[5]}\n`},
+	threeMostPlayed: (arr) => {return `-------\nMost played games\n1.Place: ${arr[0]}\n2.Place: ${arr[1]}\n3.Place: ${arr[2]}\n`},
+	playerRatingHeader: (name) => {return `-------\nPlayer: ${name}\nGame;Rating\n`},
+	playerRatingLine: (name, rating) => {
+		if(rating === "No rating asigned yet!"){
+			return `${name}, not rated by player\n`
+		}
+		else{
+			return `${name}, ${rating}\n`
+		}
+	},
+	averageRatingHeader: () => {return `-------\nAverage ratings of most recent gamenight\nGame; Rating; Has Veto\n`},
+	averageRatingLine: (name, rating, veto) => {
+		if(veto){
+			return `${name}; ${rating}; has atleast one Veto\n`
+		}
+		else{
+			return `${name}; ${rating}; No Veto\n`
+		}
+	}
 }
 
 const ITALIAN = {
@@ -263,6 +322,11 @@ const ITALIAN = {
 		"Aggiungere dei giocatori",
 		"Modificare dei giocatori",
 		"Spegnere dei giocatori"
+	],
+	editGameMenu: [
+		"Ritorno",
+		"Modificate il nome",
+		"Spegnere un gioco"
 	],
 	editPlayersMenu: [
 		"Ritorno", 
@@ -353,6 +417,30 @@ const ITALIAN = {
 	addPlayerToGameNightQuestion: (playerName) => {return `Vuoi aggiungere il giocatore ${playerName} alla serata di gioco?`},
 	revoteChoice: "Vogliamo votare di nuovo",
 	choosenGameChoice: "Secondo le recensioni, questo gioco è giocato:",
+	editPlayerQuestion: "Vuoi cambiare il nome di un giocatore o modificare una partita del giocatore?",
+	changeGameQuestion: "Quale gioco vuoi rimuovere?",
+	changeGameEditChoice: "Vuoi eliminare il nome del gioco o rimuoverlo dal giocatore?",
+	changeGameNameQuestion: "Vuoi cambiare il nome del gioco (globale)?",
+	topThreeGames: (arr) => {return `-------\nI 3 giochi da tavolo più votati\n1.Posto: ${arr[0]} con il voto di ${arr[1]} punti\n2.Posto: ${arr[2]} con il voto di ${arr[3]} punti\n3.Posto: ${arr[4]} con il voto di ${arr[5]} punti\n`},
+	threeMostPlayed: (arr) => {return `-------\nLe partite più giocate\n1.Posto: ${arr[0]}\n2.Posto: ${arr[1]}\n3.Post: ${arr[2]}\n`},
+	playerRatingHeader: (name) => {return `-------\nGiocatore: ${name}\nGioco;Voto\n`},
+	playerRatingLine: (name, rating) => {
+		if(rating === "No rating asigned yet!"){
+			return `${name}, non valutato dal giocatore\n`
+		}
+		else{
+			return `${name}, ${rating}\n`
+		}
+	},
+	averageRatingHeader: () => {return `-------\nValutazioni medie della serata di gioco più recente\nGioco; Voto; Ha Veto\n`},
+	averageRatingLine: (name, rating, veto) => {
+		if(veto){
+			return `${name}; ${rating}; ha almeno un Veto\n`
+		}
+		else{
+			return `${name}; ${rating}; non ha Veto\n`
+		}
+	}
 }
 
 const TURKISH = {
@@ -382,6 +470,11 @@ const TURKISH = {
 		"Oyuncu ekle",
 		"Oyuncuyu düzenle",
 		"Oyuncuyu sil"
+	],
+	editGameMenu: [
+		"Geri dön",
+		"Oyun adıyi düzenle",
+		"Oyunu sil"
 	],
 	editPlayersMenu: [
 		"Geri dön", 
@@ -472,6 +565,30 @@ const TURKISH = {
 	addPlayerToGameNightQuestion: (playerName) => {return `Ouncuyu ${playerName}'i oyun gecesine eklemek ister misiniz?`},
 	revoteChoice: "Tekrar oy istiyoruz",
 	choosenGameChoice: "İncelemelere göre, bu oyun oynanır:",
+	editPlayerQuestion: "Bir oyuncunun adını değiştirmek mi yoksa oyuncunun oyununu düzenlemek mi istiyorsunuz?",
+	changeGameQuestion: "Hangi oyunu değiştirmek istiyorsunuz?",
+	changeGameEditChoice: "Oyunun adını değiştirmek mi yoksa oyuncudan silmek mi istiyorsunuz?",
+	changeGameNameQuestion: "Oyunun adını (küresel olarak) değiştirmek istiyor musunuz?",
+	topThreeGames: (arr) => {return `-------\nEn çok oy alan 3 Masa Oyunu\nBirinci: ${arr[0]}, ${arr[1]} puanla\nIkinci: ${arr[2]}, ${arr[3]} puanla\nÜçüncü: ${arr[4]}, ${arr[5]} puanla\n`},
+	threeMostPlayed: (arr) => {return `-------\nEn çok oynanan oyunlar \nBirinci: ${arr[0]}\nIkinci: ${arr[1]}\nÜcüncü: ${arr[2]}\n`},
+	playerRatingHeader: (name) => {return `-------\nOyuncu: ${name}\nOyun;Puan\n`},
+	playerRatingLine: (name, rating) => {
+		if(rating === "No rating asigned yet!"){
+		return `${name}, oyuncu bu oyuna puan vermedi\n`
+	}
+	else{
+		return `${name}, ${rating}\n`
+	}
+},
+	averageRatingHeader: () => {return `-------\nEn son oyun gecesinin ortalama puanları\nOyun; Puan; Veto var mi\n`},
+	averageRatingLine: (name, rating, veto) => {
+		if(veto){
+			return `${name}; ${rating}; en az bir Veto'ya sahip\n`
+		}
+		else{
+			return `${name}; ${rating}; Veto yok\n`
+		}
+	}
 }
 
 const MODES = {
@@ -485,17 +602,17 @@ const MODES = {
 
 const MANAGEMENT_MODES = {
 	RETURN: 0,
-	MANAGE_PLAYERS: 1,//MUST
-	MANAGE_GAMES: 2, //MUST
-	PLAN_GAMENIGHT: 3, //MUST
+	MANAGE_PLAYERS: 1,
+	MANAGE_GAMES: 2,
+	PLAN_GAMENIGHT: 3,
 	SHOW_PLAYERS: 4,
 }
 
 const MANAGEMENT_PLAYERS_MODES = {
 	RETURN: 0,
-	ADD: 1, //MUST
-	EDIT: 2, //NICETOHAVE
-	DELETE: 3 //MUST
+	ADD: 1, 
+	EDIT: 2,
+	DELETE: 3
 }
 
 const EDIT_PLAYERS = {
@@ -506,9 +623,9 @@ const EDIT_PLAYERS = {
 
 const MANAGEMENT_GAMES_MODES = {
   RETURN: 0,
-  ADD: 1, //MUST
-  EDIT: 2, //NICETOHAVE
-  DELETE: 3 //MUST
+  ADD: 1, 
+  EDIT: 2,
+  DELETE: 3 
 }
 
 const DELETE_GAME = {
