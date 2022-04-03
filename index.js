@@ -19,7 +19,9 @@ let language;
 let hasDataForExport = false;
 let createdGamenight = false;
 let hasImportedData = false;
-let hasOneUser = false;
+
+let latestGameNightGame;
+
 let control = new Control();
 let exp = new Export();
 control.postWelcome();
@@ -32,19 +34,22 @@ mainLoop();
 async function exportLoop(mode_index) {
   switch (mode_index) {
     case 0:
+      console.log("HELLo");
+      process.exit();
       mainLoop();
       break;
     case 1:
       let exportFileName = "";
       exportFileName = await control.addExportFileName();
-      if (exportFileName === "") {
+      if (await exportFileName === "") {
         exportFileName = "Export";
       }
       let exportDate = await control.confirm(
         control.getLanguage().exportLoopOutput
       );
-      let csvData = exp.setExportData(session, control.getLanguage());
-      exp.createExport(csvData, exportFileName, exportDate);
+      let csvData = exp.setExportData(session, control.getLanguage(), latestGameNightGame);
+      exp.createExport(csvData, exportFileName, exportDate),
+      await control.decision(["Ok"], language.exportModeHeader, language.exportCompletedMsg);
       mainLoop();
       break;
     default:
@@ -63,7 +68,7 @@ async function gamesManagementLoop(mode_index) {
   let userList;
   switch (mode_index) {
     case MANAGEMENT_GAMES_MODES.RETURN:
-      mainLoop(MODES.MANAGEMENT);
+      mainLoop(MODES.MANAGEMENT)
       break;
     case MANAGEMENT_GAMES_MODES.ADD:
       if (session === undefined) {
@@ -72,6 +77,7 @@ async function gamesManagementLoop(mode_index) {
       userList = session.getUserObjectList();
       if (userList.length === 0) {
         await control.decision(["Ok"], language.noData, language.importOrder);
+        managementLoop(MANAGEMENT_MODES.MANAGE_GAMES)
       } else if (hasImportedData || userList.length >= 1) {
         let filteredNameList = [];
         let filteredIDList = [];
@@ -92,7 +98,6 @@ async function gamesManagementLoop(mode_index) {
             )
           );
           if (addGameConfirmation) {
-            //might needs await a
             session.addGame(filteredIDList[choosenPlayer], gameToAdd);
             await control.decision(
               ["Ok"],
@@ -114,7 +119,6 @@ async function gamesManagementLoop(mode_index) {
           language.importOrder
         );
       }
-      mainLoop(MODES.MANAGEMENT);
       break;
     case MANAGEMENT_GAMES_MODES.EDIT:
       if (session === undefined) {
@@ -123,6 +127,7 @@ async function gamesManagementLoop(mode_index) {
       userList = session.getUserObjectList();
       if (userList.length === 0) {
         await control.decision(["Ok"], language.noData, language.importOrder);
+        managementLoop(MANAGEMENT_MODES.MANAGE_GAMES)
       } else {
         var userList1 = session.getUserObjectList();
         if (hasImportedData || userList1.length >= 1) {
@@ -135,24 +140,29 @@ async function gamesManagementLoop(mode_index) {
           }
           let gameToEditIndex = await control.chooseGame(gameNames);
           let gameToEdit = gameNames[gameToEditIndex];
-          let editQuesiton = await control.decision(
-            ["Ok", language.no],
-            language.manageGamesHeader,
-            language.changeGameNameQuestion
-          );
-          if (editQuesiton !== language.no) {
-            let newGameName = await control.addGameInput();
-            let userList = session.getUserObjectList();
-            if (newGameName !== gameToEdit) {
-              for (let j = 0; j < userList.length; j++) {
-                userList[j].replaceGame(newGameName, gameToEdit);
+          if(gameToEdit !== language.return){
+            let editQuesiton = await control.decision(
+              ["Ok", language.no],
+              language.manageGamesHeader,
+              language.changeGameNameQuestion
+            );
+            if (editQuesiton !== language.no) {
+              let newGameName = await control.addGameInput();
+              let userList = session.getUserObjectList();
+              if (newGameName !== gameToEdit) {
+                for (let j = 0; j < userList.length; j++) {
+                  userList[j].replaceGame(newGameName, gameToEdit);
+                }
+                session.saveUserObjectList(userList);
               }
-              session.saveUserObjectList(userList);
             }
           }
+          else{
+            managementLoop(MANAGEMENT_MODES.MANAGE_GAMES)
+          }
         }
+        managementLoop(MANAGEMENT_MODES.MANAGE_GAMES)
       }
-      mainLoop(MODES.MANAGEMENT);
       break;
     case MANAGEMENT_GAMES_MODES.DELETE:
       if (session === undefined) {
@@ -172,12 +182,12 @@ async function gamesManagementLoop(mode_index) {
           }
           let gameToDeleteIndex = await control.chooseGame(tempList);
           let gameToDelete = tempList[gameToDeleteIndex];
-          let chosenAct = await control.decision(
-            [language.global, language.player, language.return],
-            language.deleteGameTitle,
-            language.optionTextGlobalOrIndividual
-          );
           if (gameToDelete !== language.return) {
+            let chosenAct = await control.decision(
+              [language.global, language.player, language.return],
+              language.deleteGameTitle,
+              language.optionTextGlobalOrIndividual
+            );
             if (chosenAct === language.global) {
               session.deleteGameGlobally(gameToDelete);
             } else if (chosenAct === language.player) {
@@ -199,7 +209,7 @@ async function gamesManagementLoop(mode_index) {
                 }
                 let chosenIndex = await control.choosePlayer(filteredNameList);
                 if (filteredNameList[chosenIndex] === language.return) {
-                  mainLoop(MODES.MANAGEMENT);
+                  managementLoop(MANAGEMENT_MODES.MANAGE_GAMES)
                 } else {
                   if (
                     (await control.decision(
@@ -215,8 +225,9 @@ async function gamesManagementLoop(mode_index) {
                       filteredIDList[chosenIndex],
                       gameToDelete
                     );
+
                   } else {
-                    mainLoop(MODES.MANAGEMENT);
+                    managementLoop(MANAGEMENT_MODES.MANAGE_GAMES)
                   }
                 }
               } else {
@@ -227,17 +238,11 @@ async function gamesManagementLoop(mode_index) {
                 );
               }
             } else {
-              let errorMsg = await control.decision(
-                ["Ok"],
-                language.noData,
-                "No Player found"
-              );
             }
           }
         }
       }
-      mainLoop(MODES.MANAGEMENT);
-      //Either for a player or globally
+      managementLoop(MANAGEMENT_MODES.MANAGE_GAMES)
       break;
     default:
       console.log(control.getLanguage().indexIssueOutput);
@@ -257,19 +262,19 @@ async function playerManagementLoop(mode_index) {
     case MANAGEMENT_PLAYERS_MODES.RETURN:
       mainLoop(MODES.MANAGEMENT);
       break;
-    case MANAGEMENT_PLAYERS_MODES.ADD:
+    case MANAGEMENT_PLAYERS_MODES.ADD: 
       let valueArr = await control.addPlayerInput();
       if (session === undefined) {
         session = new DataHandler("");
       }
-      session.addUser(await valueArr[0], await valueArr[1]);
+      session.addUser(valueArr[0], valueArr[1]);
       if (session.getUserObjectList().length >= 1) {
         if (session.getUserObjectList().length >= 2) {
           hasImportedData = true;
         }
         hasOneUser = true;
       }
-      mainLoop(MODES.MANAGEMENT);
+      managementLoop(MANAGEMENT_MODES.MANAGE_PLAYERS)
       break;
     case MANAGEMENT_PLAYERS_MODES.EDIT:
       if (session === undefined) {
@@ -286,23 +291,28 @@ async function playerManagementLoop(mode_index) {
         if (!names.includes(language.return)) {
           names.push(language.return);
         }
+        //choose Player to edit
         const chosenPlayer = await control.choosePlayer(names);
         if (names[chosenPlayer] !== language.return) {
+          //choose which kind of editing should be done
           const decisionForPlayer = await control.decision(
-            [language.editPlayersMenu],
+            language.editPlayersMenu,
             language.editPlayerHeader,
             language.editPlayerQuestion
           );
-          if ((await decisionForPlayer) === language.editPlayersMenu[1]) {
+          //change name of player
+          if (decisionForPlayer === language.editPlayersMenu[1]) {
             const playerName = await control.addPlayerNameInput();
             userList[chosenPlayer].setName(playerName);
             session.saveUserObjectList(userList);
-            mainLoop(MODES.MANAGEMENT);
-          } else if (decisionForPlayer === language.editPlayersMenu[2]) {
+          } 
+          //edit games of player
+          else if (decisionForPlayer === language.editPlayersMenu[2]) {
             let gameNames = userList[chosenPlayer].getBoardgames();
             if (!gameNames.includes(language.return)) {
               gameNames.push(language.return);
             }
+            //choose game to edit
             const chosenGame = await control.decision(
               gameNames,
               language.editPlayerHeader,
@@ -310,6 +320,7 @@ async function playerManagementLoop(mode_index) {
             );
 
             if (chosenGame !== language.return) {
+              //choose if game should be renamed or deleted (only for that user!)
               const gameEditAction = await control.decision(
                 language.editGameMenu,
                 language.editPlayerHeader,
@@ -321,7 +332,6 @@ async function playerManagementLoop(mode_index) {
                   if (gameName !== chosenGame) {
                     userList[chosenPlayer].replaceGame(gameName, chosenGame);
                     session.saveUserObjectList(userList);
-                    mainLoop(MODES.MANAGEMENT);
                   }
                 } else {
                   if (
@@ -335,23 +345,14 @@ async function playerManagementLoop(mode_index) {
                     )) === language.yes
                   ) {
                     session.deleteGameFromUser(ids[chosenPlayer], chosenGame);
-                    mainLoop(MODES.MANAGEMENT);
-                  } else {
-                    mainLoop(MODES.MANAGEMENT);
-                  }
+                  } 
                 }
-              } else {
-                mainLoop(MODES.MANAGEMENT);
-              }
-            } else {
-              mainLoop(MODES.MANAGEMENT);
-            }
-          } else {
-            mainLoop(MODES.MANAGEMENT);
-          }
+              } 
+            } 
+          } 
         }
       }
-      mainLoop(MODES.MANAGEMENT);
+      managementLoop(MANAGEMENT_MODES.MANAGE_PLAYERS);
       break;
     case MANAGEMENT_PLAYERS_MODES.DELETE:
       if (session === undefined) {
@@ -384,8 +385,7 @@ async function playerManagementLoop(mode_index) {
           }
         }
       }
-
-      mainLoop(MODES.MANAGEMENT);
+      managementLoop(MANAGEMENT_MODES.MANAGE_PLAYERS);
       break;
     default:
       console.log(control.getLanguage().indexIssueOutput);
@@ -416,7 +416,7 @@ async function showGamesList(list, playersList, objectList) {
 async function showPlayersList(list, objectList) {
   language = control.getLanguage();
   let chosenPlayer = await control.choosePlayer(list);
-  if (list[chosenPlayer] !== control.getLanguage().return) {
+  if (list[chosenPlayer] !== language.return) {
     let gameList = objectList[chosenPlayer].getBoardgames();
     if (!gameList.includes(language.return)) {
       gameList.push(language.return);
@@ -479,8 +479,10 @@ async function planGamenightLoop(mode_index, fromManagement = true) {
         return;
       }
       break;
+    case language.return:
+      mainLoop(MODES.MANAGEMENT);
+      break;
     default:
-      console.log(language.indexIssueOutput);
       mainLoop(MODES.MANAGEMENT);
       break;
   }
@@ -519,12 +521,10 @@ async function managementLoop(mode_index) {
           language.noData,
           language.importOrder
         );
-        mainLoop();
+        mainLoop(MODES.MANAGEMENT);
       }
       break;
     case MANAGEMENT_MODES.SHOW_PLAYERS:
-      control.setLastOption("Gameslist");
-
       if (userList.length >= 1) {
         let userNames = [];
         for (let i = 0; i < userList.length; i++) {
@@ -541,8 +541,9 @@ async function managementLoop(mode_index) {
           language.noData,
           language.importOrder
         );
+        control.setLastOption(MANAGEMENT_MODES.SHOW_PLAYERS);
+        mainLoop(MODES.MANAGEMENT);
       }
-      mainLoop(MODES.MANAGEMENT);
       break;
     default:
       let errorMsg = await control.decision(
@@ -594,8 +595,17 @@ async function applicationLoop(mode_index) {
           for (let i = 0; i < gameList.length; i++) {
             gameObjects.push(new Boardgame(gameList[i]));
           }
+          let globalGames = []
+          let gamesOjectListGlobal = session.getGamesObjectList();
+          for(let i = 0; i < gamesOjectListGlobal.length; i++){
+            globalGames.push(gamesOjectListGlobal[i].getName());
+          }
+          for(let i = 0; i < userList.length; i++){
+            userList[i].addBoardgameToList(globalGames)
+          }
 
           for (let i = 0; i < spieler.length; i++) {
+            //Voting process for a player
             spieler[i].setVeto(false);
             let player = spieler[i];
             let playerName = player.getName();
@@ -647,6 +657,8 @@ async function applicationLoop(mode_index) {
           }
           for (let i = 0; i < spieler.length; i++) {
             let found = false;
+            //puts the new data from the gamesnight into userList which is saved into localstorage
+            //this is important, if not every saved player participates in the gamenight 
             for (let j = 0; j < userList.length; j++) {
               if (!found) {
                 if (userList[j].getID() === spieler[i].getID()) {
@@ -666,18 +678,14 @@ async function applicationLoop(mode_index) {
           hasDataForExport = true;
           gamesnight = session.getGamesNightObject();
           let chosenGame = gamesnight.chooseBoardgame();
+          latestGameNightGame = chosenGame;
           session.saveChosenGameIntoHashmap(chosenGame);
           let gameChoice = await control.decision(
-            ["Ok", language.revoteChoice],
+            ["Ok"],
             language.choosenGameChoice,
             chosenGame
           );
-          if (gameChoice === language.revoteChoice) {
-            mainLoop(MODES.APPLICATION);
-          } else {
-            control.setLastOption("Application Mode");
-            mainLoop();
-          }
+          mainLoop();
         } else {
           createdGamenight = false;
           let errorMsg = await control.decision(
@@ -709,7 +717,6 @@ async function mainLoop(mainIndex = null) {
       process.exit();
 
     case MODES.TUTORIAL:
-      control.setLastOption("Tutorial");
       let tutorial = await control.decision(
         ["Ok"],
         "TUTORIAL",
@@ -739,7 +746,7 @@ async function mainLoop(mainIndex = null) {
       break;
     case MODES.IMPORT:
       const fileText = await control.postFileSelector();
-      if (fileText !== "EXIT") {
+      if (fileText !== language.return) {
         session = new DataHandler(fileText);
         session.setUpLocalStorages();
         session.checkFilename();
@@ -749,6 +756,7 @@ async function mainLoop(mainIndex = null) {
       break;
     case MODES.APPLICATION:
       let applicationIndex = await control.postApplicationMode();
+      control.setLastOption(MODES.APPLICATION);
       applicationLoop(applicationIndex);
       break;
     case MODES.MANAGEMENT:
@@ -756,6 +764,7 @@ async function mainLoop(mainIndex = null) {
       managementLoop(managementIndex);
       break;
     case MODES.EXPORT:
+      
       if (hasDataForExport) {
         let exportIndex = await control.postExportMode();
         exportLoop(exportIndex);

@@ -1,11 +1,12 @@
 var term = require("terminal-kit").terminal;
 const fs = require("fs");
 const { Player } = require("./applicationMode.js");
-const { GERMAN } = require("./enums/enum.js");
+const { GERMAN, MODES, MANAGEMENT_MODES } = require("./enums/enum.js");
 
 //Arrays mit den Menüs
 
 let setveto = false;
+
 
 const mainMenu = [
   "Exit",
@@ -76,8 +77,13 @@ term.on("key", function (name, matches, data) {
  */
 class Control {
   constructor() {
-    this.lastOption = "Main Menu";
+    // = "Main Menu";
     this.language = GERMAN;
+    this.returned = false;
+  }
+
+  setReturned(a){
+    this.returned = a;
   }
 
   /**
@@ -86,7 +92,13 @@ class Control {
    */
   setLanguage(language) {
     this.language = language;
-    this.lastOption = "Set Language";
+  }
+
+  /**
+   * @description returns lastOption from Control Class 
+   */
+  getLastOption(){
+    return this.lastOption;
   }
 
   /**
@@ -105,19 +117,6 @@ class Control {
   }
 
   /**
-   * @description logs the welcome ascii art
-   */
-  postWelcome() {
-    console.clear();
-    console.log(`
-	█───█─▄▀▀─█───▄▀▀─▄▀▀▄─█▄─▄█─▄▀▀
-	█───█─█───█───█───█──█─█▀▄▀█─█──
-	█───█─█▀▀─█───█───█──█─█─▀─█─█▀▀
-	█▄█▄█─█───█───█───█──█─█───█─█──
-	─▀─▀───▀▀──▀▀──▀▀──▀▀──▀───▀──▀▀\n`);
-  }
-
-  /**
    * @description posts selection menu for language select
    * @returns selectedindex of chosen menu item
    */
@@ -125,22 +124,11 @@ class Control {
     let selectedIndex;
     console.clear();
 
-    let startIndex = mainMenu.indexOf(this.lastOption);
-
-    if (startIndex === -1) {
-      startIndex = 0;
-    }
 
     term(this.language.languageChangeHeader);
     term(this.language.languageChangeQuestion);
-    const response = await term.singleColumnMenu(this.language.languages, {
-      selectedIndex: startIndex,
-    }).promise;
-    const selectedText = await response.selectedText;
+    const response = await term.singleColumnMenu(this.language.languages).promise;
     selectedIndex = await response.selectedIndex;
-    term("\n").green("Selected: ", selectedText);
-
-    this.lastOption = "Change Language";
 
     return selectedIndex;
   }
@@ -150,26 +138,13 @@ class Control {
    * @returns selectedindex of chosen menu item
    */
   async postMainMenu() {
-    let selectedIndex;
     console.clear();
-
-    let startIndex = mainMenu.indexOf(this.lastOption);
-
-    if (startIndex === -1) {
-      startIndex = 0;
-    }
 
     term(this.language.mainMenuHeader);
     term(this.language.mainMenuSelectTitle);
 
-    const response = await term.singleColumnMenu(this.language.mainMenu, {
-      selectedIndex: startIndex,
-    }).promise;
-    const selectedText = await response.selectedText;
-    selectedIndex = await response.selectedIndex;
-    term("\n").green("Selected: ", selectedText);
-
-    this.lastOption = "Main Menu";
+    const response = await term.singleColumnMenu(this.language.mainMenu).promise;
+    const selectedIndex = await response.selectedIndex;
 
     return selectedIndex;
   }
@@ -186,23 +161,12 @@ class Control {
     term(this.language.managementModeHeader);
     term(this.language.mainMenuSelectTitle);
 
-    let startIndex = 0;
-
-    startIndex = managementModeMenu.indexOf(this.lastOption);
-    if (startIndex === -1) {
-      startIndex = 0;
-    }
-
     const response = await term.singleColumnMenu(
-      this.language.managementModeMenu,
-      { selectedIndex: startIndex }
-    ).promise;
-    const selectedText = await response.selectedText;
+      this.language.managementModeMenu).promise;
+    if(selectedIndex !== 0){
+      this.lastOption = 0 
+    }
     selectedIndex = await response.selectedIndex;
-    term("\n").green("Selected: ", selectedText);
-
-    this.lastOption = "Management Mode";
-
     return selectedIndex;
   }
 
@@ -212,25 +176,20 @@ class Control {
    */
   async postApplicationMode() {
     let selectedIndex;
-    let startIndex = managementModeMenu.indexOf(this.lastOption);
-    if (startIndex === -1) {
-      startIndex = 0;
-    }
 
     console.clear();
 
     term(this.language.applicationModeHeader);
     term(this.language.mainMenuSelectTitle);
+    let options = this.language.applicationModeMenu;
+    if(!options.includes(this.language.return)){
+      options.push(this.language.return)
+    }
 
     const response = await term.singleColumnMenu(
-      this.language.applicationModeMenu,
-      { selectedIndex: startIndex }
+      this.language.applicationModeMenu
     ).promise;
-    const selectedText = await response.selectedText;
     selectedIndex = await response.selectedIndex;
-    term("\n").green("Selected: ", selectedText);
-
-    this.lastOption = "Application Mode";
 
     return selectedIndex;
   }
@@ -243,17 +202,12 @@ class Control {
     let selectedIndex;
 
     console.clear();
-
     term(this.language.managePlayersHeader);
     term(this.language.mainMenuSelectTitle);
 
     const response = await term.singleColumnMenu(
-      this.language.managePlayersMenu
-    ).promise;
-    const selectedText = await response.selectedText;
+      this.language.managePlayersMenu).promise;
     selectedIndex = await response.selectedIndex;
-    term("\n").green("Selected: ", selectedText);
-    this.lastOption = "Player management";
 
     return selectedIndex;
   }
@@ -393,9 +347,8 @@ class Control {
       .promise;
     const selectedText = await response.selectedText;
     selectedIndex = await response.selectedIndex;
-    term("\n").green("Selected: ", selectedText);
 
-    this.lastOption = "Player management";
+    // = "Player management";
 
     return selectedIndex;
   }
@@ -414,11 +367,8 @@ class Control {
 
     const response = await term.singleColumnMenu(this.language.manageGamesMenu)
       .promise;
-    const selectedText = await response.selectedText;
     selectedIndex = await response.selectedIndex;
-    term("\n").green("Selected: ", selectedText);
 
-    this.lastOption = "Game management";
 
     return selectedIndex;
   }
@@ -439,7 +389,6 @@ class Control {
       .promise;
     const selectedText = await response.selectedText;
     selectedIndex = await response.selectedIndex;
-    term("\n").green("Selected: ", selectedText);
 
     return selectedIndex;
   }
@@ -457,13 +406,12 @@ class Control {
     let items = await fs
       .readdirSync("./DataImport", { withFileTypes: true })
       .map((d) => d.name);
-    items.push("EXIT");
+    items.push(this.language.return);
     const response = await term.gridMenu(items).promise;
     const selectedText = await response.selectedText;
     const selectedIndex = await response.selectedIndex;
-    term("\n").green("Selected: ", selectedText);
 
-    this.lastOption = "Import Mode";
+    // = "Import Mode";
     return selectedText;
   }
 
@@ -481,9 +429,7 @@ class Control {
     term(this.language.choosePlayerQuestion);
 
     const response = await term.singleColumnMenu(userList).promise;
-    const selectedText = await response.selectedText;
-    selectedIndex = await response.selectedIndex;
-    term("\n").green("Selected: ", selectedText);
+    selectedIndex = response.selectedIndex;
 
     return selectedIndex;
   }
@@ -502,9 +448,7 @@ class Control {
     term(this.language.chooseGameQuestion);
 
     const response = await term.singleColumnMenu(gameList).promise;
-    const selectedText = await response.selectedText;
     selectedIndex = await response.selectedIndex;
-    term("\n").green("Selected: ", selectedText);
 
     return selectedIndex;
   }
@@ -597,12 +541,8 @@ class Control {
 
     term(this.language.exportModeHeader);
     term(this.language.mainMenuSelectTitle);
-    const response = await term.singleColumnMenu(this.language.exportMenu)
-      .promise;
-    const selectedText = await response.selectedText;
+    const response = await term.singleColumnMenu(this.language.exportMenu).promise;
     selectedIndex = await response.selectedIndex;
-    term("\n").green("Selected: ", selectedText);
-    this.lastOption = "Export Mode";
 
     return selectedIndex;
   }
@@ -616,7 +556,7 @@ class Control {
     term(this.language.createExportHeader);
     term.cyan(this.language.createExportFileQuestion);
     const fileName = await term.inputField().promise;
-    return fileName;
+    return fileName
   }
 
   /**
@@ -630,14 +570,26 @@ class Control {
     console.clear();
 
     const response = await this.decision(
-      [lang.oneByOne, lang.addEveryPlayer],
+      [lang.oneByOne, lang.addEveryPlayer, lang.return],
       lang.gamenightplanHeader,
       lang.addToGameNightQuestion
     );
 
-    this.lastOption = "Gamenight planning";
-
     return response;
+  }
+
+  /**
+   * @description logs the welcome ascii art
+   */
+   async postWelcome() {
+    console.clear();
+    let a = `
+    █───█─▄▀▀─█───▄▀▀─▄▀▀▄─█▄─▄█─▄▀▀
+    █───█─█───█───█───█──█─█▀▄▀█─█──
+    █───█─█▀▀─█───█───█──█─█─▀─█─█▀▀
+    █▄█▄█─█───█───█───█──█─█───█─█──
+    ─▀─▀───▀▀──▀▀──▀▀──▀▀──▀───▀──▀▀\n`;
+    await this.decision([":)"],a, "")
   }
 }
 

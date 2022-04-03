@@ -182,10 +182,7 @@ class Player {
    */
   addBoardgameToList(boardgames) {
     for (let i = 0; i < boardgames.length; i++) {
-      if (!this.boardgames.includes(boardgames[i])) {
-        this.boardgames.push(boardgames[i]);
         this.ratingHashmap.set(boardgames[i], "No rating asigned yet!");
-      }
     }
   }
 }

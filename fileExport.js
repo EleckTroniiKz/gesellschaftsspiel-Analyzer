@@ -86,16 +86,32 @@ class Export {
   }
 
   /**
+   * @description sets the chosen game string for export
+   * @param language language enum 
+   * @param chosenGame game which was chosen in last gamenight
+   * @returns 
+   */
+  setChosenGame(language, chosenGame){
+    let data = "-------\n"; 
+    data += language.chosenGameTitleExport
+    data += chosenGame
+    data += "\n"
+    return data;
+  }
+
+
+  /**
    * @description calls the functions to get all the data for the export
    * @param session instance of DataHandler class
    * @returns data string
    */
-  setExportData(session, language) {
+  setExportData(session, language, chosenGame) {
     //Initialize empty data string so you can append data with +=
-    let data = "";
+    let data = "\n";
     data += this.setPlayerRatingCSV(session, language);
     data += this.setAvgRatingCSV(session, language);
     data += this.setBestRatedCSV(session, language);
+    data += this.setChosenGame(language, chosenGame)
     data += this.setMostPlayedCSV(session, language);
     return data;
   }
@@ -114,20 +130,10 @@ class Export {
       strDate = strDate.replaceAll("/", "_");
 
       //with date in filename
-      console.log("Creating CSV file");
-      fs.writeFile(`.//DataExport//${name}_${strDate}.csv`, data, (err) => {
-        if (err) throw err;
-        console.log("Export Completed!");
-        return;
-      });
+      fs.writeFileSync(`.//DataExport//${name}_${strDate}.csv`, data);
     } else {
       //without date in filename
-      console.log("Creating CSV file");
-      fs.writeFile(`.//DataExport//${name}.csv`, data, (err) => {
-        if (err) throw err;
-        console.log("Export Completed!");
-        return;
-      });
+      fs.writeFileSync(`.//DataExport//${name}.csv`, data);
     }
   }
 }

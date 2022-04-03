@@ -77,12 +77,14 @@ class DataHandler {
    * @returns sorted map
    */
   hashMapSorter(map) {
+    //because hashmaps are not really sortable by themselves, the hasmap has to be transformed into an array
     let keys = Array.from(map.keys());
     let tempKeys = keys;
     let values = [];
     for (let i = 0; i < keys.length; i++) {
       values.push(map.get(keys[i]));
     }
+    //Bogosort for hashmap sorting
     for (let k = 0; k < keys.length; k++) {
       for (let j = 0; j < keys.length - (k + 1); j++) {
         if (values[j] > values[j + 1]) {
@@ -95,6 +97,7 @@ class DataHandler {
         }
       }
     }
+    //sorted array will be put into hashmap and then saved
     let sortedMap = new Map();
     for (let i = 0; i < tempKeys.length; i++) {
       sortedMap.set(tempKeys[i], values[i]);
@@ -110,7 +113,6 @@ class DataHandler {
     let chosenGames = this.transformStringToHash(
       localStorage.getItem("playedGames")
     );
-    //chosenGames = this.hashMapSorter(chosenGames);
     return this.hashMapSorter(chosenGames);
   }
 

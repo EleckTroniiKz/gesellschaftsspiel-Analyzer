@@ -85,11 +85,11 @@ const GERMAN = {
 	addGameHeader: `>Füge Spiel hinzu<\n`,
 	addGameQuestion: `Welches Spiel möchtest du hinzufügen?\n`,
 	addPlayerHeader: `>Füge Spieler hinzu<\n`,
-	addPlayerNameQuestion: `Gib den Namen des Spielers ein, den du hinzufügen möchtest: `,
+	addPlayerNameQuestion: `Gib den Namen des Spielers ein, den du hinzufügen möchtest: \n`,
 	addPlayerGameQuestion: `\nGib die Namen der Spiele ein, die der Spieler besitzt. \n (Trenne jedes Spiel mit einem Komma[,]. Wenn du fertig bist, schreib am Ende ein Semikolon[;]. -> Bsp: A,B,C;)\n`,
 	exportModeHeader: `>Exportmodus<\n`,
 	createExportHeader: `>Erstelle Export<\n`,
-	createExportFileQuestion: `Gib den Namen der Exportdatei an: `,
+	createExportFileQuestion: `Gib den Namen der Exportdatei an: \n`,
 	rateGameQuestion: (gameName, playerName) => {return `Spieler ${playerName}, bitte bewerte das Spiel ${gameName}`},
 	ratingNoticeOutput: (gameName, ratingValue) => {return `Du hast das Spiel ${gameName} mit ${ratingValue} bewertet.`},
 	ratingValidationQuestion: (gameName) => {return `Möchtest du das nächste Spiel bewerten oder deine Bewertung für ${gameName} ändern?`},
@@ -119,7 +119,6 @@ const GERMAN = {
 	addToGameNightQuestion: "Möchtest du jeden Spieler einzeln hinzufügen oder alle Spieler direkt?",
 	addPlayersToGameNightTitle: "Füge Spieler zum Spielabend hinzu",
 	addPlayerToGameNightQuestion: (playerName) => {return `Möchtest du den Spieler ${playerName} zum Spielabend hinzufügen?`},
-	revoteChoice: "Wir wollen nochmal wählen",
 	choosenGameChoice: "Laut den Bewertungen sollte dieses Spiel gespielt werden:",
 	editPlayerQuestion: "Möchtest du den Spielernamen oder ein Spiel des Spielers bearbeiten?",
 	changeGameQuestion: "Welches Spiel möchtest du bearbeiten?",
@@ -165,7 +164,8 @@ const GERMAN = {
 	\nSchritt 12: Wenn Sie das aktuelle Datum nicht als Suffix beim Exportdateinamen haben möchten, dann drücken Sie n. Wenn Sie das aktuelle Datum als Suffix beim Exportdateinamen haben möchten, dann drücken Sie y.
 	\nSchritt 13: Navigieren Sie zu "Ok" um zurück zum Hauptmenü zu gelangen.`,
 	cancelVoting: "Bewertung abbrechen",
-	cancelVotingQuestion: "Bist du sicher, dass du die Bewertung abbrechen möchtest?"
+	cancelVotingQuestion: "Bist du sicher, dass du die Bewertung abbrechen möchtest?",
+	chosenGameTitleExport: `Beim letzen Spielabend wurde dieses Spiel gespielt: \n`
 }
 
 const ENGLISH = {
@@ -259,7 +259,7 @@ const ENGLISH = {
 	addPlayerGameQuestion: `\nInsert the names of the game, which are owned by the new player. \n (Seperate every game with a comma [,]. Wenn you're done type a semicolon [;] at the end. -> E.g. A,B,C;)\n`,
 	exportModeHeader: `>Export Mode<\n`,
 	createExportHeader: `>Create Export<\n`,
-	createExportFileQuestion: `Insert the export filename: `,
+	createExportFileQuestion: `Insert the export filename: \,`,
 	rateGameQuestion: (gameName, playerName) => {return `Player ${playerName}, please rat the game ${gameName}`},
 	ratingNoticeOutput: (gameName, ratingValue) => {return `You've rated ${gameName} with ${ratingValue}.`},
 	ratingValidationQuestion: (gameName) => {return `DO you want to rate the next game or change your rating for ${gameName}?`},
@@ -289,7 +289,6 @@ const ENGLISH = {
 	addToGameNightQuestion: "Do you want to add every Player or add them one by one to the gamenight?",
 	addPlayersToGameNightTitle: "Add Players to gamesnight",
 	addPlayerToGameNightQuestion: (playerName) => {return `Do you want to add the Player ${playerName} to the Gamesnight?`},
-	revoteChoice: "We want to vote again",
 	choosenGameChoice: "According to the reviews, this game should be played:",
 	editPlayerQuestion: "Do you want to change the name of a player or edit a game of the player?",
 	changeGameQuestion: "Which game do you want to edit?",
@@ -335,7 +334,8 @@ const ENGLISH = {
 	\nstep 12: Press n if you do not want to set the current date as suffix after the given export file name. Press y if you do want to set the current date as suffix after the given export file name.
 	\nstep 13: Navigate to "Ok" to get back to the main menu.`,
 	cancelVoting: "Cancel ranking",
-	cancelVotingQuestion: "Are you sure you want to cancel the voting?"
+	cancelVotingQuestion: "Are you sure you want to cancel the voting?",
+	chosenGameTitleExport: `This game was played on the last gamenight: \n`
 }
 
 const ITALIAN = {
@@ -430,7 +430,7 @@ const ITALIAN = {
 	addPlayerGameQuestion: `\nInserisci i nomi dei giochi che possiede il giocatore. \n (Separa ogni gioco con una virgola[,]. Quando hai finito, aggiungi un punto e virgola [;] alla fine. -> Bsp: A,B,C;)\n`,
 	exportModeHeader: `>modalità di esportazione<\n`,
 	createExportHeader: `>Creare l'esportazione<\n`,
-	createExportFileQuestion: `Immettere il nome del file di esportazione: `,
+	createExportFileQuestion: `Immettere il nome del file di esportazione: \n`,
 	rateGameQuestion: (gameName, playerName) => {return `Giocatore ${playerName}, per favore valuta il gioco ${gameName}`},
 	ratingNoticeOutput: (gameName, ratingValue) => {return `Hai valutato il gioco ${gameName} con ${ratingValue}.`},
 	ratingValidationQuestion: (gameName) => {return `Vuoi dare un voto al prossimo gioco o cambiare il tuo punteggio per ${gameName}?`},
@@ -459,7 +459,6 @@ const ITALIAN = {
 	addToGameNightQuestion: "Vuoi aggiungere ogni giocatore individualmente o tutti i giocatori direttamente? ",
 	addPlayersToGameNightTitle: "Aggiungi i giocatori alla serata di gioco ",
 	addPlayerToGameNightQuestion: (playerName) => {return `Vuoi aggiungere il giocatore ${playerName} alla serata di gioco?`},
-	revoteChoice: "Vogliamo votare di nuovo",
 	choosenGameChoice: "Secondo le recensioni, questo gioco è giocato:",
 	editPlayerQuestion: "Vuoi cambiare il nome di un giocatore o modificare una partita del giocatore?",
 	changeGameQuestion: "Quale gioco vuoi rimuovere?",
@@ -505,7 +504,8 @@ const ITALIAN = {
 	\npassaggio 12: premere n se non si desidera impostare la data corrente come suffisso dopo il nome del file di esportazione specificato. Premere y se si desidera impostare la data corrente come suffisso dopo il nome del file di esportazione specificato.
 	\npassoggio 13: vai su "Ok" per tornare al manuale principale.`,
 	cancelVoting: "Annulla recensione",
-	cancelVotingQuestion: "Sei sicuro di voler cancellare la recensione?"
+	cancelVotingQuestion: "Sei sicuro di voler cancellare la recensione?",
+	chosenGameTitleExport: `Questa gioco è stata giocata l'ultima notte di gioco: \n`,
 }
 
 const TURKISH = {
@@ -600,7 +600,7 @@ const TURKISH = {
 	addPlayerGameQuestion: `\nOyuncunun sahip olduğu oyunların adlarını yasin. \n (Her oyunu virgülle [,] ayırın. şiniz bittiğinde, sonuna noktalı virgül [;] ekleyin. -> Ö.v. A,B,C;)\n`,
 	exportModeHeader: `>Dışa aktarma modu<\n`,
 	createExportHeader: `>Dışa aktarmayı oluştur<\n`,
-	createExportFileQuestion: `Dışa aktarma dosyasının adını girin: `,
+	createExportFileQuestion: `Dışa aktarma dosyasının adını girin: \n`,
 	rateGameQuestion: (gameName, playerName) => {return `Oyuncu ${playerName}, lütfen oyuna ${gameName} oy verin`},
 	ratingNoticeOutput: (gameName, ratingValue) => {return `${gameName} oyununu ${ratingValue} ile eşleştirdin.`},
 	ratingValidationQuestion: (gameName) => {return `Bir sonraki oyuna oy vermek istiyormusun yoksa tekrar ${gameName} oy vermek ister misiniz?`},
@@ -629,7 +629,6 @@ const TURKISH = {
 	addToGameNightQuestion: "Her oyuncuyu tek tek mi yoksa tüm oyuncuları doğrudan mı eklemek istiyorsunuz?",
 	addPlayersToGameNightTitle: "Oyun gecesine oyuncu ekle",
 	addPlayerToGameNightQuestion: (playerName) => {return `Ouncuyu ${playerName}'i oyun gecesine eklemek ister misiniz?`},
-	revoteChoice: "Tekrar oy istiyoruz",
 	choosenGameChoice: "İncelemelere göre, bu oyun oynanır:",
 	editPlayerQuestion: "Bir oyuncunun adını değiştirmek mi yoksa oyuncunun oyununu düzenlemek mi istiyorsunuz?",
 	changeGameQuestion: "Hangi oyunu değiştirmek istiyorsunuz?",
@@ -675,7 +674,8 @@ const TURKISH = {
 	\nadım 12: Verilen dışa aktarma dosyası adından sonra geçerli tarihi sonek olarak ayarlamak istemiyorsanız n'ye basın. Verilen dışa aktarma dosyası adından sonra geçerli tarihi sonek olarak ayarlamak istiyorsanız y tuşuna basın.
 	\nadım 13: Ana manuya geri dönmek için "Tamam"a gidin.`,
 	cancelVoting: "İncelemeyi iptal et",
-	cancelVotingQuestion: "İncelemeyi iptal etmek istediğinizden emin misiniz?"
+	cancelVotingQuestion: "İncelemeyi iptal etmek istediğinizden emin misiniz?",
+	chosenGameTitleExport: "Bu oyun son oyun gecesinde oynandı: \n",
 	 
 }
 
