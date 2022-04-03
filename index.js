@@ -21,6 +21,7 @@ let language;
 let hasDataForExport = false;
 let createdGamenight = false;
 let hasImportedData = false;
+let hasOneUser = false;
 let control = new Control();
 let exp = new Export();
 control.postWelcome();
@@ -37,8 +38,11 @@ async function exportLoop(mode_index) {
       mainLoop();
       break;
     case 1:
-      let exportFileName = "Export";
+      let exportFileName = "";
       exportFileName = await control.addExportFileName();
+      if(exportFileName === ""){
+        exportFileName = "Export";
+      }
       let exportDate = await control.confirm(
         control.getLanguage().exportLoopOutput
       );
@@ -64,8 +68,12 @@ async function gamesManagementLoop(mode_index) {
       mainLoop(MODES.MANAGEMENT);
       break;
     case MANAGEMENT_GAMES_MODES.ADD:
-      if (hasImportedData) {
-        let userList = session.getUserObjectList();
+      if(session === undefined){
+        session = new DataHandler("");
+      }
+      let userList = session.getUserObjectList();
+      if (hasImportedData || userList.length>=1) {
+        
         let filteredNameList = [];
         let filteredIDList = [];
         for (let i = 0; i < userList.length; i++) {
@@ -104,7 +112,12 @@ async function gamesManagementLoop(mode_index) {
       mainLoop(MODES.MANAGEMENT);
       break;
     case MANAGEMENT_GAMES_MODES.EDIT:
-      let gameNames = []
+      if(session === undefined){
+        session = new DataHandler("");
+      }
+      var userList1 = session.getUserObjectList();
+      if (hasImportedData || userList1.length>=1) {
+        let gameNames = []
       for(let i = 0; i < gameList.length; i++){
         gameNames.push(gameList[i].getName());
       }
@@ -123,57 +136,72 @@ async function gamesManagementLoop(mode_index) {
           }
           session.saveUserObjectList(userList);
         }
-        mainLoop(MODES.MANAGEMENT);
+       
       }
+      }
+      mainLoop(MODES.MANAGEMENT);
       break;
     case MANAGEMENT_GAMES_MODES.DELETE:
-      let tempList = [];
-      for (let i = 0; i < gameList.length; i++) {
-        tempList.push(gameList[i].getName());
+      if(session === undefined){
+        session = new DataHandler("");
       }
-      if(!tempList.includes(language.return)){
-        tempList.push(language.return);
-      }
-      let gameToDeleteIndex = await control.chooseGame(tempList);
-      let gameToDelete = tempList[gameToDeleteIndex];
-      let chosenAct = await control.decision(
-        [
-          language.global,
-          language.player,
-          language.return,
-        ],
-        language.deleteGameTitle,
-        language.optionTextGlobalOrIndividual
-      );
-      if (gameToDelete !== language.return) {
-        if (chosenAct === language.global) {
-          session.deleteGameGlobally(gameToDelete);
-        } else if (chosenAct === language.player) {
-          let userList = session.getUserObjectList();
-          let filteredNameList = [];
-          let filteredIDList = [];
-          for (let i = 0; i < userList.length; i++) {
-            if(userList[i].getBoardgames().includes(gameToDelete)){
-              filteredNameList.push(userList[i].getName());
-              filteredIDList.push(userList[i].getID());
-            }
-          }
-          if(filteredNameList.length !== 0 || filteredNameList.length !== undefined){
-            if(!filteredNameList.includes(language.return)){
-              filteredNameList.push(language.return);
-            }
-            let chosenIndex = await control.choosePlayer(filteredNameList);
-            if (filteredNameList[chosenIndex] === language.return) {
-              mainLoop(MODES.MANAGEMENT);
-            } else {
-              if (await control.decision([language.yes, language.no],language.deleteConfirmText,language.deleteGameFromPlayer(gameToDelete,filteredNameList[await chosenIndex])) === control.getLanguage().yes) {
-                session.deleteGameFromUser(
-                  filteredIDList[chosenIndex],
-                  gameToDelete
-                );
-              } else {
-                mainLoop(MODES.MANAGEMENT);
+      var userList1 = session.getUserObjectList();
+      if (hasImportedData || userList1.length>=1) {
+        let tempList = [];
+        for (let i = 0; i < gameList.length; i++) {
+          tempList.push(gameList[i].getName());
+        }
+        if(!tempList.includes(language.return)){
+          tempList.push(language.return);
+        }
+        let gameToDeleteIndex = await control.chooseGame(tempList);
+        let gameToDelete = tempList[gameToDeleteIndex];
+        let chosenAct = await control.decision(
+          [
+            language.global,
+            language.player,
+            language.return,
+          ],
+          language.deleteGameTitle,
+          language.optionTextGlobalOrIndividual
+        );
+        if (gameToDelete !== language.return) {
+          if (chosenAct === language.global) {
+            session.deleteGameGlobally(gameToDelete);
+          } else if (chosenAct === language.player) {
+            let userList = session.getUserObjectList();
+            let filteredNameList = [];
+            let filteredIDList = [];
+            for (let i = 0; i < userList.length; i++) {
+              if(userList[i].getBoardgames().includes(gameToDelete)){
+                filteredNameList.push(userList[i].getName());
+                filteredIDList.push(userList[i].getID());
               }
+            }
+            if(filteredNameList.length !== 0 || filteredNameList.length !== undefined){
+              if(!filteredNameList.includes(language.return)){
+                filteredNameList.push(language.return);
+              }
+              let chosenIndex = await control.choosePlayer(filteredNameList);
+              if (filteredNameList[chosenIndex] === language.return) {
+                mainLoop(MODES.MANAGEMENT);
+              } else {
+                if (await control.decision([language.yes, language.no],language.deleteConfirmText,language.deleteGameFromPlayer(gameToDelete,filteredNameList[await chosenIndex])) === control.getLanguage().yes) {
+                  session.deleteGameFromUser(
+                    filteredIDList[chosenIndex],
+                    gameToDelete
+                  );
+                } else {
+                  mainLoop(MODES.MANAGEMENT);
+                }
+              }
+            }
+            else{
+              let errorMsg = await control.decision(
+                ["Ok"],
+                language.noData,
+                "No Player found"
+              );
             }
           }
           else{
@@ -183,13 +211,6 @@ async function gamesManagementLoop(mode_index) {
               "No Player found"
             );
           }
-        }
-        else{
-          let errorMsg = await control.decision(
-            ["Ok"],
-            language.noData,
-            "No Player found"
-          );
         }
       }
       mainLoop(MODES.MANAGEMENT);
@@ -206,7 +227,7 @@ async function gamesManagementLoop(mode_index) {
  * @param mode_index chosen Menu index
  */
 async function playerManagementLoop(mode_index) {
-  let userList = session.getUserObjectList();
+  
   let names = [];
   let ids = [];
   language = control.getLanguage();
@@ -216,13 +237,20 @@ async function playerManagementLoop(mode_index) {
       break;
     case MANAGEMENT_PLAYERS_MODES.ADD:
       let valueArr = await control.addPlayerInput();
+      if(session === undefined){
+        session = new DataHandler("")
+      }
       session.addUser(await valueArr[0], await valueArr[1]);
-      if(session.getUserObjectList().length >= 2){
-        hasImportedData = true;
+      if(session.getUserObjectList().length >= 1){
+        if(session.getUserObjectList().length >= 2){
+          hasImportedData = true;
+        }
+        hasOneUser = true;
       }
       mainLoop(MODES.MANAGEMENT);
       break;
     case MANAGEMENT_PLAYERS_MODES.EDIT:
+      let userList = session.getUserObjectList();
       for(let i = 0; i < userList.length; i++){
         names.push(userList[i].getName());
         ids.push(userList[i].getID());
@@ -279,9 +307,10 @@ async function playerManagementLoop(mode_index) {
       }
       break;
     case MANAGEMENT_PLAYERS_MODES.DELETE:
-      for (let i = 0; i < userList.length; i++) {
-        names.push(userList[i].getName());
-        ids.push(userList[i].getID());
+      let userList1 = session.getUserObjectList();
+      for (let i = 0; i < userList1.length; i++) {
+        names.push(userList1[i].getName());
+        ids.push(userList1[i].getID());
       }
       if(!names.includes(language.return)){
         names.push(language.return);
@@ -292,7 +321,7 @@ async function playerManagementLoop(mode_index) {
           language.deletePlayerQuestion(player)
         );
         if (decision) {
-          session.deleteUser(ids[player]);
+            session.deleteUser(ids[player]);
         } else {
           let exportMsg = await control.decision(
             ["Ok"],
@@ -403,6 +432,10 @@ async function planGamenightLoop(mode_index, fromManagement = true) {
  */
 async function managementLoop(mode_index) {
   language = control.getLanguage()
+  if(session === undefined){
+    session = new DataHandler("");
+  }
+  let userList = session.getUserObjectList();
   let managementIndex;
   switch (mode_index) {
     case MANAGEMENT_MODES.RETURN:
@@ -417,7 +450,7 @@ async function managementLoop(mode_index) {
       gamesManagementLoop(managementIndex);
       break;
     case MANAGEMENT_MODES.PLAN_GAMENIGHT:
-      if(hasImportedData){
+      if(userList.length >= 2){
         planGamenightIndex = await control.postGameNightPlanMenu();
         planGamenightLoop(planGamenightIndex);
       }
@@ -432,8 +465,8 @@ async function managementLoop(mode_index) {
       break;
     case MANAGEMENT_MODES.SHOW_PLAYERS:
       control.setLastOption("Gameslist")
-      if (hasImportedData) {
-        let userList = session.getUserObjectList();
+      
+      if (userList.length >= 1) {
         let userNames = [];
         for (let i = 0; i < userList.length; i++) {
           userNames.push(userList[i].getName());
@@ -472,8 +505,11 @@ async function applicationLoop(mode_index) {
   language = control.getLanguage()
   switch (mode_index) {
     case 1:
-      if (hasImportedData) {
-        let userList = session.getUserObjectList();
+      if(session === undefined){
+        session = new DataHandler("");
+      }
+      let userList = session.getUserObjectList();  
+      if (userList.length >= 2) {
         if (createdGamenight) {
           gamesnight = session.getGamesNightObject();
         } else {
@@ -481,97 +517,101 @@ async function applicationLoop(mode_index) {
           await planGamenightLoop(planGamenightIndex, false);
           gamesnight = session.getGamesNightObject();
         }
-        let gameList = []; 
-        let spieler = gamesnight.getPlayers();
-        for (let i = 0; i < spieler.length; i++) {
-          let currentUsersGames = spieler[i].getBoardgames();
-          for (let j = 0; j < currentUsersGames.length; j++) {
-            let gameName = currentUsersGames[j];
-            if (!gameList.includes(gameName)) {
-              gameList.push(gameName);
-            }
-          }
-        }
-        let gameObjects = [];
-        for (let i = 0; i < gameList.length; i++) {
-          gameObjects.push(new Boardgame(gameList[i]));
-        }
-
-        for (let i = 0; i < spieler.length; i++) {
-          let player = spieler[i];
-          let playerName = player.getName();
-          for (let g = 0; g < gameList.length; g++) {
-            let gameName = gameList[g];
-            let usedVeto = player.getVeto();
-            let ratings = await control.setRating(playerName, gameName, usedVeto);
-            let rating = ratings[0];
-            let vetoSetted = ratings[1];  
-            switch (rating) {
-              case 0:
-                rating = 5;
-                break;
-              case 1:
-                rating = 4;
-                break;
-              case 2:
-                rating = 3;
-                break;
-              case 3:
-                rating = 2;
-                break;
-              case 4:
-                rating = 1;
-                break;
-              default:
-                rating = -1;
-                break;
-            }
-            if(vetoSetted){
-              gamesnight.setVeto(gameName, vetoSetted);
-              player.setRating(gameName, rating);
-              player.setVeto(vetoSetted);
-              gamesnight.setRating(gameName, rating);
-            }
-            else{
-              player.setRating(gameName, rating);
-              gamesnight.setRating(gameName, rating);
-            } 
-          }
-        }
-        for (let i = 0; i < spieler.length; i++) {
-          let found = false;
-          for (let j = 0; j < userList.length; j++) {
-            if (!found) {
-              if (userList[j].getID() === spieler[i].getID()) {
-                userList[j] = spieler[i];
-                found = true;
+        if(gamesnight.getPlayers().length > 1){
+          let gameList = []; 
+          let spieler = gamesnight.getPlayers();
+          for (let i = 0; i < spieler.length; i++) {
+            let currentUsersGames = spieler[i].getBoardgames();
+            for (let j = 0; j < currentUsersGames.length; j++) {
+              let gameName = currentUsersGames[j];
+              if (!gameList.includes(gameName)) {
+                gameList.push(gameName);
               }
             }
           }
+          let gameObjects = [];
+          for (let i = 0; i < gameList.length; i++) {
+            gameObjects.push(new Boardgame(gameList[i]));
+          }
+  
+          for (let i = 0; i < spieler.length; i++) {
+            let player = spieler[i];
+            let playerName = player.getName();
+            for (let g = 0; g < gameList.length; g++) {
+              let gameName = gameList[g];
+              let usedVeto = player.getVeto();
+              let ratings = await control.setRating(playerName, gameName, usedVeto);
+              let rating = ratings[0];
+              let vetoSetted = ratings[1];  
+              switch (rating) {
+                case 0:
+                  rating = 5;
+                  break;
+                case 1:
+                  rating = 4;
+                  break;
+                case 2:
+                  rating = 3;
+                  break;
+                case 3:
+                  rating = 2;
+                  break;
+                case 4:
+                  rating = 1;
+                  break;
+                default:
+                  rating = -1;
+                  break;
+              }
+              if(vetoSetted){
+                gamesnight.setVeto(gameName, vetoSetted);
+                player.setRating(gameName, rating);
+                player.setVeto(vetoSetted);
+                gamesnight.setRating(gameName, rating);
+              }
+              else{
+                player.setRating(gameName, rating);
+                gamesnight.setRating(gameName, rating);
+              } 
+            }
+          }
+          for (let i = 0; i < spieler.length; i++) {
+            let found = false;
+            for (let j = 0; j < userList.length; j++) {
+              if (!found) {
+                if (userList[j].getID() === spieler[i].getID()) {
+                  userList[j] = spieler[i];
+                  found = true;
+                }
+              }
+            }
+          }
+          session.saveUserObjectList(userList);
+          gamesnight.calculateAverages();
+          gamesnight.setRatingHashmap(session.hashMapSorter(gamesnight.getRating()))
+          session.saveRatingsIntoGlobalGameList(gamesnight);
+          session.saveGamesNightObject(gamesnight);
+          hasDataForExport = true;
+          gamesnight = session.getGamesNightObject();
+          let chosenGame = gamesnight.chooseBoardgame();
+          session.saveChosenGameIntoHashmap(chosenGame)
+          let gameChoice = await control.decision(["Ok", language.revoteChoice], language.choosenGameChoice, chosenGame)
+          if(gameChoice === language.revoteChoice){
+            mainLoop(MODES.APPLICATION);
+          }
+          else{
+            control.setLastOption("Application Mode")
+            mainLoop();
+          }
+        } 
+        else {
+          createdGamenight = false;
+          let errorMsg = await control.decision(
+            ["Ok"],
+            language.notEoughPlayersError,
+            language.notEnoughPlayersOrder
+          );
         }
-        session.saveUserObjectList(userList);
-        gamesnight.calculateAverages();
-        gamesnight.setRatingHashmap(session.hashMapSorter(gamesnight.getRating()))
-        session.saveRatingsIntoGlobalGameList(gamesnight);
-        session.saveGamesNightObject(gamesnight);
-        hasDataForExport = true;
-        gamesnight = session.getGamesNightObject();
-        let chosenGame = gamesnight.chooseBoardgame();
-        session.saveChosenGameIntoHashmap(chosenGame)
-        let gameChoice = await control.decision(["Ok", language.revoteChoice], language.choosenGameChoice, chosenGame)
-        if(gameChoice === language.revoteChoice){
-          mainLoop(MODES.APPLICATION);
-        }
-        else{
-          control.setLastOption("Application Mode")
-          mainLoop();
-        }
-      } else {
-        let errorMsg = await control.decision(
-          ["Ok"],
-          language.noData,
-          language.importOrder
-        );
       }
       break;
     default:

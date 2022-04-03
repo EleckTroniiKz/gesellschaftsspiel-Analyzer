@@ -143,8 +143,11 @@ const GERMAN = {
 		else{
 			return `${name}; ${rating}; Hat kein Veto\n`
 		}
-		
-	}
+	},
+	notEoughPlayersError: "Nicht genügend Spieler für den Spieleabend",
+	notEnoughPlayersOrder: "Du brauchst mindestens 2 Spieler für einen Spieleabend",
+	vetoSetText: "Setze Veto ein",
+	vetoResetText: "Ziehe Veto zurück",
 }
 
 const ENGLISH = {
@@ -292,7 +295,11 @@ const ENGLISH = {
 		else{
 			return `${name}; ${rating}; No Veto\n`
 		}
-	}
+	},
+	notEoughPlayersError: "Not enough players for gamenight",
+	notEnoughPlayersOrder: "You need atleast 2 players for a gamenight",
+	vetoSetText: "Set Veto",
+	vetoResetText: "Withdraw Veto",
 }
 
 const ITALIAN = {
@@ -440,7 +447,11 @@ const ITALIAN = {
 		else{
 			return `${name}; ${rating}; non ha Veto\n`
 		}
-	}
+	},
+	notEoughPlayersError: "Non abbastanza giocatori per la serata di gioco",
+	notEnoughPlayersOrder: "Hai bisogno di almeno 2 giocatori per una serata di gioco",
+	vetoSetText: "Usa il veto",
+	vetoResetText: "Ritiro Veto",
 }
 
 const TURKISH = {
@@ -588,7 +599,11 @@ const TURKISH = {
 		else{
 			return `${name}; ${rating}; Veto yok\n`
 		}
-	}
+	},
+	notEoughPlayersError: "Oyun gecesi için yeterli oyuncu yok",
+	notEnoughPlayersOrder: "Bir oyun gecesi için en az 2 oyuncuya ihtiyacınız var",
+	vetoSetText: "Veto Ayarla",
+	vetoResetText: "Veto'yu geri çek",
 }
 
 const MODES = {

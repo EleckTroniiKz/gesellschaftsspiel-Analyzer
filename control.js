@@ -271,10 +271,10 @@ class Control {
     console.clear();
     let choice;
     if(setveto){
-      vetoState = "VETO RESET"
+      vetoState = this.getLanguage().vetoResetText;
     }
     else{
-      vetoState = "VETO SET"
+      vetoState = this.getLanguage().vetoSetText;
     }
     if(usedVeto){
       choice = await this.decision(
