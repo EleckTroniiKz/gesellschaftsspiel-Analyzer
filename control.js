@@ -487,7 +487,6 @@ class Control {
    * @returns text which was selected from optionlist
    */
   async decision(optionList, termTitle, question) {
-    let selectedIndex;
 
     console.clear();
 
@@ -496,7 +495,6 @@ class Control {
 
     const response = await term.singleColumnMenu(optionList).promise;
     const selectedText = await response.selectedText;
-
     return selectedText;
   }
 
@@ -530,6 +528,18 @@ class Control {
     } else {
       this.addGameInput();
     }
+  }
+
+  /**
+   * @description asks for input for a player name
+   * @returns player name
+   */
+  async addPlayerNameInput(){
+    console.clear();
+    term(this.language.addPlayerHeader);
+    term.cyan("Change player name:");
+    const playerName = await term.inputField().promise;
+    return playerName;
   }
 
   /**

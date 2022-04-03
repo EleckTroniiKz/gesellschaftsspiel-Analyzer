@@ -1,9 +1,3 @@
-const {Boardgame, Player, Gamesnight} = require("./applicationMode");
-const {DataHandler} = require('./dataHandler');
-const {Control} = require("./control");
-
-const LocalStorage = require('node-localstorage').LocalStorage;
-const localStorage = new LocalStorage('./DataStorage/storage');
 const fs = require('fs');
 
 class Export{
@@ -41,7 +35,7 @@ class Export{
     let data = "\n";
     let mostPlayed = session.getPlayedGamesMap();
     let games = Array.from(mostPlayed.keys());
-    data += `Most played games \n 1.Place: ${games[games.length-1]}\n2.Place: ${games[games.length-2]}\n3.Place: ${games[games.length-3]}`;
+    data += `Most played games \n1.Place: ${games[games.length-1]}\n2.Place: ${games[games.length-2]}\n3.Place: ${games[games.length-3]}`;
     return data;
   }
 

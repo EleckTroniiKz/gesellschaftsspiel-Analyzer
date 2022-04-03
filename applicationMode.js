@@ -61,6 +61,21 @@ class Player {
   }
 
   /**
+   * @description changes name of a game in the list of a player
+   * @param newName updated game name 
+   * @param oldName old game name 
+   */
+  replaceGame(newName, oldName){
+    for(let i = 0; i < this.boardgames.length; i++){
+      if(this.boardgames[i] === oldName){
+        this.boardgames[i] = newName;
+        this.ratingHashmap.set(newName, this.ratingHashmap.get(oldName));
+        this.ratingHashmap.delete(oldName);
+      }
+    }
+  }
+
+  /**
    * @returns veto boolean 
    */
   getVeto(){
