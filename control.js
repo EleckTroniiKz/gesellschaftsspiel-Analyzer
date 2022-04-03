@@ -9,6 +9,7 @@ let setveto = false;
 
 const mainMenu = [
   "Exit",
+  "Tutorial",
   "Set Language",
   "Import Mode",
   "Application Mode",

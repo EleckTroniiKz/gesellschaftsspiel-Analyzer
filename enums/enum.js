@@ -2,6 +2,7 @@ const GERMAN = {
 	ratingOptions:["Sehr gut", "Gut", "Nicht schlecht", "Nicht so gut", "Schlecht"],
 	mainMenu: [
 		"EXIT",
+		"Tutorial",
 		"Sprache einstellen",
 		"Importmodus",
 		"Anwendungsmodus",
@@ -148,12 +149,28 @@ const GERMAN = {
 	notEnoughPlayersOrder: "Du brauchst mindestens 2 Spieler für einen Spieleabend",
 	vetoSetText: "Setze Veto ein",
 	vetoResetText: "Ziehe Veto zurück",
+	tutorial: `In diesem Tutorial erklären wir Ihnen schrittweise in welcher Reihenfolge Sie den Gesellschaftsanalyzer bedienen dürfen. Wenn in einem Schritt steht, dass Sie zu einer bestimmten Stelle navigieren sollen, dann geschieht dies immer mittels der Pfeiltasten und musst mit Enter bestätigt werden um in die entsprechende Stelle reinzukommen:\\
+	\nSchritt 0 (Optional): Navigieren Sie im Hauptmenü zu "Sprache einstellen" um die Sprache einzustellen.
+	\nSchritt 1: Navigieren Sie im Hauptmenü zu "Importmodus" um diesen auszuwählen.
+	\nSchritt 2: Navigieren Sie zur gewünschten Importdatei um diese Datei zu importieren.
+	\nSchritt 3 (Optional): Sie befinden sich nach dem Import wieder im Hauptmenü. Navigieren Sie zu "Verwaltungsmodus" um diesen auszuwählen. In diesem Modus können Sie die Spieler verwalten, deren Spiele verwalten, einen Spielabend planen und die aktuelle Spieler Liste mit deren Spielen einsehen.
+	\nSchritt 4: Navigieren Sie zu "Anwendungsmodus" um diesen auszuwählen.
+	\nSchritt 5: Navigieren Sie zu "Starte Anwendung" um einen Spielabend zu planen. Dafür muss man nun entscheiden ob man alle aktuell verfügbaren Spieler miteinbezieht oder ob man die Spieler einzeln auswählt.
+	\nSchritt 6: Navigieren Sie für jedes Gesellschaftsspiel zu einer Bewertung, die Ihrer Meinung nach angemessen ist für das jeweilige Spiel.
+	\nSchritt 7: Wenn Sie eine Bewertung ändern möchten, dann navigieren Sie zu "Ändere Bewertung". Wenn Sie ein Veto einlegen möchten, damit dieses Spiel am Spielabend auf keinen Fall gespielt wird, dann navigieren Sie zu VETO setzen (es kann nur maximal 1 VETO pro Spieler pro Spielabend gesetzt werden). Wenn Sie zufrieden sind mit Ihrer Bewertung des Spieles und dem VETO Zustand, dann navigieren Sie zu "Nächstes Spiel" um zur Bewertung des nächsten Gesellschaftsspiels zu gelangen.
+	\nSchritt 8: (Optional) Wenn Sie während den Bewertungen die Bewertungsabfrage stoppen wollen, navigieren Sie auf "Bewertung abbrechen". Dies bricht die Bewertung für den aktuell gewählten Spielabend ab. Dies geschieht dann nach einer Bestätigung des Abbruchs. Wenn Sie es wirklich abbrechen möchten, drücken sie y. Sollten Sie sich nur verdrückt haben, drücken Sie auf n. 
+	\nSchritt 9: Nachdem alle Spiele bewertet wurden und die VETOs gesetzt wurden, gibt das Matchmaking das ausgewählte Spiel an. Navigieren Sie zu "Ok" um wieder ins Hauptmenü zu gelangen.
+	\nSchritt 10: Navigieren Sie zu "Exportmodus" um diesen auszuwählen.
+	\nSchritt 11: Navigieren Sie zu "Export-Datei erstellen" und geben Sie einen angemessenen Namen an. 
+	\nSchritt 12: Wenn Sie das aktuelle Datum nicht als Suffix beim Exportdateinamen haben möchten, dann drücken Sie n. Wenn Sie das aktuelle Datum als Suffix beim Exportdateinamen haben möchten, dann drücken Sie y.
+	\nSchritt 13: Navigieren Sie zu "Ok" um zurück zum Hauptmenü zu gelangen.`,
 }
 
 const ENGLISH = {
 	ratingOptions:["very good", "good", "not bad", "not so good", "bad"],
 	mainMenu: [
 		"EXIT",
+		"Tutorial",
 		"Change the language",
 		"Import Mode",
 		"Application Mode",
@@ -300,12 +317,28 @@ const ENGLISH = {
 	notEnoughPlayersOrder: "You need atleast 2 players for a gamenight",
 	vetoSetText: "Set Veto",
 	vetoResetText: "Withdraw Veto",
+	tutorial: `This tutorial teaches you step by step how to use the application. If a step tells you to navigate to a certain spot you are supposed to do so with the arrow keys and you need to confirm with the enter key.
+	\nstep 0: Navigate to "Sprache einstellen" to change the language from german (default) to english.
+	\nstep 1: Navigate to "Importmode" to enter it.
+	\nstep 2: Navigate to your desired import file to import it.
+	\nstep 3 (optional): After the import you are sent back to the main menu. Navigate to "Management Mode" to enter it. In this mode you can manage players, their boardgames, set up a games night and check the current list of players.
+	\nstep 4: Navigate to "Application Mode" to enter it.
+	\nstep 5: Navigate to "Start Application" to set up a games night. To do so you need to choose if you want to include all players from the current list of players or if you want to choose certain people.
+	\nstep 6: Navigate to an appropriate rating for each boardgame.
+	\nstep 7: Navigate to "Change Rating" if you want to change a rating you just set. Navigate to "set VETO" (only 1 VETO can be set per player per games night) if you do not want to play that game during the games night.
+	\nstep 8 (optional): If you want to cancel the rating process, you can navigate to "cancel rating" so the rating process of the current gamenight will be cancelled.
+	\nstep 9: The matchmaking system will choose a boardgame after all boardgames have been rated and VETOs have been set. Navigate to "Ok" to get back to the main manu.
+	\nstep 10: Navigate to "Export Mode" to enter it.
+	\nstep 11: Navigate to "Create Export file" and name it appropriately.
+	\nstep 12: Press n if you do not want to set the current date as suffix after the given export file name. Press y if you do want to set the current date as suffix after the given export file name.
+	\nstep 13: Navigate to "Ok" to get back to the main menu.`
 }
 
 const ITALIAN = {
 	ratingOptions:["Molto bene", "Bene", "Non male", "É non molto bene", "Male"],
 	mainMenu: [
 		"EXIT",
+		"Tutorial",
 		"Cambiare la lingua",
 		"Modelità di importazione",
 		"Modelità di applicazione",
@@ -452,12 +485,28 @@ const ITALIAN = {
 	notEnoughPlayersOrder: "Hai bisogno di almeno 2 giocatori per una serata di gioco",
 	vetoSetText: "Usa il veto",
 	vetoResetText: "Ritiro Veto",
+	tutorial: `Questo tutorial ti insegna passo dopo passo come utilizzare l'applicazione. Se un passaggio ti dice di navigare in un determinato punto, dovresti farlo con i tasti freccia e devi confermare con il tasto Invio.
+	\npassaggio 0: Passa a "Sprache einstellen" per cambiare la lingua dal tedesco (predefinito) all'inglese.
+	\npassaggio 1: vai su "Importmode" per accedervi.
+	\npassaggio 2: vai al file di importazione desiderato per importarlo.
+	\npassaggio 3 (opzionale): dopo l'importazione si torna al menu principale. Passare a "Modalità di gestione" per accedervi. In questa modalità puoi gestire i giocatori, i loro giochi da tavolo, organizzare una serata di giochi e controllare l'elenco attuale dei giocatori.
+	\npassaggio 4: vai a "Modalità applicazione" per accedervi.
+	\npassaggio 5: vai su "Avvia applicazione" per impostare una serata di giochi. Per farlo devi scegliere se vuoi includere tutti i giocatori dall'attuale elenco di giocatori o se vuoi scegliere determinate persone.
+	\npassaggio 6: passa a una valutazione appropriata per ogni gioco da tavolo.
+	\npassaggio 7: vai a "Modifica valutazione" se desideri modificare una valutazione che hai appena impostato. Passa a "imposta VETO" (è possibile impostare solo 1 VETO per giocatore per notte di gioco) se non vuoi giocare a quel gioco durante la notte di gioco.
+	\npassaggio 8 (opzionale): Se desideri annullare il processo di valutazione, puoi accedere a "cancella valutazione" in modo che il processo di valutazione della serata di gioco in corso venga annullato.
+	\npassaggio 9:Il sistema di matchmaking sceglierà un gioco da tavolo dopo che tutti i giochi da tavolo sono stati valutati e sono stati impostati i VETO. Passare a "Ok" per tornare al menu principale.
+	\npassaggio 10: Passa a "Modalità esportazione" per accedervi.
+	\npassaggio 11: Vai a "Crea file di esportazione" e denominalo in modo appropriato.
+	\npassaggio 12: premere n se non si desidera impostare la data corrente come suffisso dopo il nome del file di esportazione specificato. Premere y se si desidera impostare la data corrente come suffisso dopo il nome del file di esportazione specificato.
+	\npassoggio 13: vai su "Ok" per tornare al manuale principale.`
 }
 
 const TURKISH = {
 	ratingOptions:["Çok iyi", "Iyi", "Fena değil", "Çok iyi değil", "Kötü"],
 	mainMenu: [
 		"EXIT",
+		"Tutorial",
 		"Dili değiştir",
 		"İçe aktarma modu",
 		"Uygulama modu",
@@ -604,15 +653,31 @@ const TURKISH = {
 	notEnoughPlayersOrder: "Bir oyun gecesi için en az 2 oyuncuya ihtiyacınız var",
 	vetoSetText: "Veto Ayarla",
 	vetoResetText: "Veto'yu geri çek",
+	tutorial: `Bu eğitim size uygulamayı nasıl kullanacağınızı adım adım öğretir. Bir adım size belirli bir noktaya gitmenizi söylüyorsa, bunu yön tuşlarıyla yapmanız ve enter tuşuyla onaylamanız gerekir.
+	\nadım 0: Dili almancadan (varsayılan) ingilizceye değiştirmek için "Sprache einstellen"e gidin.
+	\nadım 1: Girmek için "İçe Aktarma Modu"na gidin.
+	\nadım 2: İçe aktarmak için istediğiniz içe aktarma dosyasına gidin.
+	\nadım 3: (isteğe bağlı): İçe aktarmadan sonra ana menüye geri gönderilirsiniz. Girmek için "Yönetim Modu"na gidin. Bu modda oyuncuları, masa oyunlarını yönetebilir, bir oyun gecesi ayarlayabilir ve mevcut oyuncu listesini kontrol edebilirsiniz.
+	\nadım 4: Girmek için "Uygulama Modu"na gidin.
+	\nadım 5: Bir oyun gecesi ayarlamak için "Uygulamayı Başlat"a gidin. Bunu yapmak için, mevcut oyuncu listesinden tüm oyuncuları dahil etmek isteyip istemediğinizi veya belirli kişileri seçmek isteyip istemediğinizi seçmeniz gerekir.
+	\nadım 6: Her masa oyunu için uygun bir derecelendirmeye gidin.
+	\nadım 7: Yeni ayarladığınız bir derecelendirmeyi değiştirmek istiyorsanız "Derecelendirmeyi Değiştir"e gidin. Oyun gecesi boyunca o oyunu oynamak istemiyorsanız, "VETO'yu ayarla"ya gidin (oyun gecesi başına oyuncu başına sadece 1 VETO ayarlanabilir).
+	\nadım 8: (isteğe bağlı): Derecelendirme sürecini iptal etmek istiyorsanız, mevcut oyun gecesinin derecelendirme işleminin iptal edilmesi için "derecelendirmeyi iptal et" seçeneğine gidebilirsiniz.
+	\nadım 9: Tüm masa oyunları derecelendirildikten ve VETO'lar ayarlandıktan sonra çöpçatanlık sistemi bir masa oyunu seçecektir. Ana menüye geri dönmek için "Tamam"a gidin.
+	\nadım 10: Girmek için "Dışa Aktarma Modu"na gidin.
+	\nadım 11: "Dışa Aktarma dosyası oluştur" seçeneğine gidin ve uygun şekilde adlandırın.
+	\nadım 12: Verilen dışa aktarma dosyası adından sonra geçerli tarihi sonek olarak ayarlamak istemiyorsanız n'ye basın. Verilen dışa aktarma dosyası adından sonra geçerli tarihi sonek olarak ayarlamak istiyorsanız y tuşuna basın.
+	\nadım 13: Ana manuya geri dönmek için "Tamam"a gidin.`
 }
 
 const MODES = {
 	EXIT: 0,
-	LANGUAGE: 1,
-	IMPORT: 2,
-	APPLICATION: 3,
-	MANAGEMENT: 4,
-	EXPORT: 5
+	TUTORIAL: 1,
+	LANGUAGE: 2,
+	IMPORT: 3,
+	APPLICATION: 4,
+	MANAGEMENT: 5,
+	EXPORT: 6 
 }
 
 const MANAGEMENT_MODES = {
