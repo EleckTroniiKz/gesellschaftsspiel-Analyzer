@@ -42,29 +42,38 @@ class DataHandler {
    * @description sets up localstorages if they do not exist yet
    */
   setUpLocalStorages() {
-	  if(localStorage.getItem("userIds") !== null || localStorage.getItem("userIds") !== undefined || localStorage.getItem("userIds") !== ""){
-		localStorage.setItem("userIds", JSON.stringify(this.userIDs));
-	  }
-    else{
-      localStorage.setItem("userIds",[]);
+    if (
+      localStorage.getItem("userIds") !== null ||
+      localStorage.getItem("userIds") !== undefined ||
+      localStorage.getItem("userIds") !== ""
+    ) {
+      localStorage.setItem("userIds", JSON.stringify(this.userIDs));
+    } else {
+      localStorage.setItem("userIds", []);
     }
-	  if(localStorage.getItem("gameList") !== null || localStorage.getItem("gameList") !== undefined || localStorage.getItem("gameList") !== ""){
-		localStorage.setItem("gameList", JSON.stringify([]));
-	  }
-    else{
-      localStorage.setItem("gameList",[]);
+    if (
+      localStorage.getItem("gameList") !== null ||
+      localStorage.getItem("gameList") !== undefined ||
+      localStorage.getItem("gameList") !== ""
+    ) {
+      localStorage.setItem("gameList", JSON.stringify([]));
+    } else {
+      localStorage.setItem("gameList", []);
     }
-	  if(localStorage.getItem("gamesnight") !== null || localStorage.getItem("gamesnight") !== undefined || localStorage.getItem("gamesnight") !== ""){
-		localStorage.setItem("gamesnight", JSON.stringify(""));
-	  }
-    else{
-      localStorage.setItem("gamenight",[]);
+    if (
+      localStorage.getItem("gamesnight") !== null ||
+      localStorage.getItem("gamesnight") !== undefined ||
+      localStorage.getItem("gamesnight") !== ""
+    ) {
+      localStorage.setItem("gamesnight", JSON.stringify(""));
+    } else {
+      localStorage.setItem("gamenight", []);
     }
   }
 
   /**
    * @description sorts a hashmap with bogosort. from lowest to highest
-   * @param map map which should be sorted 
+   * @param map map which should be sorted
    * @returns sorted map
    */
   hashMapSorter(map) {
@@ -107,18 +116,22 @@ class DataHandler {
 
   /**
    * @description saves in the localstorage, how often a game has been chosen by matchmaking
-   * @param game game which was chosen by matchmaking 
+   * @param game game which was chosen by matchmaking
    */
   saveChosenGameIntoHashmap(game) {
     let ratingMap;
-    if (localStorage.getItem("playedGames") === null || localStorage.getItem("playedGames") === undefined ||localStorage.getItem("playedGames") === "") {
+    if (
+      localStorage.getItem("playedGames") === null ||
+      localStorage.getItem("playedGames") === undefined ||
+      localStorage.getItem("playedGames") === ""
+    ) {
       ratingMap = new Map();
       let games = this.getGamesObjectList();
       for (let i = 0; i < games.length; i++) {
         ratingMap.set(games[i].getName(), 0);
       }
       ratingMap.set(game, ratingMap.get(game) + 1);
-      console.log("HESY")
+      console.log("HESY");
     } else {
       ratingMap = this.transformStringToHash(
         localStorage.getItem("playedGames")
@@ -135,7 +148,7 @@ class DataHandler {
 
   /**
    * @description saves the ratings into the global game list, if a gamenight has been played
-   * @param gamesnight 
+   * @param gamesnight
    */
   saveRatingsIntoGlobalGameList(gamesnight) {
     let ratings = gamesnight.getRating();
@@ -260,7 +273,7 @@ class DataHandler {
           }
         }
         userList[i].setBoardgame(gameList);
-		//if the user was the only player with that game, it has to be removed out of the global gameslist
+        //if the user was the only player with that game, it has to be removed out of the global gameslist
         if (!this.checkIfGameExists(game, userList)) {
           this.deleteGameGlobally(game);
           break;
@@ -291,7 +304,7 @@ class DataHandler {
 
   /**
    * @description extracts the gamesnight object from the localstorage
-   * @returns instance of Gamesnight 
+   * @returns instance of Gamesnight
    */
   getGamesNightObject() {
     let unparsedGamesnight = JSON.parse(localStorage.getItem("gamesnight"));
@@ -377,8 +390,8 @@ class DataHandler {
    * @returns List of Player Objects
    */
   getUserObjectList() {
-    let objectList = []
-    if(localStorage.getItem("users") !== ""){
+    let objectList = [];
+    if (localStorage.getItem("users") !== "") {
       let list = JSON.parse(localStorage.getItem("users"));
       for (let i = 0; i < list.length; i++) {
         let a = new Player(list[i].name, list[i].boardgames, list[i].id);
@@ -389,9 +402,8 @@ class DataHandler {
         );
         objectList.push(a);
       }
-  
     }
-    
+
     return objectList;
   }
 
@@ -426,16 +438,19 @@ class DataHandler {
    * @returns a new random userID (0-99)
    */
   generateUserID() {
-    let userIDS = []
+    let userIDS = [];
     let id;
-    if(localStorage.getItem("userIds") === "" || localStorage.getItem("userIds") === null || localStorage.getItem("userIds") === undefined){
+    if (
+      localStorage.getItem("userIds") === "" ||
+      localStorage.getItem("userIds") === null ||
+      localStorage.getItem("userIds") === undefined
+    ) {
       id = Math.trunc(Math.floor(Math.random() * 99));
       userIDS.push(id);
-    }
-    else{
+    } else {
       userIDS = JSON.parse(localStorage.getItem("userIds"));
       id = Math.trunc(Math.floor(Math.random() * 99));
-      while(userIDS.includes(id)) {
+      while (userIDS.includes(id)) {
         id = Math.random() * 9999;
       }
       userIDS.push(id);

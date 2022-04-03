@@ -1,7 +1,7 @@
 var term = require("terminal-kit").terminal;
 const fs = require("fs");
 const { Player } = require("./applicationMode.js");
-const { ITALIAN, GERMAN, ENGLISH, TURKISH } = require("./enums/enum.js");
+const { GERMAN } = require("./enums/enum.js");
 
 //Arrays mit den Menüs
 
@@ -15,15 +15,16 @@ const mainMenu = [
   "Application Mode",
   "Management Mode",
   "Export Mode",
-]; 
+];
 
 const managementModeMenu = [
   "Return to Main Menu",
   "Player management",
   "Game management",
   "Gamenight planning",
-  "Gameslist"
+  "Gameslist",
 ];
+
 const applicationModeMenu = ["Return to Main Menu", "Start Game"];
 
 const managePlayersMenu = [
@@ -48,8 +49,6 @@ const deleteGamesMenu = [
   "Delete Game Globally",
 ];
 
-const exportMenu = ["Return", "Create Export"];
-
 /**
  * @description onClick handler to terminate the code
  */
@@ -72,7 +71,7 @@ term.on("key", function (name, matches, data) {
 });
 
 /**
- * @params lastOption: last menu page which was visited (for nicetohave) 
+ * @params lastOption: last menu page which was visited (for nicetohave)
  * @params language: contains the current language enums (german, turkish, english or italian)
  */
 class Control {
@@ -83,7 +82,7 @@ class Control {
 
   /**
    * @description sets new language enum
-   * @param language language enum 
+   * @param language language enum
    */
   setLanguage(language) {
     this.language = language;
@@ -92,14 +91,14 @@ class Control {
 
   /**
    * @description sets last visited menu option
-   * @param opt last option 
+   * @param opt last option
    */
   setLastOption(opt) {
-    this.lastOption = opt
+    this.lastOption = opt;
   }
 
   /**
-   * @returns current language value 
+   * @returns current language value
    */
   getLanguage() {
     return this.language;
@@ -262,34 +261,41 @@ class Control {
   /**
    * @description posts the game rating confirmation
    * @param gameName
-   * @param selectedIndex 
-   * @param playerName 
-   * @param usedVeto 
+   * @param selectedIndex
+   * @param playerName
+   * @param usedVeto
    * @returns array with 2 elements: selected index and veto
    */
   async ConfirmRating(gameName, selectedIndex, playerName, usedVeto) {
     let vetoState = "";
     console.clear();
     let choice;
-    if(setveto){
+    if (setveto) {
       vetoState = this.getLanguage().vetoResetText;
-    }
-    else{
+    } else {
       vetoState = this.getLanguage().vetoSetText;
     }
-    if(usedVeto){
+    if (usedVeto) {
       choice = await this.decision(
-        [this.language.nextGame, this.language.changeRating],
+        [
+          this.language.nextGame,
+          this.language.changeRating,
+          this.language.cancelVoting,
+        ],
         this.language.ratingNoticeOutput(
           gameName,
           this.language.ratingOptions[selectedIndex]
         ),
         this.language.ratingValidationQuestion(gameName)
       );
-    }
-    else{
+    } else {
       choice = await this.decision(
-        [this.language.nextGame, this.language.changeRating, vetoState],
+        [
+          this.language.nextGame,
+          this.language.changeRating,
+          this.language.cancelVoting,
+          vetoState,
+        ],
         this.language.ratingNoticeOutput(
           gameName,
           this.language.ratingOptions[selectedIndex]
@@ -298,31 +304,49 @@ class Control {
       );
     }
 
-    if(choice === this.language.nextGame){
+    if (choice === this.language.nextGame) {
       let veto = setveto;
       setveto = false;
-      if(usedVeto){
+      if (usedVeto) {
         return [selectedIndex, false];
-      }
-      else{
+      } else {
         return [selectedIndex, veto];
       }
-      
-    }
-    else if(choice === this.language.changeRating){
+    } else if (choice === this.language.changeRating) {
       return await this.setRating(playerName, gameName, usedVeto);
-    }
-    else{
-      //setveto call this confirm Rating again
-      if(setveto){
-        setveto = false;
-        return await this.ConfirmRating(gameName, selectedIndex, playerName, usedVeto);
-        //remove veto;
+    } else if (choice === this.language.cancelVoting) {
+      const confirmation = await this.confirm(
+        this.language.cancelVotingQuestion
+      );
+      if (confirmation) {
+        return "CANCELLED";
+      } else {
+        return this.ConfirmRating(
+          gameName,
+          selectedIndex,
+          playerName,
+          usedVeto
+        );
       }
-      else{
+    } else {
+      if (setveto) {
+        setveto = false;
+        return await this.ConfirmRating(
+          gameName,
+          selectedIndex,
+          playerName,
+          usedVeto
+        );
+        //remove veto choice
+      } else {
         setveto = true;
-        return await this.ConfirmRating(gameName, selectedIndex, playerName, usedVeto);
-        //add veto
+        return await this.ConfirmRating(
+          gameName,
+          selectedIndex,
+          playerName,
+          usedVeto
+        );
+        //add veto choice
       }
     }
   }
@@ -332,7 +356,7 @@ class Control {
    * @param playerName player that is rating
    * @param gameName name of game which is rated
    * @param usedVeto boolean if veto has been set
-   * @returns 
+   * @returns
    */
   async setRating(playerName, gameName, usedVeto) {
     let selectedIndex;
@@ -345,12 +369,17 @@ class Control {
     term("\n").green(
       this.language.ratingNoticeOutput(gameName, await response.selectedText)
     );
-     return await this.ConfirmRating(gameName, selectedIndex, playerName, usedVeto);
+    return await this.ConfirmRating(
+      gameName,
+      selectedIndex,
+      playerName,
+      usedVeto
+    );
   }
 
   /**
    * @description posts edit player menu
-   * @returns 
+   * @returns
    */
   async postEditPlayersMenu() {
     let selectedIndex;
@@ -440,7 +469,7 @@ class Control {
 
   /**
    * @description posts choosePlayer menu
-   * @param userList 
+   * @param userList
    * @returns returns index of selected player
    */
   async choosePlayer(userList) {
@@ -461,7 +490,7 @@ class Control {
 
   /**
    * @description posts game selector
-   * @param gameList list of games that are selectable 
+   * @param gameList list of games that are selectable
    * @returns index of selected game
    */
   async chooseGame(gameList) {
@@ -488,7 +517,6 @@ class Control {
    * @returns text which was selected from optionlist
    */
   async decision(optionList, termTitle, question) {
-
     console.clear();
 
     term(`>${termTitle}<\n`);
@@ -501,7 +529,7 @@ class Control {
 
   /**
    * @description posts confirmation question
-   * @param confirmQuestion question which has to be confirmed 
+   * @param confirmQuestion question which has to be confirmed
    * @returns boolean value true or false
    */
   async confirm(confirmQuestion) {
@@ -535,7 +563,7 @@ class Control {
    * @description asks for input for a player name
    * @returns player name
    */
-  async addPlayerNameInput(){
+  async addPlayerNameInput() {
     console.clear();
     term(this.language.addPlayerHeader);
     term.cyan("Change player name:");
@@ -613,6 +641,4 @@ class Control {
   }
 }
 
- 
-
-exports.Control = Control
+exports.Control = Control;

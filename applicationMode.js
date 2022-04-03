@@ -10,25 +10,25 @@ class Boardgame {
   }
 
   /**
-   * @returns boardgame name 
+   * @returns boardgame name
    */
   getName() {
     return this.name;
   }
 
   /**
-   * @returns boardgame rating 
+   * @returns boardgame rating
    */
   getRating() {
     return this.rating;
   }
-  
+
   /**
    * @description sets the ratingvalue of a boardgame
-   * @param ratingValue 
+   * @param ratingValue
    */
   setRating(ratingValue) {
-    this.rating = ratingValue
+    this.rating = ratingValue;
   }
 }
 
@@ -45,29 +45,29 @@ class Player {
     this.name = name;
     this.id = id;
     this.usedVeto = false;
-    if(!Array.isArray(boardgames)) {
+    if (!Array.isArray(boardgames)) {
       this.boardgames = [];
     } else {
       this.boardgames = [];
-      for(let i = 0; i < boardgames.length; i++) {
+      for (let i = 0; i < boardgames.length; i++) {
         let boardgameobject = new Boardgame(boardgames[i]);
         this.boardgames.push(boardgameobject.getName());
       }
     }
     this.ratingHashmap = new Map();
-    for(let i = 0; i < this.boardgames.length; i++) {
+    for (let i = 0; i < this.boardgames.length; i++) {
       this.ratingHashmap.set(this.boardgames[i], "No rating asigned yet!");
     }
   }
 
   /**
    * @description changes name of a game in the list of a player
-   * @param newName updated game name 
-   * @param oldName old game name 
+   * @param newName updated game name
+   * @param oldName old game name
    */
-  replaceGame(newName, oldName){
-    for(let i = 0; i < this.boardgames.length; i++){
-      if(this.boardgames[i] === oldName){
+  replaceGame(newName, oldName) {
+    for (let i = 0; i < this.boardgames.length; i++) {
+      if (this.boardgames[i] === oldName) {
         this.boardgames[i] = newName;
         this.ratingHashmap.set(newName, this.ratingHashmap.get(oldName));
         this.ratingHashmap.delete(oldName);
@@ -76,17 +76,17 @@ class Player {
   }
 
   /**
-   * @returns veto boolean 
+   * @returns veto boolean
    */
-  getVeto(){
+  getVeto() {
     return this.usedVeto;
   }
 
   /**
    * @description sets if player used veto already
-   * @param {*} val new boolean value 
+   * @param {*} val new boolean value
    */
-  setVeto(val){
+  setVeto(val) {
     this.usedVeto = val;
   }
 
@@ -98,7 +98,7 @@ class Player {
   }
 
   /**
-   * @returns Player name 
+   * @returns Player name
    */
   getName() {
     return this.name;
@@ -106,14 +106,14 @@ class Player {
 
   /**
    * @description sets player name
-   * @param name new Name of player 
+   * @param name new Name of player
    */
   setName(name) {
     this.name = name;
   }
-  
+
   /**
-   * @returns list of boardgames from the player 
+   * @returns list of boardgames from the player
    */
   getBoardgames() {
     return this.boardgames;
@@ -121,10 +121,10 @@ class Player {
 
   /**
    * @description adds new boardgame to boardgame list
-   * @param boardgamestring name of new boardgame 
+   * @param boardgamestring name of new boardgame
    */
   addBoardgame(boardgamestring) {
-    if(typeof(boardgamestring) === "string") {
+    if (typeof boardgamestring === "string") {
       let boardgameobject = new Boardgame(boardgamestring);
       this.boardgames.push(boardgameobject.getName());
     } else {
@@ -141,25 +141,25 @@ class Player {
 
   /**
    * @description sets rating value for boardgame
-   * @param boardgame rated boardgame 
-   * @param rating ring for boardgame 
+   * @param boardgame rated boardgame
+   * @param rating ring for boardgame
    */
   setRating(boardgame, rating) {
-    if(this.ratingHashmap.has(boardgame)) {
+    if (this.ratingHashmap.has(boardgame)) {
       this.ratingHashmap.set(boardgame, rating);
     }
   }
 
   /**
    * @description set the ratingmap
-   * @param map 
+   * @param map
    */
-  setRatingMap(map){
+  setRatingMap(map) {
     this.ratingHashmap = map;
   }
 
   /**
-   * @description sets boardgamelist and ratinghashmap 
+   * @description sets boardgamelist and ratinghashmap
    * @param boardgames list of boardgames
    * @param ratingHashmap hashmap with ratings for the games
    */
@@ -172,28 +172,27 @@ class Player {
    * @description replaces players boardgame list with new list
    * @param boardgames new boardgame list
    */
-  setBoardgame(boardgames){
+  setBoardgame(boardgames) {
     this.boardgames = boardgames;
   }
 
   /**
    * @description adds boardgames from a list to the  players boardgame list
-   * @param boardgames list of new boardgames 
+   * @param boardgames list of new boardgames
    */
   addBoardgameToList(boardgames) {
-    for(let i = 0; i < boardgames.length; i++) {
-      if(!this.boardgames.includes(boardgames[i])) {
+    for (let i = 0; i < boardgames.length; i++) {
+      if (!this.boardgames.includes(boardgames[i])) {
         this.boardgames.push(boardgames[i]);
         this.ratingHashmap.set(boardgames[i], "No rating asigned yet!");
       }
     }
   }
-  
 }
 
 /**
  * @description Gamesnight class
- * @param players List of players that are 
+ * @param players List of players that are
  * @param ratingHashmap hashmap with average ratings of the gamenight
  * @param vetoHash hashmap which displays on which game a veto has been used
  * @param amountOfRatingsSetHashmap hashmap with amount of ratings per game
@@ -205,46 +204,45 @@ class Gamesnight {
     this.ratingHashmap = new Map();
     this.vetoHash = new Map();
     this.amountOfRatingsSetHashmap = new Map();
-    if(!Array.isArray(players)) {
+    if (!Array.isArray(players)) {
       this.boardgames = [];
       console.log("Your player input was not an array!");
     } else {
       this.boardgames = [];
       //iterates through each player
-      for(let i = 0; i < this.players.length; i++) {
+      for (let i = 0; i < this.players.length; i++) {
         //iterates through the boardgames of each player
-        for(let j = 0; j < this.players[i].getBoardgames().length; j++) {
-          if(!this.boardgames.includes(this.players[i].getBoardgames()[j])) {
+        for (let j = 0; j < this.players[i].getBoardgames().length; j++) {
+          if (!this.boardgames.includes(this.players[i].getBoardgames()[j])) {
             this.boardgames.push(this.players[i].getBoardgames()[j]);
           }
         }
-        for(let j = 0; j < this.boardgames.length; j++) {
+        for (let j = 0; j < this.boardgames.length; j++) {
           this.ratingHashmap.set(this.boardgames[j], "No rating asigned yet!");
         }
       }
-      for(let i = 0; i < this.players.length; i++) {
-        this.players[i].addBoardgameToList(this.boardgames);  
+      for (let i = 0; i < this.players.length; i++) {
+        this.players[i].addBoardgameToList(this.boardgames);
       }
-      for(let i = 0; i < this.boardgames.length; i++){
+      for (let i = 0; i < this.boardgames.length; i++) {
         this.amountOfRatingsSetHashmap.set(this.boardgames[i], 0);
         this.vetoHash.set(this.boardgames[i], false);
       }
-      
     }
   }
 
   /**
    * @returns returns veto map
    */
-  getVetoList(){
+  getVetoList() {
     return this.vetoHash;
   }
 
   /**
-   * @param map 
+   * @param map
    * @description sets veto list with
    */
-  setVetoList(map){
+  setVetoList(map) {
     this.vetoHash = map;
   }
 
@@ -261,7 +259,7 @@ class Gamesnight {
   getBoardgames() {
     return this.boardgames;
   }
-  
+
   /**
    * @returns rating hashmap
    */
@@ -278,7 +276,7 @@ class Gamesnight {
 
   /**
    * @param map
-   * @description sets hashmap with amount of ratings per game 
+   * @description sets hashmap with amount of ratings per game
    */
   setAmountOfRatingsSetHashmap(map) {
     this.amountOfRatingsSetHashmap = map;
@@ -287,11 +285,11 @@ class Gamesnight {
   /**
    * @description calculates average ratings of the games from the gamesnight
    */
-  calculateAverages(){
-    for(let i = 0; i < this.boardgames.length; i++){
+  calculateAverages() {
+    for (let i = 0; i < this.boardgames.length; i++) {
       let ratingSum = this.ratingHashmap.get(this.boardgames[i]);
       let ratingAmount = this.amountOfRatingsSetHashmap.get(this.boardgames[i]);
-      this.ratingHashmap.set(this.boardgames[i], (ratingSum/ratingAmount));
+      this.ratingHashmap.set(this.boardgames[i], ratingSum / ratingAmount);
     }
   }
 
@@ -309,15 +307,15 @@ class Gamesnight {
    * @param rating rating value
    */
   setRating(boardgame, rating) {
-    if(this.ratingHashmap.has(boardgame)) {
-      if(this.ratingHashmap.get(boardgame) === "No rating asigned yet!") {
+    if (this.ratingHashmap.has(boardgame)) {
+      if (this.ratingHashmap.get(boardgame) === "No rating asigned yet!") {
         this.ratingHashmap.set(boardgame, rating);
         let temp = this.amountOfRatingsSetHashmap.get(boardgame);
         this.amountOfRatingsSetHashmap.set(boardgame, temp + 1);
-        
       } else {
         let temp = this.amountOfRatingsSetHashmap.get(boardgame);
-        let ratingSum = (parseInt(this.ratingHashmap.get(boardgame)) + parseInt(rating));
+        let ratingSum =
+          parseInt(this.ratingHashmap.get(boardgame)) + parseInt(rating);
         //let averageRating = (parseInt(this.ratingHashmap.get(boardgame)) + parseInt(rating)) / this.players.length;
         this.ratingHashmap.set(boardgame, ratingSum);
         this.amountOfRatingsSetHashmap.set(boardgame, temp + 1);
@@ -330,7 +328,7 @@ class Gamesnight {
    * @param game game where a veto was used
    * @param val true or false
    */
-  setVeto(game, val){
+  setVeto(game, val) {
     //val should be boolean!
     this.vetoHash.set(game, val);
   }
@@ -340,29 +338,22 @@ class Gamesnight {
    * @returns chosen game
    */
   chooseBoardgame() {
-    let ratingKeys = Array.from(this.ratingHashmap.keys())
-    let index = ratingKeys.length-1;
+    let ratingKeys = Array.from(this.ratingHashmap.keys());
+    let index = ratingKeys.length - 1;
     let foundGame = false;
-    while(!foundGame){
-      if(this.vetoHash.get(ratingKeys[index]) === false){
+    while (!foundGame) {
+      if (this.vetoHash.get(ratingKeys[index]) === false) {
         foundGame = true;
         return ratingKeys[index];
-      }
-      else{
+      } else {
         index--;
-        if(index === -1){
+        if (index === -1) {
           foundGame = true;
-          return ratingKeys[Array.from(this.ratingHashmap.keys()).length]
+          return ratingKeys[Array.from(this.ratingHashmap.keys()).length];
         }
       }
     }
-    
-    
   }
-
- 
-
-  
 }
 exports.Boardgame = Boardgame;
 exports.Player = Player;

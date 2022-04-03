@@ -73,11 +73,11 @@ const GERMAN = {
 	confirmQuestionCreator: (confirmQuestion, i) => {
 		switch(i){
 			case 0:
-				return `${confirmQuestion}\n Drücke`;
+				return `${confirmQuestion}\n Drücke `;
 			case 1:
 				return `\"n\" um abzulehnen`;
 			case 2:
-				return `oder`;
+				return ` oder `;
 			case 3:
 				return `\"y\" um zuzustimmen.\n`;
 		}
@@ -164,6 +164,8 @@ const GERMAN = {
 	\nSchritt 11: Navigieren Sie zu "Export-Datei erstellen" und geben Sie einen angemessenen Namen an. 
 	\nSchritt 12: Wenn Sie das aktuelle Datum nicht als Suffix beim Exportdateinamen haben möchten, dann drücken Sie n. Wenn Sie das aktuelle Datum als Suffix beim Exportdateinamen haben möchten, dann drücken Sie y.
 	\nSchritt 13: Navigieren Sie zu "Ok" um zurück zum Hauptmenü zu gelangen.`,
+	cancelVoting: "Bewertung abbrechen",
+	cancelVotingQuestion: "Bist du sicher, dass du die Bewertung abbrechen möchtest?"
 }
 
 const ENGLISH = {
@@ -331,7 +333,9 @@ const ENGLISH = {
 	\nstep 10: Navigate to "Export Mode" to enter it.
 	\nstep 11: Navigate to "Create Export file" and name it appropriately.
 	\nstep 12: Press n if you do not want to set the current date as suffix after the given export file name. Press y if you do want to set the current date as suffix after the given export file name.
-	\nstep 13: Navigate to "Ok" to get back to the main menu.`
+	\nstep 13: Navigate to "Ok" to get back to the main menu.`,
+	cancelVoting: "Cancel ranking",
+	cancelVotingQuestion: "Are you sure you want to cancel the voting?"
 }
 
 const ITALIAN = {
@@ -499,7 +503,9 @@ const ITALIAN = {
 	\npassaggio 10: Passa a "Modalità esportazione" per accedervi.
 	\npassaggio 11: Vai a "Crea file di esportazione" e denominalo in modo appropriato.
 	\npassaggio 12: premere n se non si desidera impostare la data corrente come suffisso dopo il nome del file di esportazione specificato. Premere y se si desidera impostare la data corrente come suffisso dopo il nome del file di esportazione specificato.
-	\npassoggio 13: vai su "Ok" per tornare al manuale principale.`
+	\npassoggio 13: vai su "Ok" per tornare al manuale principale.`,
+	cancelVoting: "Annulla recensione",
+	cancelVotingQuestion: "Sei sicuro di voler cancellare la recensione?"
 }
 
 const TURKISH = {
@@ -667,7 +673,10 @@ const TURKISH = {
 	\nadım 10: Girmek için "Dışa Aktarma Modu"na gidin.
 	\nadım 11: "Dışa Aktarma dosyası oluştur" seçeneğine gidin ve uygun şekilde adlandırın.
 	\nadım 12: Verilen dışa aktarma dosyası adından sonra geçerli tarihi sonek olarak ayarlamak istemiyorsanız n'ye basın. Verilen dışa aktarma dosyası adından sonra geçerli tarihi sonek olarak ayarlamak istiyorsanız y tuşuna basın.
-	\nadım 13: Ana manuya geri dönmek için "Tamam"a gidin.`
+	\nadım 13: Ana manuya geri dönmek için "Tamam"a gidin.`,
+	cancelVoting: "İncelemeyi iptal et",
+	cancelVotingQuestion: "İncelemeyi iptal etmek istediğinizden emin misiniz?"
+	 
 }
 
 const MODES = {
